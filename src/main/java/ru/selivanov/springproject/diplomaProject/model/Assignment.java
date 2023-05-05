@@ -15,7 +15,7 @@ public class Assignment {
     @Id
     @Column(name = "assignment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int assignment_id;
+    private int assignmentId;
 
     @Column(name = "type")
     @NotEmpty(message = "Тип оценки не может быть пустым!")
@@ -57,12 +57,12 @@ public class Assignment {
         this.date = date;
     }
 
-    public int getAssignment_id() {
-        return assignment_id;
+    public int getAssignmentId() {
+        return assignmentId;
     }
 
-    public void setAssignment_id(int assignment_id) {
-        this.assignment_id = assignment_id;
+    public void setAssignmentId(int assignment_id) {
+        this.assignmentId = assignment_id;
     }
 
     public String getType() {
@@ -118,11 +118,11 @@ public class Assignment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Assignment that = (Assignment) o;
-        return assignment_id == that.assignment_id && max_points == that.max_points && type.equals(that.type) && Objects.equals(description, that.description) && date.equals(that.date) && workload.equals(that.workload);
+        return assignmentId == that.assignmentId && max_points == that.max_points && type.equals(that.type) && Objects.equals(description, that.description) && date.equals(that.date) && workload.equals(that.workload);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(assignment_id, type, description, max_points, date, workload);
+        return Objects.hash(assignmentId, type, description, max_points, date, workload);
     }
 }
