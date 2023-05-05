@@ -1,64 +1,37 @@
-package ru.selivanov.springproject.diplomaProject.model;
+package ru.selivanov.springproject.diplomaProject.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-import java.util.Objects;
+public class UserDTO {
 
-@Entity
-@Table(name = "User_")
-public class User {
-
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
-
-    @Column(name = "username")
     @NotEmpty(message = "Имя пользователя не может быть пустым!")
     @Size(min = 2, max = 255, message = "Имя пользователя должно быть от 2 до 255 символов!")
     private String username;
 
-    @Column(name = "password")
     @NotEmpty(message = "Пароль не может быть пустым!")
     @Size(min = 6, max = 255, message = "Пароль должен быть длиной минимум 6 символов!")
     private String password;
 
-    @Column(name = "email")
     @Email
     @NotEmpty(message = "Данные почты не могут быть пустыми!")
     private String email;
 
-    @Column(name = "role")
     @NotEmpty(message = "Не выбрана роль пользователя")
     private String role;
 
-    @Column(name = "first_name")
     @NotEmpty(message = "Имя пользователя не может быть пустым!")
     @Size(min = 2, max = 255, message = "Имя пользователя должно быть от 2 до 255 символов!")
     private String firstName;
 
-    @Column(name = "second_name")
     @NotEmpty(message = "Фамилия пользователя не может быть пустой!")
     @Size(min = 2, max = 255, message = "Фамилия пользователя должна быть от 2 до 255 символов!")
     private String secondName;
 
-    @Column(name = "patronymic")
-    private String patronymic;
+    public UserDTO() {}
 
-    @OneToOne(mappedBy = "user")
-    //@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    private Student student;
-
-    @OneToOne(mappedBy = "user")
-    //@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    private Teacher teacher;
-
-    public User() {}
-
-    public User(String username, String password, String email, String role, String firstName, String secondName, String patronymic) {
+    public UserDTO(String username, String password, String email, String role, String firstName, String secondName, String patronymic) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -68,13 +41,16 @@ public class User {
         this.patronymic = patronymic;
     }
 
-    public int getUserId() {
-        return userId;
+    public UserDTO(String username, String password, String email, String role, String firstName, String secondName) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.firstName = firstName;
+        this.secondName = secondName;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    private String patronymic;
 
     public String getUsername() {
         return username;
@@ -130,36 +106,5 @@ public class User {
 
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return username.equals(user.username) && password.equals(user.password) && email.equals(user.email) &&
-                role.equals(user.role) && firstName.equals(user.firstName) && secondName.equals(user.secondName) &&
-                Objects.equals(patronymic, user.patronymic);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, password, email);
     }
 }
