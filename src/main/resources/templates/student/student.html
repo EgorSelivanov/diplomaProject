@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:style="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет студента</title>
+    <link rel="stylesheet" type="text/css" href="/css/student.css" />
+</head>
+<body>
+<div class="container">
+    <h1>Личный кабинет студента</h1>
+    <div class="student-info" id="student-id" th:value="${user.getStudent().getStudentId()}">
+        <h2 th:text="${user.getSecondName() + ' ' + user.getFirstName() + ' ' + user.getPatronymic()}"></h2>
+        <p th:text="${user.getEmail()}"></p>
+        <form th:method="GET" th:action="@{/auth/change-password}" id="change-password-btn">
+            <button type="submit" >Сменить пароль</button>
+        </form>
+
+        <form th:action="@{/logout}" th:method="POST" class="bth-logout">
+            <input type="submit" value="Выйти">
+        </form>
+    </div>
+    <div class="tabs">
+        <ul>
+            <li><button class="tab-button active" data-tab="schedule">Расписание</button></li>
+            <li><button  class="tab-button" data-tab="journal">Журнал</button></li>
+            <li><button  class="tab-button" data-tab="news">Новости</button></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="schedule">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>День недели</th>
+                        <th>Дата</th>
+                        <th>Время начала</th>
+                        <th>Дисциплина</th>
+                        <th>Вид занятия</th>
+                        <th>Аудитория</th>
+                        <th>Преподаватель</th>
+                        <th>Кафедра</th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="schedule : ${scheduleDataList}">
+                    <tr>
+                        <td>
+                            <span th:text="${schedule.getDayOfWeek()}">
+                                schedule
+                            </span>
+                        </td>
+                        <td>
+                            28.04.2023
+                        </td>
+                        <td>
+                            <span th:text="${schedule.getStartTimeFormat()}">
+                                schedule
+                            </span>
+                        </td>
+                        <td>
+                            <span th:text="${schedule.getName()}">
+                                schedule
+                            </span>
+                        </td>
+                        <td>
+                            <span th:text="${schedule.getType()}">
+                                schedule
+                            </span>
+                        </td>
+                        <td>
+                            <span th:text="${schedule.getAudience()}">
+                                schedule
+                            </span>
+                        </td>
+                        <td>
+                            <span th:text="${schedule.getTeacherName()}">
+                                schedule
+                            </span>
+                        </td>
+                        <td>
+                            <span th:text="${schedule.getDepartment()}">
+                                schedule
+                            </span>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <!-- end of schedule tab -->
+            <!-- journal tab -->
+            <div id="journal" class="tab-pane" style="display: none;">
+                <h2>Журнал</h2>
+                <p>Выберите дисциплину:</p>
+                <div class="disciplines-list">
+                    <form th:each="subject : ${subjectList}">
+                        <button id="choose-discipline-btn" type="button" name="discipline" th:text="${subject.getName()}"
+                                th:value="${subject.getSubjectId()}">Название</button>
+                    </form>
+                </div>
+                <div class="journal-table">
+                    <!-- журнал для выбранной дисциплины будет здесь -->
+                </div>
+            </div>
+            <!-- end of journal tab -->
+
+            <!-- news tab -->
+            <div id="news" class="tab-pane" style="display: none;">
+                <h2>Новости</h2>
+                <p>Здесь будут новости</p>
+            </div>
+            <!-- end of news tab -->
+
+
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="/js/student.js"></script>
+</html>
