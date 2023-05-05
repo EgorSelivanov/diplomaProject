@@ -1,0 +1,90 @@
+.login-page {
+    width: 360px;
+    padding: 8% 0 0;
+    margin: auto;
+}
+
+.form {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.form input {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+    position: relative;
+}
+
+.form .login-button {
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: #4CAF50;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.form .login-button:hover,.form .login-button:active,.form .login-button:focus {
+    background: #43A047;
+}
+
+.form input:focus {
+    border: 1px solid #4CAF50;
+}
+
+.error-message {
+    color: red;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.password-wrapper {
+    position: relative; /* добавляем */
+}
+
+.password-toggle {
+    position: absolute;
+    top: 40%;
+    right: 10px; /* Изменены координаты положения кнопки "глаза" */
+    transform: translateY(-50%);
+    width: 23px;
+    height: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-image: url('https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-eye-1024.png');
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 20px;
+}
+
+.password-toggle:focus {
+    outline: none;
+}
+
+.password-input[type="password"] {
+    letter-spacing: 0.3em;
+}
+
+.password-input[type="text"] {
+    letter-spacing: normal;
+}

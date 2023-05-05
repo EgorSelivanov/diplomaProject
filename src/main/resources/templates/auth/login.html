@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Login page</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    <script src="/js/login.js"></script>
 </head>
 <body>
+    <div class="login-page">
+        <div class="form">
+            <form name="f" method="post" action="/process_login" class="login-form">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-<form name="f" method="post" action="/process_login">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <label for="username">Введите имя пользователя: </label>
+                <input type="text" name="username" id="username">
+                </br>
+                <label for="password">Введите пароль: </label>
 
-    <label for="username">Введите имя пользователя: </label>
-    <input type="text" name="username" id="username">
-    </br>
-    <label for="password">Введите пароль: </label>
-    <input type="password" name="password" id="password">
-    </br>
-    <input type="submit" value="Login">
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="password" class="password-input">
+                    <button type="button" id="password-toggle" class="password-toggle" onclick="togglePasswordVisibility()"></button>
+                </div>
 
-    <div th:if="${param.error}" style="color: red">
-        Неправильные имя или пароль
+                </br>
+<!--                <input type="submit" value="Login">-->
+                <button class="login-button">Войти</button>
+
+                <div th:if="${param.error}"  class="error-message">
+                    Неправильные имя или пароль
+                </div>
+            </form>
+        </div>
     </div>
-</form>
 </body>
 </html>
