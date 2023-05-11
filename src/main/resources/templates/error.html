@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ошибка</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .error-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .return-button {
+            background-color: #337ab7;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .return-button:hover {
+            background-color: #286090;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="error-message">
+        Что-то пошло не так. Возможно, Вы пытаетесь получить доступ к нереализованной или запрещенной для Вашего уровня странице.
+        Если Вы уверены, что указанный адрес верный, обратитесь к администратору!
+    </div>
+    <button class="return-button" onclick="goBack()">Вернуться к предыдущему шагу</button>
+</div>
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+</body>
+</html>
