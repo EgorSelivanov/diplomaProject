@@ -1,0 +1,56 @@
+<!-- HTML код для модальной страницы -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Создание нового расписания занятий</h2>
+        <form id="scheduleForm" th:action="@{/teacher/new-schedule}" th:method="post" th:object="${teacherScheduleDTO}">
+            <div>
+                <label for="weekday">День недели:</label>
+                <select id="weekday" name="weekday" th:field="*{dayOfWeek}">
+                    <option value="Понедельник">Понедельник</option>
+                    <option value="Вторник">Вторник</option>
+                    <option value="Среда">Среда</option>
+                    <option value="Четверг">Четверг</option>
+                    <option value="Пятница">Пятница</option>
+                    <option value="Суббота">Суббота</option>
+                    <option value="Воскресенье">Воскресенье</option>
+                </select>
+            </div>
+            <div>
+                <label for="startTime">Время начала:</label>
+                <input type="text" id="startTime" name="startTime" class="timepicker" required th:field="*{startTime}">
+            </div>
+            <div>
+                <label for="endTime">Время окончания:</label>
+                <input type="text" id="endTime" name="endTime" class="timepicker" required th:field="*{endTime}">
+            </div>
+            <div>
+                <label for="subject">Название дисциплины:</label>
+                <select id="subject" name="subject" required th:field="*{subjectId}">
+                    <!-- Опции будут запрашиваться у сервера -->
+                </select>
+            </div>
+            <div>
+                <label for="lessonType">Вид занятия:</label>
+                <select id="lessonType" name="lessonType" required th:field="*{type}">
+                    <option value="лекция">лекция</option>
+                    <option value="практика">практика</option>
+                    <option value="ЛР">ЛР</option>
+                </select>
+            </div>
+            <div>
+                <label for="classroom">Аудитория:</label>
+                <input type="text" id="classroom" name="classroom" required th:field="*{audience}">
+            </div>
+            <div>
+                <label for="group">Название группы:</label>
+                <select id="group" name="group" required th:field="*{groupId}">
+                    <!-- Опции будут запрашиваться у сервера -->
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="Сохранить">
+            </div>
+        </form>
+    </div>
+</div>
