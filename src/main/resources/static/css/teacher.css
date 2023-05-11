@@ -1,0 +1,194 @@
+/* Стиль для body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Стиль для заголовка h1 */
+h1 {
+    text-align: center;
+    margin-top: 40px;
+}
+
+/* Стиль для контейнера .container */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+/* Стиль для блока с информацией о студенте */
+.teacher-info {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* Стиль для кнопки .btn */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+
+/* Стиль для вкладок .tabs */
+.tabs {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* Стиль для списка вкладок .tabs ul */
+.tabs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Стиль для элемента списка вкладок .tabs ul li */
+.tabs ul li {
+    display: inline-block;
+}
+
+/* Стиль для ссылки вкладки .tabs ul li a */
+.tabs ul li button {
+    display: block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    color: #333;
+    text-decoration: none;
+    border: 2px solid #007bff;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    cursor: pointer;
+}
+
+/* Стиль для активной ссылки вкладки .tabs ul li a.active */
+.tabs ul li button.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Стиль для содержимого вкладок .tab-content */
+.tab-content {
+    border: 2px solid #007bff;
+    padding: 20px;
+    border-radius: 0 5px 5px 5px;
+}
+
+/* Стиль для таблицы расписания */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Стиль для ячеек таблицы расписания */
+table td, table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+/* Стиль для заголовка таблицы расписания */
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Стиль для строки таблицы расписания */
+table tr {
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+}
+
+/* Стиль для скрытого содержимого вкладок в блоке с табами */
+.tabcontent {
+    display: none;
+}
+
+
+form {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.teacher-info button[type="submit"],
+.teacher-info input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.teacher-info button[type="submit"]:hover,
+.teacher-info input[type="submit"]:hover {
+    background-color: #3e8e41;
+}
+
+.bth-logout {
+    margin-top: 20px;
+}
+
+
+/* Стиль для вкладки Журнал */
+.disciplines-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.disciplines-list button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background-color: #0099CC;
+    color: white;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.disciplines-list button:hover {
+    background-color: #0077B3;
+}
+
+.journal-table {
+    margin-top: 20px;
+}
+
+.journal-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.journal-table th, .journal-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.journal-table td:first-child {
+    text-align: left;
+}
+
+
+
+
