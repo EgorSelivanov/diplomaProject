@@ -42,8 +42,6 @@ function getJournalData(discipline) {
             const journalTable = document.querySelector('.journal-table');
             // очищаем его содержимое
             journalTable.innerHTML = '';
-            console.log("DATA:");
-            console.log(data);
             // если полученных данных нет, выводим сообщение об ошибке
             if (Array.isArray(data) && data.length === 0) {
                 journalTable.innerHTML = '<p>Данных для отображения нет</p>';
@@ -91,7 +89,6 @@ submitButtons.forEach(button => {
     button.addEventListener('click', event => {
         event.preventDefault(); // отменяем стандартное поведение формы
         const selectedDiscipline = button.value; // получаем выбранную дисциплину из формы
-        console.log(selectedDiscipline);
         getJournalData(selectedDiscipline); // вызываем функцию getJournalData с выбранной дисциплиной
         return false;
     });

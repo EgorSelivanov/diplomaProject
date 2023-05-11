@@ -30,12 +30,10 @@ public class Schedule {
     private String dayOfWeek;
 
     @Column(name = "start_time")
-    @NotEmpty(message = "Не указано время начала занятия!")
     @Temporal(TemporalType.TIME)
     private Date startTime;
 
     @Column(name = "end_time")
-    @NotEmpty(message = "Не указано время окончания занятия!")
     @Temporal(TemporalType.TIME)
     private Date endTime;
 

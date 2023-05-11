@@ -45,26 +45,6 @@ public class StudentService {
         Group group = this.getGroupByStudent(id);
 
         return studentDAO.getStudentScheduleData(group.getGroupId());
-
-        /*List<StudentScheduleDTO> scheduleDTOS = new ArrayList<>();
-
-        Hibernate.initialize(group.getWorkloadList());
-        List<Workload> workloadList = group.getWorkloadList();
-
-        for (Workload workload: workloadList) {
-            Subject subject = workload.getSubject();
-            Teacher teacher = workload.getTeacher();
-            User user = teacher.getUser();
-
-            for (Schedule schedule: workload.getScheduleList()) {
-                scheduleDTOS.add(new StudentScheduleDTO(schedule.getAudience(), schedule.getDayOfWeek(), schedule.getStartTime(),
-                        schedule.getEndTime(), subject.getName(), workload.getType(),
-                        user.getSecondName() + " " + user.getFirstName() + " " + user.getPatronymic(),
-                        teacher.getDepartment()));
-            }
-        }
-
-        return scheduleDTOS;*/
     }
 
     public List<Subject> getSubjectListByStudent(int id) {

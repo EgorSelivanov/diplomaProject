@@ -42,7 +42,6 @@ public class StudentScheduleDTO {
     @Size(min = 2, max = 255, message = "Фамилия пользователя должна быть от 2 до 255 символов!")
     private String secondName;
 
-
     private String patronymic;
 
     @NotEmpty(message = "Название кафедры не может быть пустым!")

@@ -2,13 +2,11 @@ package ru.selivanov.springproject.diplomaProject.services;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.selivanov.springproject.diplomaProject.model.User;
 import ru.selivanov.springproject.diplomaProject.repositories.UsersRepository;
-import ru.selivanov.springproject.diplomaProject.security.UserDetails;
+
 
 @Service
 public class RegistrationService {
@@ -29,10 +27,7 @@ public class RegistrationService {
     }
 
     @Transactional
-    public void changePassword(String password) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userDetails.getUser();
+    public void changePassword(User user, String password) {
         user.setPassword(passwordEncoder.encode(password));
 
         usersRepository.save(user);
