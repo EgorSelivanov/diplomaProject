@@ -40,13 +40,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors().disable()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/css/**", "/js/**").permitAll()
+                        .requestMatchers("/student/**").hasRole("STUDENT")
+                        .requestMatchers("/teacher/**").hasRole("TEACHER")
+                        //.requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().hasAnyRole("STUDENT", "TEACHER", "ADMIN"))
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/hello", true)
+                .defaultSuccessUrl("/auth/redirect", true)
                 .failureUrl("/auth/login?error")
                 .and()
                 .logout()
