@@ -4,6 +4,8 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.selivanov.springproject.diplomaProject.dao.TeacherDAO;
+import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.*;
 import ru.selivanov.springproject.diplomaProject.repositories.TeachersRepository;
 
@@ -14,10 +16,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TeacherService {
     private final TeachersRepository teachersRepository;
-
+    private final TeacherDAO teacherDAO;
     @Autowired
-    public TeacherService(TeachersRepository teachersRepository) {
+    public TeacherService(TeachersRepository teachersRepository, TeacherDAO teacherDAO) {
         this.teachersRepository = teachersRepository;
+        this.teacherDAO = teacherDAO;
     }
 
     public List<Teacher> findByDepartment(String department) {
@@ -73,5 +76,19 @@ public class TeacherService {
         Hibernate.initialize(teacherOptional.get().getWorkloadList());
 
         return teacherOptional.get().getWorkloadList();
+    }
+
+    public List<TeacherScheduleDTO> getScheduleDataByTeacher(int id) {
+        return teacherDAO.getTeacherScheduleData(id);
+    }
+
+    public List<Subject> getSubjectListByTeacher(int id) {
+        List<Subject> list = teacherDAO.getSubjectListByTeacherId(id);
+        System.out.println(list.get(0).getSubjectId());
+        return teacherDAO.getSubjectListByTeacherId(id);
+    }
+
+    public List<Group> getGroupListByTeacher(int id) {
+        return teacherDAO.getGroupListByTeacherId(id);
     }
 }
