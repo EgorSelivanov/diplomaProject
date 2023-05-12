@@ -25,7 +25,6 @@ public class Attendance {
     private Schedule schedule;
 
     @Column(name = "present")
-    @NotEmpty(message = "Баллы за посещение не должны быть пустыми!")
     @Min(0)
     private int present;
 

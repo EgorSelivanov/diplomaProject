@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.selivanov.springproject.diplomaProject.dto.AttendanceStudentDTO;
 import ru.selivanov.springproject.diplomaProject.dto.GradesDTO;
 import ru.selivanov.springproject.diplomaProject.services.StudentService;
 
@@ -34,5 +35,11 @@ public class StudentController {
     @GetMapping("/{id}/journal")
     public List<GradesDTO> getGradesList(@PathVariable("id") int id, @RequestParam("discipline") int subjectId) {
         return studentService.getGradesListByStudent(id, subjectId);
+    }
+
+    @ResponseBody
+    @GetMapping("/{id}/attendance")
+    public List<AttendanceStudentDTO> getAttendanceList(@PathVariable("id") int id, @RequestParam("discipline") int subjectId) {
+        return studentService.getAttendanceListByStudentAndSubject(id, subjectId);
     }
 }

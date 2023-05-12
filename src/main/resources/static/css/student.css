@@ -170,21 +170,17 @@ form {
     background-color: #0077B3;
 }
 
-.journal-table {
+.journal-table, .attendance-table{
     margin-top: 20px;
 }
 
-.journal-table table {
+.journal-table table, .attendance-table table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.journal-table th, .journal-table td {
+.journal-table th, .journal-table td, .attendance-table th, .attendance-table td {
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
-}
-
-.journal-table td:first-child {
-    text-align: left;
 }

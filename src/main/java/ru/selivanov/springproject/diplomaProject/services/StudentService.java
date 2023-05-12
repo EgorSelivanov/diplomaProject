@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.selivanov.springproject.diplomaProject.dao.StudentDAO;
+import ru.selivanov.springproject.diplomaProject.dto.AttendanceStudentDTO;
 import ru.selivanov.springproject.diplomaProject.dto.GradesDTO;
 import ru.selivanov.springproject.diplomaProject.dto.StudentScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.*;
@@ -99,5 +100,9 @@ public class StudentService {
         Hibernate.initialize(studentOptional.get().getAttendanceList());
 
         return studentOptional.get().getAttendanceList();
+    }
+
+    public List<AttendanceStudentDTO> getAttendanceListByStudentAndSubject(int studentId, int subjectId) {
+        return studentDAO.getAttendanceDTOList(studentId, subjectId);
     }
 }

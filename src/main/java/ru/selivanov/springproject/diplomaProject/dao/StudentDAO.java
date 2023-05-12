@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.selivanov.springproject.diplomaProject.dto.AttendanceStudentDTO;
 import ru.selivanov.springproject.diplomaProject.dto.GradesDTO;
 import ru.selivanov.springproject.diplomaProject.dto.StudentScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
@@ -52,5 +53,15 @@ public class StudentDAO {
                 LEFT JOIN grade gr ON assign.assignment_id = gr.assignment_id
                 WHERE w.group_id = ? AND w.subject_id = ? AND gr.student_id = ? ORDER BY "date"
                 """, new Object[]{groupId, subjectId, studentId}, new BeanPropertyRowMapper<>(GradesDTO.class));
+    }
+
+    public List<AttendanceStudentDTO> getAttendanceDTOList(int studentId, int subjectId) {
+        return jdbcTemplate.query("""
+                SELECT attendance.date, schedule.day_of_week, attendance.present, workload.type FROM attendance\s
+                JOIN schedule ON attendance.schedule_id = schedule.schedule_id
+                JOIN workload ON schedule.workload_id = workload.workload_id
+                WHERE workload.subject_id = ? AND attendance.student_id = ?
+                ORDER BY attendance.date
+                """, new Object[]{subjectId, studentId}, new BeanPropertyRowMapper<>(AttendanceStudentDTO.class));
     }
 }
