@@ -7,6 +7,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,6 +23,11 @@ public class SecurityConfig {
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     //настраиваем аутентификацию
@@ -48,14 +55,25 @@ public class SecurityConfig {
                         .requestMatchers("/teacher/**").hasRole("TEACHER")
                         //.requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().hasAnyRole("STUDENT", "TEACHER", "ADMIN"))
-                .formLogin().loginPage("/auth/login")
-                .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/auth/redirect", true)
-                .failureUrl("/auth/login?error")
+                .formLogin()
+                    .loginPage("/auth/login")
+                    .loginProcessingUrl("/process_login")
+                    .defaultSuccessUrl("/auth/redirect", true)
+                    .failureUrl("/auth/login?error")
                 .and()
                 .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/auth/login");
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/auth/login")
+                .and()
+                .rememberMe()
+                    .tokenValiditySeconds(86400) // 24 часа
+                .and()
+                .sessionManagement()
+                    .sessionFixation().migrateSession()
+                    .maximumSessions(1)
+                    .expiredUrl("/login")
+                    .maxSessionsPreventsLogin(false)
+                    .sessionRegistry(sessionRegistry());;
         return http.build();
     }
 }
