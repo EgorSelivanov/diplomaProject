@@ -30,12 +30,19 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="schedule">
+                    <div id="info-schedule">
+                    </div>
+
+                    <div class="button-wrapper">
+                        <button id="prev-week-btn" class="btn"> &lt; </button>
+                        <button id="next-week-btn" class="btn"> &gt; </button>
+                    </div>
+
                     <button id="addScheduleButton" class="btn btn-primary">Добавить занятие</button>
                     <table id="scheduleTable">
                         <thead>
                         <tr>
                             <th>День недели</th>
-                            <th>Дата</th>
                             <th>Время начала</th>
                             <th>Время окончания</th>
                             <th>Дисциплина</th>
@@ -51,9 +58,6 @@
                                     <span th:text="${schedule.getDayOfWeek()}">
                                         schedule
                                     </span>
-                            </td>
-                            <td>
-                                28.04.2023
                             </td>
                             <td>
                                     <span th:text="${schedule.getStartTimeFormat()}">
@@ -127,4 +131,5 @@
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="/js/teacher.js"></script>
+<script src="/js/tabsAndScheduleData.js"></script>
 </html>

@@ -1,33 +1,3 @@
-// Получаем все кнопки вкладок и все элементы содержимого вкладок
-var tabButtons = document.querySelectorAll(".tab-button");
-var tabContents = document.querySelectorAll(".tab-pane");
-
-
-// При клике на кнопку вкладки
-tabButtons.forEach(function(button) {
-    button.addEventListener("click", function() {
-
-        // Удаляем класс "active" у всех кнопок вкладок
-        tabButtons.forEach(function(btn) {
-            btn.classList.remove("active");
-        });
-
-        // Добавляем класс "active" только на выбранную кнопку
-        button.classList.add("active");
-
-        // Скрываем все элементы содержимого вкладок
-        tabContents.forEach(function(content) {
-            content.style.display = "none";
-        });
-
-        // Отображаем только содержимое выбранной вкладки
-        var tabId = button.getAttribute("data-tab");
-        var tabContent = document.querySelector("#" + tabId);
-        tabContent.style.display = "block";
-    });
-});
-
-
 //Добавление нового расписания
 
 // Найти кнопку "Добавить занятие"
@@ -131,4 +101,48 @@ function fetchGroups() {
         .catch(error => {
             console.error('Ошибка при получении данных для выпадающего списка групп:', error);
         });
+}
+
+
+
+//отображение расписания
+// функция, которая отправляет GET запрос на сервер и получает данные для таблицы расписания
+function getScheduleDataByDate(date) {
+    const teacherId = document.querySelector('#teacher-id').getAttribute("value");
+    // отправляем GET запрос на сервер с параметром discipline
+    fetch(`${teacherId}/schedule?date=${date}`, { method: 'GET' })
+        .then(response => response.json()) // получаем ответ и преобразуем его в json
+        .then(data => {
+            // получаем элемент table с id schedule-table
+            const scheduleTable = document.getElementById('scheduleTable');
+
+            // создаем таблицу и заголовок таблицы
+            var tbody = scheduleTable.getElementsByTagName("tbody")[0];
+            if (tbody === undefined || tbody === null) {
+                tbody = document.createElement('tbody');
+                scheduleTable.appendChild(tbody);
+            }
+
+            //очищаем
+            tbody.innerHTML = '';
+
+            // если полученных данных нет, оставляем таблицу пустой
+            if (Array.isArray(data) && data.length === 0) {
+                return;
+            }
+
+            // заполняем таблицу данными
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                const cells = [item.dayOfWeek, item.startTimeFormat, item.endTimeFormat, item.name, item.type, item.audience,
+                    item.groupName, item.courseNumber];
+                cells.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    row.appendChild(td);
+                });
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error(error));
 }

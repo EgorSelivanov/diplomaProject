@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.selivanov.springproject.diplomaProject.dto.NewScheduleTeacherDTO;
+import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.Group;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
 import ru.selivanov.springproject.diplomaProject.model.User;
@@ -14,6 +15,9 @@ import ru.selivanov.springproject.diplomaProject.security.UserDetails;
 import ru.selivanov.springproject.diplomaProject.services.TeacherService;
 import ru.selivanov.springproject.diplomaProject.services.WorkloadService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -33,7 +37,7 @@ public class TeacherController {
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", teacherService.getUserByTeacher(id));
 
-        model.addAttribute("scheduleDataList", teacherService.getScheduleDataByTeacher(id));
+        model.addAttribute("scheduleDataList", teacherService.getScheduleDataByTeacher(id, new Date()));
         model.addAttribute("subjectList", teacherService.getSubjectListByTeacher(id));
         return "teacher/teacher";
     }
@@ -66,5 +70,13 @@ public class TeacherController {
     @GetMapping("/{id}/groups")
     public List<Group> getGroupList(@PathVariable("id") int id) {
         return teacherService.getGroupListByTeacher(id);
+    }
+
+    @ResponseBody
+    @GetMapping("/{id}/schedule")
+    public List<TeacherScheduleDTO> getScheduleByDAte(@PathVariable("id") int id, @RequestParam(value = "date") String date) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date getDate = dateFormat.parse(date);
+        return teacherService.getScheduleDataByTeacher(id, getDate);
     }
 }

@@ -9,6 +9,7 @@ import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.*;
 import ru.selivanov.springproject.diplomaProject.repositories.TeachersRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,8 +79,8 @@ public class TeacherService {
         return teacherOptional.get().getWorkloadList();
     }
 
-    public List<TeacherScheduleDTO> getScheduleDataByTeacher(int id) {
-        return teacherDAO.getTeacherScheduleData(id);
+    public List<TeacherScheduleDTO> getScheduleDataByTeacher(int id, Date date) {
+        return teacherDAO.getTeacherScheduleData(id, date);
     }
 
     public List<Subject> getSubjectListByTeacher(int id) {

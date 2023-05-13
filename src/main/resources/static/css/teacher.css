@@ -189,6 +189,19 @@ form {
     text-align: left;
 }
 
+/* Стили для кнопок < и > */
+.button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#addScheduleButton {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 
 
