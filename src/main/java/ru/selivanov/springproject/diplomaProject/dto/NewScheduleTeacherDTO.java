@@ -35,6 +35,9 @@ public class NewScheduleTeacherDTO {
     @Size(min = 2, max = 255, message = "Тип должен содержать от 2 до 255 символов!")
     private String type;
 
+
+    private String repeat;
+
     @Min(1)
     private int groupId;
 
@@ -123,5 +126,13 @@ public class NewScheduleTeacherDTO {
 
     public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public String getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(String repeat) {
+        this.repeat = repeat;
     }
 }

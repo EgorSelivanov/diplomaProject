@@ -53,7 +53,7 @@ public class TeacherController {
 
         workloadService.createNewTeacherSchedule(teacherScheduleDTO);
 
-        return "redirect:/teacher/1";
+        return "redirect:/teacher/" + user.getTeacher().getTeacherId();
     }
 
     @ResponseBody

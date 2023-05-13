@@ -39,6 +39,17 @@
                 </select>
             </div>
             <div>
+                <label for="lessonRepeat">Повтор:</label>
+                <select id="lessonRepeat" name="lessonRepeat" required th:field="*{repeat}">
+                    <option value="Еженедельно">Еженедельно</option>
+                    <option value="Неч.">Неч.</option>
+                    <option value="Чет.">Чет.</option>
+                    <option value="Неч./Чет.">Неч./Чет.</option>
+                    <option value="Чет./Неч.">Чет./Неч.</option>
+                    <option value="Одно занятие">Одно занятие</option>
+                </select>
+            </div>
+            <div>
                 <label for="classroom">Аудитория:</label>
                 <input type="text" id="classroom" name="classroom" required th:field="*{audience}">
             </div>

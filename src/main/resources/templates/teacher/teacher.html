@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Личный кабинет студента</h1>
+        <h1>Личный кабинет преподавателя</h1>
         <div class="teacher-info" id="teacher-id" th:value="${user.getTeacher().getTeacherId()}">
             <h2 th:text="${user.getSecondName() + ' ' + user.getFirstName() + ' ' + user.getPatronymic()}"></h2>
             <p th:text="${user.getEmail()}"></p>
