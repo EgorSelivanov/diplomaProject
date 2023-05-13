@@ -9,6 +9,7 @@ import ru.selivanov.springproject.diplomaProject.dto.GradesDTO;
 import ru.selivanov.springproject.diplomaProject.dto.StudentScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -21,24 +22,29 @@ public class StudentDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<StudentScheduleDTO> getStudentScheduleData(int groupId) {
-        return jdbcTemplate.query("SELECT schedule.day_of_week, schedule.start_time, subject.name, workload.type, schedule.audience, user_.first_name, user_.second_name, user_.patronymic, teacher.department\n" +
-                        "FROM workload JOIN schedule ON workload.workload_id = schedule.workload_id\n" +
-                        "JOIN subject ON workload.subject_id = subject.subject_id\n" +
-                        "JOIN teacher ON workload.teacher_id = teacher.teacher_id\n" +
-                        "JOIN user_ ON teacher.user_id = user_.user_id\n" +
-                        "WHERE workload.group_id = ?\n" +
-                        "ORDER BY CASE schedule.day_of_week\n" +
-                        "    WHEN 'Понедельник' THEN 1\n" +
-                        "    WHEN 'Вторник' THEN 2\n" +
-                        "    WHEN 'Среда' THEN 3\n" +
-                        "    WHEN 'Четверг' THEN 4\n" +
-                        "    WHEN 'Пятница' THEN 5\n" +
-                        "    WHEN 'Суббота' THEN 6\n" +
-                        "    WHEN 'Воскресенье' THEN 7\n" +
-                        "    ELSE 8\n" +
-                        "END, schedule.start_time;", new Object[]{groupId},
-                new BeanPropertyRowMapper<>(StudentScheduleDTO.class));
+    public List<StudentScheduleDTO> getStudentScheduleData(int studentId, Date date) {
+        return jdbcTemplate.query("""
+                    SELECT schedule.day_of_week, schedule.start_time, schedule.end_time, subject.name, workload.type, schedule.audience, user_.first_name, user_.second_name, user_.patronymic, teacher.department
+                    FROM workload JOIN schedule ON workload.workload_id = schedule.workload_id
+                    JOIN subject ON workload.subject_id = subject.subject_id
+                    JOIN teacher ON workload.teacher_id = teacher.teacher_id
+                    JOIN user_ ON teacher.user_id = user_.user_id
+                    JOIN attendance ON attendance.schedule_id = schedule.schedule_id
+                    WHERE
+                    EXTRACT(WEEK FROM attendance.date) = EXTRACT(WEEK FROM ?::DATE) AND
+                    attendance.student_id = ?
+                    ORDER BY CASE schedule.day_of_week
+                        WHEN 'Понедельник' THEN 1
+                        WHEN 'Вторник' THEN 2
+                        WHEN 'Среда' THEN 3
+                        WHEN 'Четверг' THEN 4
+                        WHEN 'Пятница' THEN 5
+                        WHEN 'Суббота' THEN 6
+                        WHEN 'Воскресенье' THEN 7
+                        ELSE 8
+                    END, schedule.start_time;
+                    """, new Object[]{date, studentId},
+                                    new BeanPropertyRowMapper<>(StudentScheduleDTO.class));
     }
 
     public List<Subject> getSubjectListByGroup(int groupId) {
@@ -60,7 +66,7 @@ public class StudentDAO {
                 SELECT attendance.date, schedule.day_of_week, attendance.present, workload.type FROM attendance\s
                 JOIN schedule ON attendance.schedule_id = schedule.schedule_id
                 JOIN workload ON schedule.workload_id = workload.workload_id
-                WHERE workload.subject_id = ? AND attendance.student_id = ?
+                WHERE workload.subject_id = ? AND attendance.student_id = ? 
                 ORDER BY attendance.date
                 """, new Object[]{subjectId, studentId}, new BeanPropertyRowMapper<>(AttendanceStudentDTO.class));
     }

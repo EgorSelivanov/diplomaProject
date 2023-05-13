@@ -1,3 +1,4 @@
+var currentDate = new Date();
 // Получаем все кнопки вкладок и все элементы содержимого вкладок
 var tabButtons = document.querySelectorAll(".tab-button");
 var tabContents = document.querySelectorAll(".tab-pane");
@@ -158,3 +159,85 @@ submitButtons.forEach(button => {
     });
 });
 
+
+//отображение расписания
+// функция, которая отправляет GET запрос на сервер и получает данные для таблицы расписания
+function getScheduleDataByDate(date) {
+    const studentId = document.querySelector('#student-id').getAttribute("value");
+    // отправляем GET запрос на сервер с параметром discipline
+    fetch(`${studentId}/schedule?date=${date}`, { method: 'GET' })
+        .then(response => response.json()) // получаем ответ и преобразуем его в json
+        .then(data => {
+            // получаем элемент table с id schedule-table
+            const scheduleTable = document.getElementById('schedule-table');
+
+            // создаем таблицу и заголовок таблицы
+            var tbody = scheduleTable.getElementsByTagName("tbody")[0];
+            if (tbody === undefined || tbody === null) {
+                tbody = document.createElement('tbody');
+                scheduleTable.appendChild(tbody);
+            }
+
+            //очищаем
+            tbody.innerHTML = '';
+
+            // если полученных данных нет, оставляем таблицу пустой
+            if (Array.isArray(data) && data.length === 0) {
+                return;
+            }
+
+            // заполняем таблицу данными
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                const cells = [item.dayOfWeek, item.startTimeFormat, item.endTimeFormat, item.name, item.type, item.audience,
+                    item.secondName + " " + item.firstName + " " + item.patronymic, item.department];
+                cells.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    row.appendChild(td);
+                });
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => console.error(error));
+}
+
+
+const prevWeekButton = document.getElementById('prev-week-btn');
+const nextWeekButton = document.getElementById('next-week-btn');
+setInfoTextDateOfSchedule();
+
+function setInfoTextDateOfSchedule() {
+    const dateH2text = document.getElementById('info-schedule');
+    dateH2text.innerHTML = '';
+// Находим день недели текущей даты (0 - воскресенье, 1 - понедельник, и т.д.)
+    var currentDayOfWeek = currentDate.getDay();
+// Определяем дату начала недели
+    var startDate = new Date(currentDate);
+    startDate.setDate(currentDate.getDate() - currentDayOfWeek + 1); // Начало недели - понедельник
+// Определяем дату окончания недели
+    var endDate = new Date(currentDate);
+    endDate.setDate(currentDate.getDate() - currentDayOfWeek + 7); // Окончание недели - воскресенье
+// Преобразуем даты в нужный формат (дд.мм.гггг)
+    var startDateFormatted = startDate.toLocaleDateString('ru-RU');
+    var endDateFormatted = endDate.toLocaleDateString('ru-RU');
+// создаем подпись таблицы
+    const dateH2Content = document.createElement('h2');
+    dateH2Content.textContent = "Таблица расписания для недели: " + startDateFormatted + " - " + endDateFormatted;
+    dateH2text.appendChild(dateH2Content);
+}
+
+
+prevWeekButton.addEventListener('click', event => {
+    currentDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+    getScheduleDataByDate(currentDate.toISOString().split('T')[0]);
+    setInfoTextDateOfSchedule();
+    return false;
+});
+
+nextWeekButton.addEventListener('click', event => {
+    currentDate = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    getScheduleDataByDate(currentDate.toISOString().split('T')[0]);
+    setInfoTextDateOfSchedule();
+    return false;
+});

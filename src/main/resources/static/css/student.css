@@ -184,3 +184,13 @@ form {
     text-align: center;
     border: 1px solid #ddd;
 }
+
+/* Стили для кнопок < и > */
+.button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+

@@ -27,62 +27,71 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="schedule">
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>День недели</th>
-                            <th>Дата</th>
-                            <th>Время начала</th>
-                            <th>Дисциплина</th>
-                            <th>Вид занятия</th>
-                            <th>Аудитория</th>
-                            <th>Преподаватель</th>
-                            <th>Кафедра</th>
-                        </tr>
-                        </thead>
-                        <tbody th:each="schedule : ${scheduleDataList}">
-                        <tr>
-                            <td>
-                                <span th:text="${schedule.getDayOfWeek()}">
-                                    schedule
-                                </span>
-                            </td>
-                            <td>
-                                28.04.2023
-                            </td>
-                            <td>
-                                <span th:text="${schedule.getStartTimeFormat()}">
-                                    schedule
-                                </span>
-                            </td>
-                            <td>
-                                <span th:text="${schedule.getName()}">
-                                    schedule
-                                </span>
-                            </td>
-                            <td>
-                                <span th:text="${schedule.getType()}">
-                                    schedule
-                                </span>
-                            </td>
-                            <td>
-                                <span th:text="${schedule.getAudience()}">
-                                    schedule
-                                </span>
-                            </td>
-                            <td>
-                                <span th:text="${schedule.getTeacherName()}">
-                                    schedule
-                                </span>
-                            </td>
-                            <td>
-                                <span th:text="${schedule.getDepartment()}">
-                                    schedule
-                                </span>
-                            </td>
-                        </tr>
+                    <div id="info-schedule">
+                    </div>
+                    <div class="button-wrapper">
+                        <button id="prev-week-btn" class="btn"> &lt; </button>
+                        <button id="next-week-btn" class="btn"> &gt; </button>
+                    </div>
+                        <table id="schedule-table">
+                            <thead>
+                            <tr>
+                                <th>День недели</th>
+                                <th>Время начала</th>
+                                <th>Время окончания</th>
+                                <th>Дисциплина</th>
+                                <th>Вид занятия</th>
+                                <th>Аудитория</th>
+                                <th>Преподаватель</th>
+                                <th>Кафедра</th>
+                            </tr>
+                            </thead>
+                            <tbody id="schedule-table-tbody" th:each="schedule : ${scheduleDataList}">
+                                <tr>
+                                    <td>
+                                        <span th:text="${schedule.getDayOfWeek()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getStartTimeFormat()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getEndTimeFormat()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getName()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getType()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getAudience()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getTeacherName()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getDepartment()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
 
-                    </table>
+                        </table>
                 </div>
                 <!-- end of schedule tab -->
                 <!-- journal tab -->
