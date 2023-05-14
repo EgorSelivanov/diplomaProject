@@ -8,7 +8,9 @@ import jakarta.validation.constraints.Size;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class NewScheduleTeacherDTO {
     private final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
@@ -38,22 +40,26 @@ public class NewScheduleTeacherDTO {
 
     private String repeat;
 
-    @Min(1)
-    private int groupId;
+    /*@Min(1)
+    private int groupId;*/
+
+    private List<Integer> groupsId;
 
     @Min(1)
     private int teacherId;
 
-    public NewScheduleTeacherDTO() {};
+    public NewScheduleTeacherDTO() {
+        groupsId = new ArrayList<>();
+    };
 
-    public NewScheduleTeacherDTO(String audience, String dayOfWeek, Date startTime, Date endTime, int subjectId, String type, int groupId) {
+    public NewScheduleTeacherDTO(String audience, String dayOfWeek, Date startTime, Date endTime, int subjectId, String type, List<Integer> groupId) {
         this.audience = audience;
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
         this.subjectId = subjectId;
         this.type = type;
-        this.groupId = groupId;
+        this.groupsId = groupsId;
     }
 
     public String getAudience() {
@@ -112,12 +118,20 @@ public class NewScheduleTeacherDTO {
         this.type = type;
     }
 
-    public int getGroupId() {
+    /*public int getGroupId() {
         return groupId;
     }
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
+    }*/
+
+    public List<Integer> getGroupsId() {
+        return groupsId;
+    }
+
+    public void setGroupsId(List<Integer> groupsId) {
+        this.groupsId = groupsId;
     }
 
     public int getTeacherId() {

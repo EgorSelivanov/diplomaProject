@@ -125,35 +125,37 @@ public class WorkloadService {
 
     @Transactional
     public void createNewTeacherSchedule(NewScheduleTeacherDTO newScheduleTeacherDTO) {
-        Workload workload = new Workload();
-        workload.setGroup(groupsRepository.findById(newScheduleTeacherDTO.getGroupId()).get());
-        workload.setTeacher(teachersRepository.findById(newScheduleTeacherDTO.getTeacherId()).get());
-        workload.setSubject(subjectsRepository.findById(newScheduleTeacherDTO.getSubjectId()).get());
-        workload.setType(newScheduleTeacherDTO.getType());
-        workloadsRepository.save(workload);
+        for (int i = 0; i < newScheduleTeacherDTO.getGroupsId().size(); i++) {
+            Workload workload = new Workload();
+            workload.setGroup(groupsRepository.findById(newScheduleTeacherDTO.getGroupsId().get(i)).get());
+            workload.setTeacher(teachersRepository.findById(newScheduleTeacherDTO.getTeacherId()).get());
+            workload.setSubject(subjectsRepository.findById(newScheduleTeacherDTO.getSubjectId()).get());
+            workload.setType(newScheduleTeacherDTO.getType());
+            workloadsRepository.save(workload);
 
-        Schedule schedule = new Schedule();
-        schedule.setWorkload(workload);
-        schedule.setAudience(newScheduleTeacherDTO.getAudience());
-        schedule.setStartTime(newScheduleTeacherDTO.getStartTime());
-        schedule.setEndTime(newScheduleTeacherDTO.getEndTime());
-        schedule.setDayOfWeek(newScheduleTeacherDTO.getDayOfWeek());
-        schedulesRepository.save(schedule);
+            Schedule schedule = new Schedule();
+            schedule.setWorkload(workload);
+            schedule.setAudience(newScheduleTeacherDTO.getAudience());
+            schedule.setStartTime(newScheduleTeacherDTO.getStartTime());
+            schedule.setEndTime(newScheduleTeacherDTO.getEndTime());
+            schedule.setDayOfWeek(newScheduleTeacherDTO.getDayOfWeek());
+            schedulesRepository.save(schedule);
 
-        Group group = groupsRepository.findById(newScheduleTeacherDTO.getGroupId()).get();
-        Hibernate.initialize(group.getStudents());
-        List<Student> studentList = group.getStudents();
-        List<Date> dateList = processDates(newScheduleTeacherDTO.getDayOfWeek(), newScheduleTeacherDTO.getRepeat());
+            Group group = groupsRepository.findById(newScheduleTeacherDTO.getGroupsId().get(i)).get();
+            Hibernate.initialize(group.getStudents());
+            List<Student> studentList = group.getStudents();
+            List<Date> dateList = processDates(newScheduleTeacherDTO.getDayOfWeek(), newScheduleTeacherDTO.getRepeat());
 
-        //Создаем посещаемости
-        List<Attendance> attendanceList = new ArrayList<>();
-        for (Student student: studentList) {
-            for (Date date : dateList) {
-                attendanceList.add(new Attendance(student, schedule, 0, date));
+            //Создаем посещаемости
+            List<Attendance> attendanceList = new ArrayList<>();
+            for (Student student: studentList) {
+                for (Date date : dateList) {
+                    attendanceList.add(new Attendance(student, schedule, 0, date));
+                }
             }
-        }
 
-        attendancesRepository.saveAll(attendanceList);
+            attendancesRepository.saveAll(attendanceList);
+        }
     }
 
     private List<Date> processDates(String dayOfWeek, String repeat) {
@@ -167,7 +169,7 @@ public class WorkloadService {
         LocalDate startDay = currentDate.with(TemporalAdjusters.next(userSelectedDayOfWeek));
 
         // Определение номера недели текущей даты
-        int currentWeekNumber = startDay.get(WeekFields.ISO.weekOfWeekBasedYear());
+        int currentWeekNumber = startDay.get(WeekFields.ISO.weekOfWeekBasedYear()) + 1;
 
         int repeatable = 0;
         switch (repeat) {
