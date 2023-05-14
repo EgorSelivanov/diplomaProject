@@ -6,8 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.selivanov.springproject.diplomaProject.dto.NewScheduleTeacherDTO;
-import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
+import ru.selivanov.springproject.diplomaProject.dto.*;
 import ru.selivanov.springproject.diplomaProject.model.Group;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
 import ru.selivanov.springproject.diplomaProject.model.User;
@@ -68,15 +67,26 @@ public class TeacherController {
 
     @ResponseBody
     @GetMapping("/{id}/groups")
-    public List<Group> getGroupList(@PathVariable("id") int id) {
-        return teacherService.getGroupListByTeacher(id);
+    public List<Group> getGroupList(@PathVariable("id") int id, @RequestParam(value = "discipline", required = false) Integer subjectId) {
+        if (subjectId == null)
+            return teacherService.getGroupListByTeacher(id);
+        else
+            return teacherService.getGroupListByTeacherAndSubject(id, subjectId);
     }
 
     @ResponseBody
     @GetMapping("/{id}/schedule")
-    public List<TeacherScheduleDTO> getScheduleByDAte(@PathVariable("id") int id, @RequestParam(value = "date") String date) throws ParseException {
+    public List<TeacherScheduleDTO> getScheduleByDate(@PathVariable("id") int id, @RequestParam(value = "date") String date) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date getDate = dateFormat.parse(date);
         return teacherService.getScheduleDataByTeacher(id, getDate);
+    }
+
+    @ResponseBody
+    @GetMapping("/{id}/journal")
+    public List<AttendanceToShowDTO> getAttendanceList(@PathVariable("id") int id, @RequestParam("discipline") int subjectId,
+                                                   @RequestParam("group") int groupId,
+                                                   @RequestParam("type") String type) {
+        return teacherService.getAttendanceList(id, subjectId, groupId, type);
     }
 }

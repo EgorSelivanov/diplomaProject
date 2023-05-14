@@ -172,21 +172,34 @@ form {
 
 .journal-table {
     margin-top: 20px;
+    width: 100%;
+    overflow-x: auto;
 }
 
 .journal-table table {
-    width: 100%;
     border-collapse: collapse;
+    width: 135%;
+    table-layout: fixed;
 }
 
 .journal-table th, .journal-table td {
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
+    font-size: 80%;
+    width: 45px;
+    white-space: break-spaces;
+    overflow: scroll; /* Скрывает содержимое, которое выходит за пределы ячейки */
+    text-overflow: ellipsis; /* Добавляет многоточие для обозначения обрезанного текста */
+    resize: horizontal;
 }
 
-.journal-table td:first-child {
-    text-align: left;
+.journal-table td:first-child, .journal-table th:first-child{
+    width: 20px;
+}
+
+.journal-table td:nth-child(2), .journal-table th:nth-child(2){
+    width: 150px;
 }
 
 /* Стили для кнопок < и > */
@@ -202,6 +215,30 @@ form {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+/*Стили для выпадающего списка*/
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.select-wrapper select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.select-wrapper select:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+
 
 
 
