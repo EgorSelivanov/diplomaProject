@@ -2,6 +2,29 @@ var currentDate = new Date();
 
 setInfoTextDateOfSchedule();
 
+function getWeekOfYear(date) {
+    // Создаем объект Date на основе заданной даты
+    var targetDate = new Date(date);
+
+    // Копируем объект Date, чтобы не изменять оригинальный
+    var tempDate = new Date(date);
+
+    // Устанавливаем первый января того же года
+    tempDate.setMonth(0);
+    tempDate.setDate(1);
+
+    // Получаем день недели первого января
+    var firstDayOfWeek = tempDate.getDay();
+
+    // Вычисляем разницу между целевой датой и первым января
+    var diff = (targetDate - tempDate) / (24 * 60 * 60 * 1000);
+
+    // Вычисляем номер недели
+    var weekNumber = Math.ceil((diff + firstDayOfWeek) / 7);
+
+    return weekNumber;
+}
+
 function setInfoTextDateOfSchedule() {
     const dateH2text = document.getElementById('info-schedule');
     dateH2text.innerHTML = '';
@@ -20,6 +43,16 @@ function setInfoTextDateOfSchedule() {
     const dateH2Content = document.createElement('h2');
     dateH2Content.textContent = "Таблица расписания для недели: " + startDateFormatted + " - " + endDateFormatted;
     dateH2text.appendChild(dateH2Content);
+
+    const typeOfDate = document.createElement('h2');
+    var weekNumber = getWeekOfYear(startDate);
+    var str = " ";
+    if (weekNumber % 2 === 0)
+        str = 'Чётная';
+    else
+        str = 'Нечётная';
+    typeOfDate.textContent = str;
+    dateH2text.appendChild(typeOfDate);
 }
 
 const prevWeekButton = document.getElementById('prev-week-btn');
