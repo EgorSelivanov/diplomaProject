@@ -29,6 +29,8 @@ public class UserDTO {
     @Size(min = 2, max = 255, message = "Фамилия пользователя должна быть от 2 до 255 символов!")
     private String secondName;
 
+    private String patronymic;
+
     public UserDTO() {}
 
     public UserDTO(String username, String password, String email, String role, String firstName, String secondName, String patronymic) {
@@ -49,8 +51,6 @@ public class UserDTO {
         this.firstName = firstName;
         this.secondName = secondName;
     }
-
-    private String patronymic;
 
     public String getUsername() {
         return username;

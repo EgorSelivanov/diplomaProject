@@ -35,7 +35,7 @@
                 <select id="lessonType" name="lessonType" required th:field="*{type}">
                     <option value="лекция">лекция</option>
                     <option value="практика">практика</option>
-                    <option value="ЛР">ЛР</option>
+                    <option value="л.р.">л.р.</option>
                 </select>
             </div>
             <div>
@@ -55,7 +55,7 @@
             </div>
             <div>
                 <label for="group">Название группы:</label>
-                <select id="group" name="group" required th:field="*{groupId}">
+                <select id="group" name="groups" required th:field="*{groupsId}" multiple>
                     <!-- Опции будут запрашиваться у сервера -->
                 </select>
             </div>
