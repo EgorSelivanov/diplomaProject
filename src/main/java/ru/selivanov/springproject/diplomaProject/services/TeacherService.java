@@ -5,13 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.selivanov.springproject.diplomaProject.dao.TeacherDAO;
+import ru.selivanov.springproject.diplomaProject.dto.AttendanceOfStudentsDTO;
+import ru.selivanov.springproject.diplomaProject.dto.AttendanceToShowDTO;
 import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.*;
 import ru.selivanov.springproject.diplomaProject.repositories.TeachersRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -91,5 +91,35 @@ public class TeacherService {
 
     public List<Group> getGroupListByTeacher(int id) {
         return teacherDAO.getGroupListByTeacherId(id);
+    }
+
+    public List<Group> getGroupListByTeacherAndSubject(int id, int subjectId) {
+        return teacherDAO.getGroupListByTeacherIdAndSubjectId(id, subjectId);
+    }
+
+    public List<AttendanceToShowDTO> getAttendanceList(int teacherId, int subjectId, int groupId, String type){
+        List<AttendanceOfStudentsDTO> list = teacherDAO.getAttendanceList(teacherId, subjectId, groupId, type);
+        List<AttendanceToShowDTO> finalList = new ArrayList<>();
+        Set<String> fio = new HashSet<>();
+
+        AttendanceToShowDTO attendance = null;
+        String currentStudent = "";
+        for (AttendanceOfStudentsDTO dto : list) {
+            if (!currentStudent.equals(dto.getFullName())) {
+                if (attendance != null) {
+                    finalList.add(attendance);
+                    fio.add(attendance.getFullName());
+                }
+                attendance = new AttendanceToShowDTO();
+                attendance.setFullName(dto.getFullName());
+                currentStudent = dto.getFullName();
+            }
+            attendance.addDate(dto.getDateFormat());
+            attendance.addPresent(dto.getPresent());
+        }
+        if (attendance != null && !fio.contains(attendance.getFullName()))
+            finalList.add(attendance);
+
+        return finalList;
     }
 }

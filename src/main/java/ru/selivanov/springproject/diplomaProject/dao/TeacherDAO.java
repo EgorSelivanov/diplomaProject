@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.selivanov.springproject.diplomaProject.dto.AttendanceOfStudentsDTO;
 import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
 import ru.selivanov.springproject.diplomaProject.model.Group;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
@@ -52,7 +53,7 @@ public class TeacherDAO {
                     WHERE workload.teacher_id = ? AND\s
                     EXTRACT(WEEK FROM attendance.date) = EXTRACT(WEEK FROM ?::DATE)
                 ) AS subquery
-                ORDER BY day_of_week_order, start_time;
+                ORDER BY day_of_week_order, start_time, group_name;
                 """, new Object[]{id, date},
                 new BeanPropertyRowMapper<>(TeacherScheduleDTO.class));
     }
@@ -71,5 +72,29 @@ public class TeacherDAO {
                 WHERE workload.teacher_id = ?
                 """, new Object[]{id},
                 new BeanPropertyRowMapper<>(Group.class));
+    }
+
+    public List<Group> getGroupListByTeacherIdAndSubjectId(int id, int subjectId) {
+        return jdbcTemplate.query("""
+                SELECT DISTINCT group_.* FROM group_
+                JOIN workload ON workload.group_id = group_.group_id
+                WHERE workload.teacher_id = ? AND workload.subject_id = ?
+                ORDER BY group_.course_number, group_.name
+                """, new Object[]{id, subjectId},
+                new BeanPropertyRowMapper<>(Group.class));
+    }
+
+    public List<AttendanceOfStudentsDTO> getAttendanceList(int teacherId, int subjectId, int groupId, String type) {
+        return jdbcTemplate.query("""
+                SELECT user_.second_name, user_.first_name, user_.patronymic, attendance.date, attendance.present
+                FROM attendance
+                JOIN schedule ON attendance.schedule_id = schedule.schedule_id
+                JOIN workload ON workload.workload_id = schedule.workload_id
+                JOIN student ON student.student_id = attendance.student_id
+                JOIN user_ ON user_.user_id = student.user_id
+                WHERE workload.teacher_id = ? AND workload.subject_id = ? AND workload.group_id = ? AND workload.type = ?
+                ORDER BY user_.second_name, user_.first_name, user_.patronymic,attendance.date
+                """, new Object[]{teacherId, subjectId, groupId, type},
+                new BeanPropertyRowMapper<>(AttendanceOfStudentsDTO.class));
     }
 }
