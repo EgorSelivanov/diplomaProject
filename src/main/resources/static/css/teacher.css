@@ -170,35 +170,35 @@ form {
     background-color: #0077B3;
 }
 
-.journal-table {
+.journal-table, .grades-table, .assignment-table {
     margin-top: 20px;
     width: 100%;
     overflow-x: auto;
 }
 
-.journal-table table {
+.journal-table table, .grades-table table, .assignment-table table {
     border-collapse: collapse;
-    width: 135%;
+    width: 100%;
     table-layout: fixed;
 }
 
-.journal-table th, .journal-table td {
+.journal-table th, .journal-table td, .grades-table th, .grades-table td, .assignment-table th, .assignment-table td{
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
     font-size: 80%;
-    width: 45px;
+    width: min-content;
     white-space: break-spaces;
     overflow: scroll; /* Скрывает содержимое, которое выходит за пределы ячейки */
     text-overflow: ellipsis; /* Добавляет многоточие для обозначения обрезанного текста */
     resize: horizontal;
 }
 
-.journal-table td:first-child, .journal-table th:first-child{
+.journal-table td:first-child, .journal-table th:first-child, .grades-table td:first-child, .grades-table th:first-child{
     width: 20px;
 }
 
-.journal-table td:nth-child(2), .journal-table th:nth-child(2){
+.journal-table td:nth-child(2), .journal-table th:nth-child(2), .grades-table td:nth-child(2), .grades-table th:nth-child(2){
     width: 150px;
 }
 
@@ -238,7 +238,25 @@ form {
     box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
 }
 
+.editable-cell input {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 95%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 4px;
+    border: none;
+    background-color: transparent;
+    font-size: inherit;
+    text-align: center;
+}
 
+
+/*Кнопки сохранения изменений*/
+.btn-save-changes {
+    margin-top: 15px;
+}
 
 
 
