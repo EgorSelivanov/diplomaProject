@@ -5,7 +5,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.selivanov.springproject.diplomaProject.dto.AttendanceOfStudentsDTO;
+import ru.selivanov.springproject.diplomaProject.dto.GradesOfStudentsOfGroupDTO;
 import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
+import ru.selivanov.springproject.diplomaProject.model.Assignment;
 import ru.selivanov.springproject.diplomaProject.model.Group;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
 
@@ -86,7 +88,7 @@ public class TeacherDAO {
 
     public List<AttendanceOfStudentsDTO> getAttendanceList(int teacherId, int subjectId, int groupId, String type) {
         return jdbcTemplate.query("""
-                SELECT user_.second_name, user_.first_name, user_.patronymic, attendance.date, attendance.present
+                SELECT attendance.attendance_id, user_.second_name, user_.first_name, user_.patronymic, attendance.date, attendance.present
                 FROM attendance
                 JOIN schedule ON attendance.schedule_id = schedule.schedule_id
                 JOIN workload ON workload.workload_id = schedule.workload_id
@@ -96,5 +98,37 @@ public class TeacherDAO {
                 ORDER BY user_.second_name, user_.first_name, user_.patronymic,attendance.date
                 """, new Object[]{teacherId, subjectId, groupId, type},
                 new BeanPropertyRowMapper<>(AttendanceOfStudentsDTO.class));
+    }
+
+    public List<GradesOfStudentsOfGroupDTO> getGradesList(int teacherId, int subjectId, int groupId, String type) {
+        return jdbcTemplate.query("""
+                SELECT DISTINCT student.student_id, assignment_.assignment_id,user_.first_name, user_.second_name, user_.patronymic, assignment_.type, assignment_.description,
+                assignment_.max_points, assignment_.date, grade.points
+                FROM assignment_
+                JOIN workload ON workload.workload_id = assignment_.workload_id
+                LEFT JOIN grade ON grade.assignment_id = assignment_.assignment_id
+                JOIN student ON workload.group_id = student.group_id
+                JOIN user_ ON user_.user_id = student.user_id
+                WHERE workload.teacher_id = ? AND
+                workload.subject_id = ? AND
+                workload.group_id = ? AND
+                workload.type = ? AND
+                (grade IS NULL OR student.student_id = grade.student_id)
+                ORDER BY user_.second_name, user_.first_name, user_.patronymic, assignment_.date
+                """, new Object[]{teacherId, subjectId, groupId, type},
+                new BeanPropertyRowMapper<>(GradesOfStudentsOfGroupDTO.class));
+    }
+
+    public List<Assignment> getAssignmentList(int teacherId, int subjectId, int groupId, String type) {
+        return jdbcTemplate.query("""
+                SELECT assignment_.assignment_id, assignment_.type, assignment_.description, assignment_.max_points, assignment_.date
+                FROM assignment_ JOIN workload ON assignment_.workload_id = workload.workload_id
+                WHERE workload.teacher_id = ? AND
+                workload.subject_id = ? AND
+                workload.group_id = ? AND
+                workload.type = ?
+                ORDER BY assignment_.date
+                """, new Object[]{teacherId, subjectId, groupId, type},
+                new BeanPropertyRowMapper<>(Assignment.class));
     }
 }
