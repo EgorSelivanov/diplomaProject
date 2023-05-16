@@ -14,6 +14,7 @@
         <div class="teacher-info" id="teacher-id" th:value="${user.getTeacher().getTeacherId()}">
             <h2 th:text="${user.getSecondName() + ' ' + user.getFirstName() + ' ' + user.getPatronymic()}"></h2>
             <p th:text="${user.getEmail()}"></p>
+            <input type="hidden" id="csrfToken" th:value="${_csrf}" />
             <form th:method="GET" th:action="@{/auth/change-password}" id="change-password-btn">
                 <button type="submit" >Сменить пароль</button>
             </form>
@@ -52,8 +53,8 @@
                             <th>Курс</th>
                         </tr>
                         </thead>
-                        <tbody th:each="schedule : ${scheduleDataList}">
-                        <tr>
+                        <tbody>
+                        <tr th:each="schedule : ${scheduleDataList}">
                             <td>
                                     <span th:text="${schedule.getDayOfWeek()}">
                                         schedule
@@ -117,6 +118,26 @@
 
                     <div class="journal-table">
                         <!-- журнал для выбранной дисциплины будет здесь -->
+                    </div>
+
+                    <div class="journal-save">
+                        <!-- кнопка сохранения данных о посещениях будет здесь -->
+                    </div>
+
+                    <div class="grades-table">
+                        <!-- оценки для выбранной дисциплины будет здесь -->
+                    </div>
+
+                    <div class="grades-save">
+                        <!-- кнопка сохранения данных об оценках будет здесь -->
+                    </div>
+
+                    <div class="assignment-table">
+                        <!-- назначения для выбранной дисциплины будет здесь -->
+                    </div>
+
+                    <div class="assignment-save">
+                        <!-- кнопка сохранения данных о назначениях будет здесь -->
                     </div>
                 </div>
                 <!-- end of journal tab -->
