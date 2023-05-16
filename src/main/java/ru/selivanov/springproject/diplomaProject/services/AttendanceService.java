@@ -22,8 +22,15 @@ public class AttendanceService {
         this.attendancesRepository = attendancesRepository;
     }
 
+    public Optional<Attendance> getAttendanceById(int id) { return attendancesRepository.findById(id); }
+
     public List<Attendance> getAttendancesByDate(Date date) {
         return attendancesRepository.findByDate(date);
+    }
+
+    @Transactional
+    public void saveAttendance(Attendance attendance) {
+        attendancesRepository.save(attendance);
     }
 
     @Transactional
