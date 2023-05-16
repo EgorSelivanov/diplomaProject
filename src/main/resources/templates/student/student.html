@@ -46,8 +46,8 @@
                                 <th>Кафедра</th>
                             </tr>
                             </thead>
-                            <tbody id="schedule-table-tbody" th:each="schedule : ${scheduleDataList}">
-                                <tr>
+                            <tbody id="schedule-table-tbody">
+                                <tr th:each="schedule : ${scheduleDataList}">
                                     <td>
                                         <span th:text="${schedule.getDayOfWeek()}">
                                             schedule
