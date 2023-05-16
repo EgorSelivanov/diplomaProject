@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login", "/auth/registration", "/error").permitAll()
                         .requestMatchers("/css/**", "/js/**").permitAll()
                         .requestMatchers("/student/**").hasRole("STUDENT")
-                        .requestMatchers("/teacher/**").hasRole("TEACHER")
+                        .requestMatchers("/teacher/**", "/grade", "/assignment", "/attendance").hasRole("TEACHER")
                         //.requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().hasAnyRole("STUDENT", "TEACHER", "ADMIN"))
                 .formLogin()
