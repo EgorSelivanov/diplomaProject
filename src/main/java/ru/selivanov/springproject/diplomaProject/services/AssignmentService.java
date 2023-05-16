@@ -36,6 +36,11 @@ public class AssignmentService {
     }
 
     @Transactional
+    public void saveAssignment(Assignment assignment) {
+        assignmentsRepository.save(assignment);
+    }
+
+    @Transactional
     public boolean updateAssignment(int id, Assignment updatedAssignment) {
         Optional<Assignment> assignmentById = assignmentsRepository.findById(id);
 
@@ -71,6 +76,10 @@ public class AssignmentService {
         Hibernate.initialize(assignmentOptional.get().getGradeList());
 
         return assignmentOptional.get().getGradeList();
+    }
+
+    public Optional<Assignment> getAssignmentById(int id) {
+        return assignmentsRepository.findById(id);
     }
 
     @Transactional
