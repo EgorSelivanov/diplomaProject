@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.selivanov.springproject.diplomaProject.dao.TeacherDAO;
-import ru.selivanov.springproject.diplomaProject.dto.AttendanceOfStudentsDTO;
-import ru.selivanov.springproject.diplomaProject.dto.AttendanceToShowDTO;
-import ru.selivanov.springproject.diplomaProject.dto.TeacherScheduleDTO;
+import ru.selivanov.springproject.diplomaProject.dto.*;
 import ru.selivanov.springproject.diplomaProject.model.*;
 import ru.selivanov.springproject.diplomaProject.repositories.TeachersRepository;
 
@@ -116,10 +114,50 @@ public class TeacherService {
             }
             attendance.addDate(dto.getDateFormat());
             attendance.addPresent(dto.getPresent());
+            attendance.addAttendanceId(dto.getAttendanceId());
         }
         if (attendance != null && !fio.contains(attendance.getFullName()))
             finalList.add(attendance);
 
         return finalList;
+    }
+
+    public List<GradesOfStudentsToShowDTO> getGradesList(int teacherId, int subjectId, int groupId, String type) {
+        List<GradesOfStudentsOfGroupDTO> list = teacherDAO.getGradesList(teacherId, subjectId, groupId, type);
+        List<GradesOfStudentsToShowDTO> finalList = new ArrayList<>();
+        Set<Integer> fio = new HashSet<>();
+
+        GradesOfStudentsToShowDTO grade = null;
+        int currentStudent = -1;
+        for (GradesOfStudentsOfGroupDTO dto : list) {
+            if (currentStudent != dto.getStudentId()) {
+                if (grade != null) {
+                    finalList.add(grade);
+                    fio.add(grade.getStudentId());
+                }
+                grade = new GradesOfStudentsToShowDTO();
+                grade.setFullName(dto.getFullName());
+                grade.setStudentId(dto.getStudentId());
+                currentStudent = dto.getStudentId();
+            }
+            grade.addType(dto.getType());
+            grade.addDescription(dto.getDescription());
+            grade.addMaxPoints(dto.getMaxPoints());
+            grade.addDate(dto.getDateFormat());
+            grade.addAssignmentId(dto.getAssignmentId());
+            if (dto.getPoints() == null)
+                grade.addPoints("-");
+            else
+                grade.addPoints(String.valueOf(dto.getPoints()));
+        }
+
+        if (grade != null && !fio.contains(grade.getStudentId()))
+            finalList.add(grade);
+
+        return finalList;
+    }
+
+    public List<Assignment> getAssignmentList(int teacherId, int subjectId, int groupId, String type) {
+        return teacherDAO.getAssignmentList(teacherId, subjectId, groupId, type);
     }
 }

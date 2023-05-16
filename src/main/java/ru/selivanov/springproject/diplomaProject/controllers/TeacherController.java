@@ -1,12 +1,15 @@
 package ru.selivanov.springproject.diplomaProject.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.selivanov.springproject.diplomaProject.dto.*;
+import ru.selivanov.springproject.diplomaProject.model.Assignment;
 import ru.selivanov.springproject.diplomaProject.model.Group;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
 import ru.selivanov.springproject.diplomaProject.model.User;
@@ -33,11 +36,14 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model, HttpServletRequest request) {
         model.addAttribute("user", teacherService.getUserByTeacher(id));
 
         model.addAttribute("scheduleDataList", teacherService.getScheduleDataByTeacher(id, new Date()));
         model.addAttribute("subjectList", teacherService.getSubjectListByTeacher(id));
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+        model.addAttribute("_csrf", csrfToken.getToken());
         return "teacher/teacher";
     }
 
@@ -88,5 +94,21 @@ public class TeacherController {
                                                    @RequestParam("group") int groupId,
                                                    @RequestParam("type") String type) {
         return teacherService.getAttendanceList(id, subjectId, groupId, type);
+    }
+
+    @ResponseBody
+    @GetMapping("/{id}/grades")
+    public List<GradesOfStudentsToShowDTO> getGradesList(@PathVariable("id") int id, @RequestParam("discipline") int subjectId,
+                                                       @RequestParam("group") int groupId,
+                                                       @RequestParam("type") String type) {
+        return teacherService.getGradesList(id, subjectId, groupId, type);
+    }
+
+    @ResponseBody
+    @GetMapping("/{id}/assignments")
+    public List<Assignment> getAssignmentList(@PathVariable("id") int id, @RequestParam("discipline") int subjectId,
+                                              @RequestParam("group") int groupId,
+                                              @RequestParam("type") String type) {
+        return teacherService.getAssignmentList(id, subjectId, groupId, type);
     }
 }
