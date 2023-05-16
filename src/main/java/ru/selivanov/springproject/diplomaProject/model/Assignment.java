@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +12,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "Assignment_")
 public class Assignment {
-
+    @Transient
+    private final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
     @Id
     @Column(name = "assignment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +27,8 @@ public class Assignment {
     private String description;
 
     @Column(name = "max_points")
-    @NotEmpty(message = "Количество максимальных баллов не указано!")
     @Min(0)
-    private int max_points;
+    private int maxPoints;
 
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
@@ -42,18 +43,18 @@ public class Assignment {
 
     public Assignment() {}
 
-    public Assignment(String type, String description, int max_points, Date date, Workload workload) {
+    public Assignment(String type, String description, int maxPoints, Date date, Workload workload) {
         this.type = type;
         this.description = description;
-        this.max_points = max_points;
+        this.maxPoints = maxPoints;
         this.date = date;
         this.workload = workload;
     }
 
-    public Assignment(String type, String description, int max_points, Date date) {
+    public Assignment(String type, String description, int maxPoints, Date date) {
         this.type = type;
         this.description = description;
-        this.max_points = max_points;
+        this.maxPoints = maxPoints;
         this.date = date;
     }
 
@@ -81,12 +82,12 @@ public class Assignment {
         this.description = description;
     }
 
-    public int getMax_points() {
-        return max_points;
+    public int getMaxPoints() {
+        return maxPoints;
     }
 
-    public void setMax_points(int max_points) {
-        this.max_points = max_points;
+    public void setMaxPoints(int max_points) {
+        this.maxPoints = max_points;
     }
 
     public Date getDate() {
@@ -113,16 +114,20 @@ public class Assignment {
         this.gradeList = gradeList;
     }
 
+    public String getDateFormat() {
+        return formatter.format(date);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Assignment that = (Assignment) o;
-        return assignmentId == that.assignmentId && max_points == that.max_points && type.equals(that.type) && Objects.equals(description, that.description) && date.equals(that.date) && workload.equals(that.workload);
+        return assignmentId == that.assignmentId && maxPoints == that.maxPoints && type.equals(that.type) && Objects.equals(description, that.description) && date.equals(that.date) && workload.equals(that.workload);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(assignmentId, type, description, max_points, date, workload);
+        return Objects.hash(assignmentId, type, description, maxPoints, date, workload);
     }
 }

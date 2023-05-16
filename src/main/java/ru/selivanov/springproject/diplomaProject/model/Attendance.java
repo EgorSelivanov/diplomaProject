@@ -2,7 +2,6 @@ package ru.selivanov.springproject.diplomaProject.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -30,7 +29,7 @@ public class Attendance {
 
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date date;
 
     public Attendance() {}

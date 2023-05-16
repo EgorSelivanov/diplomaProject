@@ -2,7 +2,6 @@ package ru.selivanov.springproject.diplomaProject.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Objects;
 
@@ -24,7 +23,6 @@ public class Grade {
 
     @Column(name = "points")
     @Min(0)
-    @NotEmpty(message = "Количество баллов не должно быть пустым!")
     private int points;
 
     public Grade () {}
