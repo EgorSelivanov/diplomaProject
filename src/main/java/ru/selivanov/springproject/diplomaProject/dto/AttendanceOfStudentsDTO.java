@@ -10,6 +10,9 @@ import java.util.Date;
 
 public class AttendanceOfStudentsDTO {
     private final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+
+    @Min(0)
+    private int attendanceId;
     @NotEmpty(message = "Имя пользователя не может быть пустым!")
     @Size(min = 2, max = 255, message = "Имя пользователя должно быть от 2 до 255 символов!")
     private String firstName;
@@ -28,7 +31,8 @@ public class AttendanceOfStudentsDTO {
 
     public AttendanceOfStudentsDTO() {}
 
-    public AttendanceOfStudentsDTO(String firstName, String secondName, String patronymic, Date date, int present) {
+    public AttendanceOfStudentsDTO(int attendanceId, String firstName, String secondName, String patronymic, Date date, int present) {
+        this.attendanceId = attendanceId;
         this.firstName = firstName;
         this.secondName = secondName;
         this.patronymic = patronymic;
@@ -74,6 +78,14 @@ public class AttendanceOfStudentsDTO {
 
     public void setPresent(int present) {
         this.present = present;
+    }
+
+    public int getAttendanceId() {
+        return attendanceId;
+    }
+
+    public void setAttendanceId(int attendanceId) {
+        this.attendanceId = attendanceId;
     }
 
     public String getDateFormat() {
