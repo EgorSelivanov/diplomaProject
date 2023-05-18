@@ -78,8 +78,8 @@ public class AssignmentService {
         return assignmentOptional.get().getGradeList();
     }
 
-    public Optional<Assignment> getAssignmentById(int id) {
-        return assignmentsRepository.findById(id);
+    public Assignment getAssignmentById(int id) {
+        return assignmentsRepository.findById(id).orElse(null);
     }
 
     @Transactional
