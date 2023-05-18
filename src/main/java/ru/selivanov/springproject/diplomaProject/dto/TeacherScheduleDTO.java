@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.Date;
 
 public class TeacherScheduleDTO {
@@ -42,6 +43,8 @@ public class TeacherScheduleDTO {
     @NotEmpty(message = "Не указан курс группы!")
     private int courseNumber;
 
+    private String className;
+
     public TeacherScheduleDTO() {}
 
     public TeacherScheduleDTO(String audience, String dayOfWeek, Date startTime, Date endTime, String name, String type, String groupName, int courseNumber) {
@@ -73,6 +76,7 @@ public class TeacherScheduleDTO {
 
     public void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+        this.className = getClassNameByDay().toString();
     }
 
     public Date getStartTime() {
@@ -129,5 +133,26 @@ public class TeacherScheduleDTO {
 
     public String getEndTimeFormat() {
         return formatter.format(endTime);
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    private DayOfWeek getClassNameByDay() {
+        return switch (this.dayOfWeek) {
+            case "Понедельник" -> DayOfWeek.MONDAY;
+            case "Вторник" -> DayOfWeek.TUESDAY;
+            case "Среда" -> DayOfWeek.WEDNESDAY;
+            case "Четверг" -> DayOfWeek.THURSDAY;
+            case "Пятница" -> DayOfWeek.FRIDAY;
+            case "Суббота" -> DayOfWeek.SATURDAY;
+            case "Воскресенье" -> DayOfWeek.SUNDAY;
+            default -> throw new RuntimeException("Неверный формат дня недели!");
+        };
     }
 }
