@@ -86,6 +86,16 @@ public class TeacherDAO {
                 new BeanPropertyRowMapper<>(Group.class));
     }
 
+    public List<Group> getGroupListByTeacherIdAndSubjectIdAndType(int id, int subjectId, String type) {
+        return jdbcTemplate.query("""
+                SELECT DISTINCT group_.* FROM group_
+                JOIN workload ON workload.group_id = group_.group_id
+                WHERE workload.teacher_id = ? AND workload.subject_id = ? AND workload.type = ?
+                ORDER BY group_.course_number, group_.name
+                """, new Object[]{id, subjectId, type},
+                new BeanPropertyRowMapper<>(Group.class));
+    }
+
     public List<AttendanceOfStudentsDTO> getAttendanceList(int teacherId, int subjectId, int groupId, String type) {
         return jdbcTemplate.query("""
                 SELECT attendance.attendance_id, user_.second_name, user_.first_name, user_.patronymic, attendance.date, attendance.present
@@ -106,14 +116,14 @@ public class TeacherDAO {
                 assignment_.max_points, assignment_.date, grade.points
                 FROM assignment_
                 JOIN workload ON workload.workload_id = assignment_.workload_id
-                LEFT JOIN grade ON grade.assignment_id = assignment_.assignment_id
                 JOIN student ON workload.group_id = student.group_id
+                LEFT JOIN grade ON grade.assignment_id = assignment_.assignment_id
+                AND student.student_id = grade.student_id
                 JOIN user_ ON user_.user_id = student.user_id
                 WHERE workload.teacher_id = ? AND
                 workload.subject_id = ? AND
                 workload.group_id = ? AND
-                workload.type = ? AND
-                (grade IS NULL OR student.student_id = grade.student_id)
+                workload.type = ?
                 ORDER BY user_.second_name, user_.first_name, user_.patronymic, assignment_.date
                 """, new Object[]{teacherId, subjectId, groupId, type},
                 new BeanPropertyRowMapper<>(GradesOfStudentsOfGroupDTO.class));

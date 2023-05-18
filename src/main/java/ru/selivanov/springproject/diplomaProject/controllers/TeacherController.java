@@ -73,11 +73,17 @@ public class TeacherController {
 
     @ResponseBody
     @GetMapping("/{id}/groups")
-    public List<Group> getGroupList(@PathVariable("id") int id, @RequestParam(value = "discipline", required = false) Integer subjectId) {
+    public List<Group> getGroupList(@PathVariable("id") int id,
+                                    @RequestParam(value = "discipline", required = false) Integer subjectId,
+                                    @RequestParam(value = "type", required = false) String type) {
         if (subjectId == null)
             return teacherService.getGroupListByTeacher(id);
-        else
-            return teacherService.getGroupListByTeacherAndSubject(id, subjectId);
+        else {
+            if (type == null)
+                return teacherService.getGroupListByTeacherAndSubject(id, subjectId);
+            else
+                return teacherService.getGroupListByTeacherAndSubjectAndType(id, subjectId, type);
+        }
     }
 
     @ResponseBody

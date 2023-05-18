@@ -95,6 +95,10 @@ public class TeacherService {
         return teacherDAO.getGroupListByTeacherIdAndSubjectId(id, subjectId);
     }
 
+    public List<Group> getGroupListByTeacherAndSubjectAndType(int id, int subjectId, String type) {
+        return teacherDAO.getGroupListByTeacherIdAndSubjectIdAndType(id, subjectId, type);
+    }
+
     public List<AttendanceToShowDTO> getAttendanceList(int teacherId, int subjectId, int groupId, String type){
         List<AttendanceOfStudentsDTO> list = teacherDAO.getAttendanceList(teacherId, subjectId, groupId, type);
         List<AttendanceToShowDTO> finalList = new ArrayList<>();
@@ -146,7 +150,7 @@ public class TeacherService {
             grade.addDate(dto.getDateFormat());
             grade.addAssignmentId(dto.getAssignmentId());
             if (dto.getPoints() == null)
-                grade.addPoints("-");
+                grade.addPoints("");
             else
                 grade.addPoints(String.valueOf(dto.getPoints()));
         }
