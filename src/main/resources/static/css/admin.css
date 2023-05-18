@@ -1,0 +1,62 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+header .header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    height: 65px;
+}
+
+header h1 {
+    margin-top: -15px;
+    font-size: 35px;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #333;
+    color: #fff;
+    float: left;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sidebar li:hover {
+    background-color: darkslateblue;
+}
+
+.content {
+    padding: 20px;
+    margin-left: 200px;
+}
+
+.content h2 {
+    margin-top: 0;
+}
+
+.content p {
+    margin-bottom: 20px;
+}
+
+.active {
+    background-color: darkslateblue;
+}
+
+.icon {
+    margin-right: 10px;
+}

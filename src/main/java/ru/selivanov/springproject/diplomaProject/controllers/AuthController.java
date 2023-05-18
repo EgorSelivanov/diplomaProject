@@ -36,6 +36,8 @@ public class AuthController {
             return "redirect:/student/" + user.getStudent().getStudentId();
         if ("ROLE_TEACHER".equals(user.getRole()))
             return "redirect:/teacher/" + user.getTeacher().getTeacherId();
+        if ("ROLE_ADMIN".equals(user.getRole()))
+            return "redirect:/admin/" + user.getUserId();
         else
             return "redirect:/logout";
     }
