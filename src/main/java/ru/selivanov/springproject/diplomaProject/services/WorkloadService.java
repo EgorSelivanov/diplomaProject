@@ -123,14 +123,31 @@ public class WorkloadService {
         return workloadOptional.get().getAssignmentList();
     }
 
+    public Workload getWorkloadByTeacherSubjectGroupType(int teacherId, int subjectId, int groupId, String type) {
+        Teacher teacher = teachersRepository.findById(teacherId).orElse(null);
+        Subject subject = subjectsRepository.findById(subjectId).orElse(null);
+        Group group = groupsRepository.findById(groupId).orElse(null);
+        if (teacher == null || subject == null || group == null || type == null)
+            return null;
+        return workloadsRepository.findByTeacherAndSubjectAndGroupAndType(teacher, subject, group, type).orElse(null);
+    }
+
     @Transactional
     public void createNewTeacherSchedule(NewScheduleTeacherDTO newScheduleTeacherDTO) {
         for (int i = 0; i < newScheduleTeacherDTO.getGroupsId().size(); i++) {
-            Workload workload = new Workload();
-            workload.setGroup(groupsRepository.findById(newScheduleTeacherDTO.getGroupsId().get(i)).get());
-            workload.setTeacher(teachersRepository.findById(newScheduleTeacherDTO.getTeacherId()).get());
-            workload.setSubject(subjectsRepository.findById(newScheduleTeacherDTO.getSubjectId()).get());
-            workload.setType(newScheduleTeacherDTO.getType());
+            int teacherId = newScheduleTeacherDTO.getTeacherId();
+            int subjectId = newScheduleTeacherDTO.getSubjectId();
+            int groupId = newScheduleTeacherDTO.getGroupsId().get(i);
+            String type = newScheduleTeacherDTO.getType();
+
+            Workload workload = getWorkloadByTeacherSubjectGroupType(teacherId, subjectId, groupId, type);
+            if (workload == null) {
+                workload = new Workload();
+                workload.setGroup(groupsRepository.findById(groupId).get());
+                workload.setTeacher(teachersRepository.findById(teacherId).get());
+                workload.setSubject(subjectsRepository.findById(subjectId).get());
+                workload.setType(type);
+            }
             workloadsRepository.save(workload);
 
             Schedule schedule = new Schedule();
@@ -174,12 +191,12 @@ public class WorkloadService {
         int repeatable = 0;
         switch (repeat) {
             case "Еженедельно", "Неч./Чет.", "Чет./Неч." -> repeatable = 1;
-            case "Неч." -> {
+            case "Чет." -> {
                 repeatable = 2;
                 if (currentWeekNumber % 2 == 0)
                     startDay = startDay.plusWeeks(1);
             }
-            case "Чет." -> {
+            case "Неч." -> {
                 repeatable = 2;
                 if (currentWeekNumber % 2 != 0)
                     startDay = startDay.plusWeeks(1);
