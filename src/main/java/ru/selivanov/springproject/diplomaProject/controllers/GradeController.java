@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.selivanov.springproject.diplomaProject.model.Grade;
+import ru.selivanov.springproject.diplomaProject.services.AssignmentService;
 import ru.selivanov.springproject.diplomaProject.services.GradeService;
+import ru.selivanov.springproject.diplomaProject.services.StudentService;
 
 import java.util.List;
 import java.util.Map;
@@ -17,10 +19,14 @@ import java.util.Map;
 @RequestMapping("/grade")
 public class GradeController {
     private final GradeService gradeService;
+    private final StudentService studentService;
+    private final AssignmentService assignmentService;
 
     @Autowired
-    public GradeController(GradeService gradeService) {
+    public GradeController(GradeService gradeService, StudentService studentService, AssignmentService assignmentService) {
         this.gradeService = gradeService;
+        this.studentService = studentService;
+        this.assignmentService = assignmentService;
     }
 
     @ResponseBody
@@ -33,8 +39,11 @@ public class GradeController {
             int assignmentId = list.get(2);
 
             Grade grade = gradeService.getGradeByStudentAndAssignment(studentId, assignmentId);
-            if (grade == null)
-                return ResponseEntity.notFound().build();
+            if (grade == null) {
+                grade = new Grade();
+                grade.setStudent(studentService.getStudentById(studentId));
+                grade.setAssignment(assignmentService.getAssignmentById(assignmentId));
+            }
             grade.setPoints(value);
 
             gradeService.saveGrade(grade);
