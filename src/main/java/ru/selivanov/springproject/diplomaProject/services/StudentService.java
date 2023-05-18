@@ -42,6 +42,10 @@ public class StudentService {
         return studentsRepository.findById(id).map(Student::getGroup).orElse(null);
     }
 
+    public Student getStudentById(int id) {
+        return studentsRepository.findById(id).orElse(null);
+    }
+
     public List<StudentScheduleDTO> getScheduleDataByStudent(int id, Date date) {
         return studentDAO.getStudentScheduleData(id, date);
     }
