@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Личный кабинет преподавателя</title>
     <link rel="stylesheet" type="text/css" href="/css/teacher.css" />
-    <link rel="stylesheet" type="text/css" href="/css/modalNewSchedule.css" />
+    <link rel="stylesheet" type="text/css" href="/css/modal.css" />
     <!-- Подключение библиотеки flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
@@ -23,6 +23,9 @@
                 <input type="submit" value="Выйти">
             </form>
         </div>
+
+        <div id="modal-div"></div>
+
         <div class="tabs">
             <ul>
                 <li><button class="tab-button active" data-tab="schedule">Расписание</button></li>
@@ -54,7 +57,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="schedule : ${scheduleDataList}">
+                        <tr th:each="schedule : ${scheduleDataList}" th:class="${schedule.getClassName()}">
                             <td>
                                     <span th:text="${schedule.getDayOfWeek()}">
                                         schedule
@@ -98,7 +101,6 @@
                         </tr>
 
                     </table>
-                    <div id="modal-div"></div>
                 </div>
                 <!-- end of schedule tab -->
                 <!-- journal tab -->
@@ -110,6 +112,10 @@
                             <button id="choose-discipline-btn" type="button" name="discipline" th:text="${subject.getName()}"
                                     th:value="${subject.getSubjectId()}">Название</button>
                         </form>
+                    </div>
+
+                    <div class="type-list select-wrapper">
+
                     </div>
 
                     <div class="groups-list select-wrapper">
@@ -156,6 +162,10 @@
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/js/secondary.js"></script>
+<script src="/js/attendance.js"></script>
+<script src="/js/grade.js"></script>
+<script src="/js/assignment.js"></script>
 <script src="/js/teacher.js"></script>
 <script src="/js/tabsAndScheduleData.js"></script>
 </html>

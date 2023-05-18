@@ -180,6 +180,7 @@ form {
     border-collapse: collapse;
     width: 100%;
     table-layout: fixed;
+    margin-top: 15px;
 }
 
 .journal-table th, .journal-table td, .grades-table th, .grades-table td, .assignment-table th, .assignment-table td{
@@ -200,6 +201,18 @@ form {
 
 .journal-table td:nth-child(2), .journal-table th:nth-child(2), .grades-table td:nth-child(2), .grades-table th:nth-child(2){
     width: 150px;
+}
+
+.assignment-table th:nth-child(5), .assignment-table td:nth-child(5) {
+    width: 0px;
+}
+
+.assignment-table th:nth-child(4) {
+    width: 20%;
+}
+
+.assignment-table td:nth-child(4) {
+    font-size: 12px;
 }
 
 /* Стили для кнопок < и > */
@@ -257,6 +270,18 @@ form {
 .btn-save-changes {
     margin-top: 15px;
 }
+
+#createNewAssignmentBtn {
+    margin-right: 15px;
+}
+
+input.koeff {
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #007bff;
+}
+
+
 
 
 
