@@ -51,20 +51,33 @@ public class UserService {
     }
 
     @Transactional
-    public boolean updateUser(int id, User updatedUser) {
+    public void updateUser(int id, User updatedUser, String password) {
         Optional<User> userById = usersRepository.findById(id);
 
-        if (userById.isEmpty())
-            return false;
-
-        User userToBeUpdated = userById.get();
+        User userToBeUpdated = userById.orElse(null);
+        if (userToBeUpdated == null)
+            throw new RuntimeException();
 
         updatedUser.setUserId(id);
-        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        updatedUser.setPassword(passwordEncoder.encode(password));
         updatedUser.setStudent(userToBeUpdated.getStudent());
         updatedUser.setTeacher(userToBeUpdated.getTeacher());
         usersRepository.save(updatedUser);
-        return true;
+    }
+
+    @Transactional
+    public void updateUser(int id, User updatedUser) {
+        Optional<User> userById = usersRepository.findById(id);
+
+        User userToBeUpdated = userById.orElse(null);
+        if (userToBeUpdated == null)
+            throw new RuntimeException();
+
+        updatedUser.setUserId(id);
+        updatedUser.setPassword(userToBeUpdated.getPassword());
+        updatedUser.setStudent(userToBeUpdated.getStudent());
+        updatedUser.setTeacher(userToBeUpdated.getTeacher());
+        usersRepository.save(updatedUser);
     }
 
     @Transactional
