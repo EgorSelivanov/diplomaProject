@@ -7,6 +7,9 @@ import org.springframework.validation.Validator;
 import ru.selivanov.springproject.diplomaProject.model.User;
 import ru.selivanov.springproject.diplomaProject.services.UserService;
 
+import java.util.Objects;
+import java.util.Optional;
+
 @Component
 public class UserValidator implements Validator {
     private final UserService userService;
@@ -25,10 +28,18 @@ public class UserValidator implements Validator {
     public void validate(Object target, Errors errors) {
         User user = (User) target;
 
-        if (userService.findByUsername(user.getUsername()).isPresent())
-            errors.rejectValue("username", "Already exists", "Человек с таким именем пользователя уже существует!");
+        Optional<User> userByUsername = userService.findByUsername(user.getUsername());
+        Optional<User> userByEmail = userService.findByEmail(user.getEmail());
 
-        if (userService.findByEmail(user.getEmail()).isPresent())
+        if (userByUsername.isPresent() && !Objects.equals(userByUsername.get().getUserId(), user.getUserId())) {
+            System.out.println("UserByName: " + userByUsername.get().getUserId());
+            System.out.println("user: " + user.getUserId());
+            errors.rejectValue("username", "Already exists", "Человек с таким именем пользователя уже существует!");
+        }
+        if (userByEmail.isPresent() && !Objects.equals(userByEmail.get().getUserId(), user.getUserId())) {
+            System.out.println("UserByEmail: " + userByEmail.get().getUserId());
+            System.out.println("user: " + user.getUserId());
             errors.rejectValue("email", "Already exists", "Человек с таким адресом электронной почты уже существует!");
+        }
     }
 }
