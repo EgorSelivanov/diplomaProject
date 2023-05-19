@@ -1,0 +1,35 @@
+/* Стили для формы */
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.span-password {
+    margin-left: 20%;
+}
+
+/* Стили для заголовка */
+.info-for-form {
+    margin-top: 2%;
+    margin-bottom: 3%;
+}
+
+h2 {
+    text-align: center;
+}
+
+/* Стили для отображения ошибок */
+.error {
+    color: red;
+    margin-top: -8px;
+    font-size: 16px;
+    margin-bottom: 2%;
+}
