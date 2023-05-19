@@ -43,7 +43,7 @@ public class PasswordValidator implements Validator {
 
         if (!passwordDTO.getNewPassword().equals(passwordDTO.getNewPasswordConfirmation())) {
             errors.rejectValue("newPassword", "Doesn't match", "Пароли не совпадают!");
-            errors.rejectValue("passwordConfirmation", "Doesn't match", "Пароли не совпадают!");
+            errors.rejectValue("newPasswordConfirmation", "Doesn't match", "Пароли не совпадают!");
         }
     }
 }
