@@ -1,0 +1,46 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <div class="admin-info col-md-5">
+        <label for="admin-fio" class="text-primary">ФИО: </label>
+        <h2 id="admin-fio"
+            th:text="${user.getSecondName() + ' ' + user.getFirstName() + ' ' + user.getPatronymic()}"></h2>
+        <label for="admin-email" class="text-primary">Email: </label>
+        <p id="admin-email" th:text="${user.getEmail()}"></p>
+        <label for="admin-username" class="text-primary">Имя пользователя: </label>
+        <p id="admin-username" th:text="${user.getUsername()}"></p>
+        <div class="form-button">
+            <form th:method="GET" th:action="@{/auth/change-password}" id="change-password-btn">
+                <button type="submit" class="btn btn-primary">Сменить пароль</button>
+            </form>
+
+            <form th:action="@{/logout}" th:method="POST" class="bth-logout">
+                <input type="submit" value="Выйти" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+
+    <div class="admin-list col-lg-6">
+        <h2>Список модераторов</h2>
+        <div class="input-group">
+            <input type="text" class="form-control" id="search-admin-input" placeholder="Поиск...">
+            <button type="button" id="search-admin-button" class="btn btn-secondary">
+                <i class="bi-search"></i>
+            </button>
+        </div>
+
+        <div id="admin-list">
+
+        </div>
+    </div>
+
+    <div class="col-md-5">
+    </div>
+
+    <div class="admin-control col-lg-6">
+        <h2>Действия</h2>
+        <div class="d-flex">
+            <form th:method="GET" th:action="@{/admin/{id}/new-user(id=${user.getUserId()})}" id="add-user-btn">
+                <button type="submit" class="btn btn-primary">Добавить нового пользователя</button>
+            </form>
+        </div>
+    </div>
+</div>
