@@ -14,7 +14,7 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private Integer userId;
 
     @Column(name = "username")
     @NotEmpty(message = "Имя пользователя не может быть пустым!")
@@ -68,11 +68,20 @@ public class User {
         this.patronymic = patronymic;
     }
 
-    public int getUserId() {
+    public User(String username, String email, String role, String firstName, String secondName, String patronymic) {
+        this.username = username;
+        this.email = email;
+        this.role = role;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.patronymic = patronymic;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
