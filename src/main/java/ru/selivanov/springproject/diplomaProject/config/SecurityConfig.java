@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .cors().disable()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-                        .requestMatchers("/css/**", "/js/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/student/**").hasRole("STUDENT")
                         .requestMatchers("/teacher/**", "/grade", "/assignment", "/attendance").hasRole("TEACHER")
                         .requestMatchers("/admin", "/grade", "/assignment", "/attendance").hasRole("ADMIN")
