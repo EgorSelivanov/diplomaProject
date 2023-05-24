@@ -27,7 +27,6 @@ public class Group {
 
     @Column(name = "course_number")
     @Min(1)
-    @NotEmpty(message = "Не указан курс группы!")
     private int courseNumber;
 
     @OneToMany(mappedBy = "group")
