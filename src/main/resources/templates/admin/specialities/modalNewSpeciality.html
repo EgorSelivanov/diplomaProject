@@ -1,0 +1,29 @@
+<!-- HTML код для модальной страницы -->
+<div id="myModal" class="modall">
+    <div class="modall-content">
+        <span class="close">&times;</span>
+        <h2>Создание новой специальности</h2>
+        <form id="newSpecialityForm" class="needs-validation" novalidate
+              action="/admin/new-speciality" method="POST" >
+            <div class="input-group">
+                <label for="name-speciality">Название специальности:</label>
+                <input type="text" id="name-speciality" name="name" class="form-control" required>
+                <div class="invalid-feedback">Пожалуйста, введите название специальности для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="code-speciality">Код специальности:</label>
+                <div>
+                    <input type="text" id="code-speciality" name="code" class="form-control" required>
+                    <div class="col-auto">
+                        <span class="form-text">Должен содержать 8 или 10 символов</span>
+                    </div>
+                    <div class="invalid-feedback">Пожалуйста, введите код специальности для продолжения</div>
+                </div>
+            </div>
+            <div th:if="${errorSpeciality != ''}" class="error" th:text="${errorSpeciality}"></div>
+            <div>
+                <input id="submit-add" type="submit" value="Сохранить" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>

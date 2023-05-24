@@ -1,0 +1,35 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <div class="speciality-control col-md-5">
+        <h2>Действия</h2>
+        <div class="d-flex">
+            <form method="GET" action="/admin/new-speciality" id="add-speciality-form">
+                <button type="submit" id="submit-add-speciality" class="btn btn-primary"
+                        onclick="getPageNewSpeciality(event)">Добавить новую специальность</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="speciality-list col-lg-6">
+        <h2>Список специальностей</h2>
+        <div class="input-group">
+            <input type="text" class="form-control" id="search-input" placeholder="Поиск...">
+            <button type="button" id="close-search-button" class="btn btn-secondary">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <button type="button" id="search-button" class="btn btn-secondary">
+                <i class="bi-search"></i>
+            </button>
+        </div>
+
+        <div id="speciality-list">
+
+        </div>
+    </div>
+
+    <div class="col-md-5">
+    </div>
+
+    <div class="col-lg-6">
+
+    </div>
+</div>

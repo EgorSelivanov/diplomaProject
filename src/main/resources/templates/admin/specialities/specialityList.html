@@ -1,0 +1,34 @@
+<div class="d-flex speciality-li" th:each="speciality : ${specialities}" >
+    <div class="flex-shrink-0">
+        <img src="/images/college-svgrepo-com.svg" class="rounded-circle" alt="Sample-img">
+    </div>
+    <div class="flex-grow-1 ms-3">
+        <form th:id="${'speciality-form' + speciality.getSpecialityId()}" class="needs-validation" novalidate
+              th:action="@{/admin/{id}/edit-speciality/{idEdit}(id=${user.getUserId()}, idEdit=${speciality.getSpecialityId()})}"
+              th:method="post">
+            <div class="input-group">
+                <span class="input-group-text">Имя</span>
+                <input type="text" th:id="${'speciality-name' + speciality.getSpecialityId()}" name="speciality-name" class="form-control" readonly
+                       th:value="${speciality.getSpecialityName()}">
+                <div class="invalid-feedback">Пожалуйста, введите название специальности для продолжения</div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Код</span>
+                <input type="text" th:id="${'speciality-code' + speciality.getSpecialityId()}" name="speciality-code" class="form-control" readonly
+                       th:value="${speciality.getCode()}">
+                <div class="invalid-feedback">Пожалуйста, введите код специальности для продолжения</div>
+            </div>
+            <div class="speciality-buttons">
+                <a type="submit" th:id="${'submit-speciality' + speciality.getSpecialityId()}" style="display: none;"
+                   th:href="${speciality.getSpecialityId()}"
+                   onclick="fetchEdit(event)"><i class="bi bi-check2-square"></i></a>
+                <a th:id="${'button-edit-speciality' + speciality.getSpecialityId()}"
+                   th:href="${speciality.getSpecialityId()}"
+                   onclick="editSpeciality(event)"><i class="bi bi-pencil-square"></i></a>
+                <a th:id="${'button-delete-speciality' + speciality.getSpecialityId()}"
+                   th:href="@{/admin/{id}/deleteSpeciality(id=${speciality.getSpecialityId()})}"
+                   onclick="confirmDeletionSpeciality(event)"><i class="bi bi-x-circle"></i></a>
+            </div>
+        </form>
+    </div>
+</div>
