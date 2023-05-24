@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Личный кабинет преподавателя</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Font Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
     <link rel="stylesheet" type="text/css" href="/css/teacher.css" />
     <link rel="stylesheet" type="text/css" href="/css/modal.css" />
     <!-- Подключение библиотеки flatpickr -->
@@ -30,7 +35,7 @@
             <ul>
                 <li><button class="tab-button active" data-tab="schedule">Расписание</button></li>
                 <li><button  class="tab-button" data-tab="journal">Журнал</button></li>
-                <li><button  class="tab-button" data-tab="news">Новости</button></li>
+                <!--<li><button  class="tab-button" data-tab="news">Новости</button></li>-->
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="schedule">
@@ -161,8 +166,10 @@
     </div>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="/js/secondary.js"></script>
+<script src="/js/validateBootstrapForms.js"></script>
 <script src="/js/attendance.js"></script>
 <script src="/js/grade.js"></script>
 <script src="/js/assignment.js"></script>
