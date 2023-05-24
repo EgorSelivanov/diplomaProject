@@ -1,0 +1,26 @@
+<!-- HTML код для модальной страницы -->
+<div id="myModal" class="modall">
+    <div class="modall-content">
+        <span class="close">&times;</span>
+        <h2>Создание новой дисциплины</h2>
+        <form id="newSubjectForm" class="needs-validation" novalidate
+              action="/admin/new-subject" method="POST">
+            <div class="input-group">
+                <label for="name-subject">Название дисциплины:</label>
+                <input type="text" id="name-subject" name="name" class="form-control" required>
+                <div class="invalid-feedback">Пожалуйста, введите название дисциплины для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="description-subject">Описание:</label>
+                <div>
+                    <input type="text" id="description-subject" name="code" class="form-control">
+                    <div class="invalid-feedback">Пожалуйста, введите описание дисциплины для продолжения</div>
+                </div>
+            </div>
+            <div th:if="${errorSubject != ''}" class="error" th:text="${errorSubject}"></div>
+            <div>
+                <input id="submit-add" type="submit" value="Сохранить" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>
