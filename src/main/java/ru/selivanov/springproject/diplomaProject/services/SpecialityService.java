@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.selivanov.springproject.diplomaProject.model.*;
 import ru.selivanov.springproject.diplomaProject.repositories.SpecialitiesRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,12 +21,37 @@ public class SpecialityService {
         this.specialitiesRepository = specialitiesRepository;
     }
 
-    public Optional<Speciality> findByNameLike(String name) {
-        return specialitiesRepository.findByNameLike(name);
+    public Speciality getSpecialityById(int id) {
+        return specialitiesRepository.findById(id).orElse(null);
     }
 
-    public Optional<Speciality> findByCodeLike(String code) {
-        return specialitiesRepository.findByCodeLike(code);
+    public List<Speciality> getSpecialities() {
+        return specialitiesRepository.findAllByOrderByCode();
+    }
+
+    public List<Speciality> getSpecialitiesSearch(String search) {
+        search = "%" + search + "%";
+        List<Speciality> list = new ArrayList<>();
+        list.addAll(specialitiesRepository.findAllBySpecialityNameLikeIgnoreCaseOrderByCode(search));
+        list.addAll(specialitiesRepository.findAllByCodeLikeIgnoreCaseOrderByCode(search));
+        return list;
+    }
+
+    public Optional<Speciality> findByName(String name) {
+        return specialitiesRepository.findBySpecialityName(name);
+    }
+
+    public Optional<Speciality> findByCode(String code) {
+        return specialitiesRepository.findByCode(code);
+    }
+
+    @Transactional
+    public int createSpeciality(Speciality speciality) {
+        if (speciality == null || speciality.getSpecialityName() == null || speciality.getSpecialityName().trim().equals("") ||
+        speciality.getCode() == null || speciality.getCode().trim().equals(""))
+            return -1;
+        specialitiesRepository.save(speciality);
+        return speciality.getSpecialityId();
     }
 
     @Transactional

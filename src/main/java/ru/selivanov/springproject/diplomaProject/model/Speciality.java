@@ -3,6 +3,7 @@ package ru.selivanov.springproject.diplomaProject.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,7 +11,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "Speciality")
 public class Speciality {
-
     @Id
     @Column(name = "speciality_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class Speciality {
 
     @Column(name = "speciality_name")
     @NotEmpty(message = "Название специальности не должно быть пустым!")
-    private String name;
+    private String specialityName;
 
     @Column(name = "code")
     @NotEmpty(message = "Код специальности не должен быть пустым!")
@@ -30,8 +30,8 @@ public class Speciality {
 
     public Speciality() {}
 
-    public Speciality(String name) {
-        this.name = name;
+    public Speciality(String specialityName) {
+        this.specialityName = specialityName;
     }
 
     public int getSpecialityId() {
@@ -42,12 +42,12 @@ public class Speciality {
         this.specialityId = specialityId;
     }
 
-    public String getName() {
-        return name;
+    public String getSpecialityName() {
+        return specialityName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSpecialityName(String name) {
+        this.specialityName = name;
     }
 
     public List<Group> getGroupList() {
@@ -58,16 +58,24 @@ public class Speciality {
         this.groupList = groupList;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Speciality that = (Speciality) o;
-        return name.equals(that.name);
+        return specialityName.equals(that.specialityName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(specialityName);
     }
 }
