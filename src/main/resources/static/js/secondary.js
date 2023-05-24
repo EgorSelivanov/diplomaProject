@@ -3,10 +3,10 @@ function customAlert(message) {
     var modal = document.getElementById('modal-div');
 
     var alertContainer = document.createElement('div');
-    alertContainer.classList.add('modal');
+    alertContainer.classList.add('modall');
 
     var alertContent = document.createElement('div');
-    alertContent.classList.add('modal-content');
+    alertContent.classList.add('modall-content');
     var spanClose = document.createElement('span');
     spanClose.classList.add('close');
     spanClose.innerHTML = '&times;';
@@ -68,4 +68,22 @@ function customConfirm(message) {
 
     // Отобразить модальное окно
     modal.style.display = 'block';
+}
+
+function showModal(modal, modalHtml) {
+    modal.innerHTML = modalHtml;
+
+    // Отобразить модальное окно
+    modal.style.display = 'block';
+
+    // Закрытие модального окна при клике на крестик
+    var closeBtn = modal.querySelector('.close');
+
+    if (closeBtn === null)
+        return;
+
+    closeBtn.addEventListener('click', function () {
+        modal.style.display = 'none';
+        modal.innerHTML = '';
+    });
 }
