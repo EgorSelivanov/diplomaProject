@@ -1,0 +1,39 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <div class="group-control col-md-5">
+        <h2>Действия</h2>
+        <div class="d-flex">
+            <form method="GET" action="/admin/new-group" id="add-group-form">
+                <button type="submit" id="submit-add-group" class="btn btn-primary"
+                        onclick="getPageNewGroup(event)">Добавить новую группу
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+
+    </div>
+
+    <div class="group-list col-lg-11">
+        <h2>Список групп</h2>
+        <div class="input-group">
+            <input type="text" class="form-control" id="search-input" placeholder="Поиск...">
+            <button type="button" id="close-search-button" class="btn btn-secondary">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <button type="button" id="search-button" class="btn btn-secondary">
+                <i class="bi-search"></i>
+            </button>
+
+            <div class="input-group">
+                <span class="input-group-text">Поиск по курсу</span>
+                <input type="checkbox" id="checkbox-course" class="form-check-input mt-0">
+                <input type="number" id="inp-number-course" class="form-control" value="1" min="1" max="6" readonly>
+            </div>
+        </div>
+
+        <div id="group-list" class="row row-cols-2">
+
+        </div>
+    </div>
+</div>

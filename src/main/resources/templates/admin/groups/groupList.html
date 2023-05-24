@@ -1,0 +1,52 @@
+<div class="d-flex group-li" th:each="group : ${groups}" >
+    <div class="flex-shrink-0">
+        <img src="/images/group-of-people-svgrepo-com.svg" class="rounded-circle" alt="Sample-img">
+    </div>
+    <div class="flex-grow-1 ms-3">
+        <form th:id="${'group-form' + group.getGroupId()}" class="needs-validation" novalidate
+              th:action="@{/admin/{id}/edit-group/{idEdit}(id=${user.getUserId()}, idEdit=${group.getGroupId()})}"
+              th:method="post">
+            <div class="input-group">
+                <span class="input-group-text">Имя</span>
+                <input type="text" th:id="${'group-name' + group.getGroupId()}" name="group-name" class="form-control" readonly
+                       th:value="${group.getName()}">
+                <div class="invalid-feedback">Пожалуйста, введите название группы для продолжения</div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Курс</span>
+                <input type="number" th:id="${'group-course' + group.getGroupId()}" name="group-course" class="form-control"
+                       pattern="[0-9]*" inputmode="numeric" readonly
+                       th:value="${group.getCourseNumber()}" min="1" max="6">
+                <div class="invalid-feedback">Пожалуйста, введите курс группы для продолжения</div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Код специальности</span>
+                <select th:id="${'group-speciality-code' + group.getGroupId()}" class="form-select" disabled>
+                    <option selected th:value="${group.getSpeciality().getSpecialityId()}" th:text="${group.getSpeciality().getCode()}"></option>
+                    <option th:each="speciality : ${specialityList}" th:if="${group.getSpeciality().getSpecialityId() != speciality.getSpecialityId()}"
+                            th:value="${speciality.getSpecialityId()}" th:text="${speciality.getCode()}"></option>
+                </select>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">Имя специальности</span>
+                <select th:id="${'group-speciality-name' + group.getGroupId()}" class="form-select" disabled>
+                    <option selected th:value="${group.getSpeciality().getSpecialityId()}" th:text="${group.getSpeciality().getSpecialityName()}"></option>
+                    <option th:each="speciality : ${specialityList}" th:if="${group.getSpeciality().getSpecialityId() != speciality.getSpecialityId()}"
+                            th:value="${speciality.getSpecialityId()}" th:text="${speciality.getSpecialityName()}"></option>
+                </select>
+            </div>
+
+            <div class="group-buttons">
+                <a type="submit" th:id="${'submit-group' + group.getGroupId()}" style="display: none;"
+                   th:href="${group.getGroupId()}"
+                   onclick="fetchEditGroup(event)"><i class="bi bi-check2-square"></i></a>
+                <a th:id="${'button-edit-group' + group.getGroupId()}"
+                   th:href="${group.getGroupId()}"
+                   onclick="editGroup(event)"><i class="bi bi-pencil-square"></i></a>
+                <a th:id="${'button-delete-group' + group.getGroupId()}"
+                   th:href="@{/admin/{id}/deleteGroup(id=${group.getGroupId()})}"
+                   onclick="confirmDeletionGroup(event)"><i class="bi bi-x-circle"></i></a>
+            </div>
+        </form>
+    </div>
+</div>
