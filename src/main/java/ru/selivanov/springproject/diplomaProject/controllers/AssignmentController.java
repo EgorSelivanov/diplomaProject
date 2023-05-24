@@ -43,8 +43,9 @@ public class AssignmentController {
     @ResponseBody
     @PostMapping("/new-assignment")
     public ResponseEntity<String> createAssignment(@RequestBody CreateNewAssignmentDTO assignment) {
-        if (assignment == null)
-            return ResponseEntity.ofNullable("Форма содержит пустые поля!");
+        if (assignment == null || assignment.getDate() == null || assignment.getMaxPoints() == 0 || assignment.getType() == null ||
+        assignment.getType().trim().equals(""))
+            return ResponseEntity.notFound().build();
 
         int teacherId = assignment.getTeacherId();
         int subjectId = assignment.getSubjectId();

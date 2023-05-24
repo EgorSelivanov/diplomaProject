@@ -24,8 +24,15 @@ function createNewAssignment(selectedDiscipline, selectedGroup, selectedType) {
 
             var submit = modal.querySelector('#submit');
             submit.addEventListener('click', event => {
+                var form = document.getElementById('newAssignmentForm');
                 event.preventDefault();
-                fetchNewAssignment(modal, selectedDiscipline, selectedGroup, selectedType);
+                if (form.checkValidity() === false) {
+                    event.stopPropagation();
+                }
+                else {
+                    fetchNewAssignment(modal, selectedDiscipline, selectedGroup, selectedType);
+                }
+                form.classList.add('was-validated');
                 return false;
             });
         })
