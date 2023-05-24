@@ -1,3 +1,4 @@
+//Подтверждение удаления админа
 function confirmDeletion(event) {
     event.preventDefault(); // Предотвращаем переход по ссылке по умолчанию
 
@@ -35,4 +36,26 @@ function confirmDeletion(event) {
         // Закрыть окно подтверждения
         modal.innerHTML = '';
     });
+}
+
+//Получение списка админов
+function getAdminList(search) {
+    fetch(`${adminId}/adminList?search=` + search, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => {
+            return response.text();
+        })
+        .then(function (adminListHtml) {
+            var divList = document.getElementById('admin-list');
+            divList.innerHTML = '';
+            divList.innerHTML = adminListHtml;
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
 }

@@ -1,0 +1,16 @@
+<div class="d-flex admin-li" th:each="admin : ${admins}" th:if="${admin.getUserId() != user.getUserId()}">
+    <div class="flex-shrink-0">
+        <img src="/images/avatar.svg" class="rounded-circle" alt="Sample-img">
+    </div>
+    <div class="flex-grow-1 ms-3">
+        <h5 th:text="${admin.getSecondName() + ' ' + admin.getFirstName() + ' ' + admin.getPatronymic()}">
+            <small class="text-muted"><i>Posted on January 10, 2021</i></small>
+        </h5>
+        <p th:text="${'Username: ' + admin.getUsername()}"></p>
+        <p th:text="${'Email: ' + admin.getEmail()}"></p>
+        <a th:href="@{/admin/{id}/edit/{userId}(id=${user.getUserId()}, userId=${admin.getUserId()})}"><i
+                class="bi bi-pencil-square"></i></a>
+        <a th:href="@{/admin/{id}/delete(id=${admin.getUserId()})}" onclick="confirmDeletion(event)"><i
+                class="bi bi-x-circle"></i></a>
+    </div>
+</div>

@@ -29,7 +29,5 @@ h2 {
 /* Стили для отображения ошибок */
 .error {
     color: red;
-    margin-top: -8px;
     font-size: 16px;
-    margin-bottom: 2%;
 }

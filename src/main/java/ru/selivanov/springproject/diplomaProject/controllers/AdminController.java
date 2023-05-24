@@ -16,6 +16,7 @@ import ru.selivanov.springproject.diplomaProject.services.UserService;
 import ru.selivanov.springproject.diplomaProject.util.ResetPasswordValidator;
 import ru.selivanov.springproject.diplomaProject.util.UserValidator;
 
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -41,12 +42,13 @@ public class AdminController {
         return "admin/admin";
     }
 
+    // -----begin-----Вкладка Личный кабинет-----begin-----
     @GetMapping("/{id}/personal")
     public String getPersonalPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", adminService.getUserById(id));
         model.addAttribute("admins", adminService.getAdminList());
 
-        return "admin/personal";
+        return "admin/personalArea/personal";
     }
 
     @GetMapping("/{id}/new-user")
@@ -55,7 +57,7 @@ public class AdminController {
         user.setUserId(id);
         model.addAttribute("user", user);
 
-        return "admin/newUser";
+        return "admin/personalArea/newUser";
     }
 
     @PostMapping("/{id}/new-user")
@@ -64,13 +66,13 @@ public class AdminController {
                               BindingResult bindingResult) {
         user.setUserId(id);
         if (bindingResult.hasErrors()) {
-            return "/admin/edit";
+            return "/admin/personalArea/edit";
         }
 
         userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors())
-            return "/admin/edit";
+            return "/admin/personalArea/edit";
 
         user.setUserId(null);
         userService.addUser(user);
@@ -84,7 +86,7 @@ public class AdminController {
         editUserDTO.setUserId(userEditId);
         model.addAttribute("user", editUserDTO);
 
-        return "admin/edit";
+        return "admin/personalArea/edit";
     }
 
     @PostMapping("/{id}/edit/{userEditId}")
@@ -95,18 +97,18 @@ public class AdminController {
         user.setUserId(userEditId);
         userDTO.setUserId(userEditId);
         if (bindingResult.hasErrors()) {
-            return "/admin/edit";
+            return "/admin/personalArea/edit";
         }
 
         userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors())
-            return "/admin/edit";
+            return "/admin/personalArea/edit";
 
         if (userDTO.getPassword() != null && !userDTO.getPassword().trim().equals("")) {
             resetPasswordValidator.validate(userDTO.getPassword(), bindingResult);
             if (bindingResult.hasErrors())
-                return "/admin/edit";
+                return "/admin/personalArea/edit";
             userService.updateUser(userEditId, user, userDTO.getPassword());
         }
         else
@@ -116,7 +118,7 @@ public class AdminController {
 
     @ResponseBody
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<String> deleteAssignmentById(@PathVariable("id") int id) {
+    public ResponseEntity<String> deleteUserById(@PathVariable("id") int id) {
         User user = adminService.getUserById(id);
         if (user == null)
             return ResponseEntity.ofNullable("Данного пользователя не найдено!");
@@ -134,6 +136,7 @@ public class AdminController {
         else
             model.addAttribute("admins", adminService.getAdminListSearch(search));
 
-        return "admin/adminList";
+        return "admin/personalArea/adminList";
     }
+    // ------end------Вкладка Личный кабинет------end------
 }
