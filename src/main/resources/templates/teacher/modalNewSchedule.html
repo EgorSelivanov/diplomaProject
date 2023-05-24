@@ -3,10 +3,11 @@
     <div class="modall-content">
         <span class="close">&times;</span>
         <h2>Создание нового расписания занятий</h2>
-        <form id="scheduleForm" th:action="@{/teacher/new-schedule}" th:method="post" th:object="${teacherScheduleDTO}">
-            <div>
+        <form id="scheduleForm" class="needs-validation" novalidate
+              th:action="@{/teacher/new-schedule}" th:method="post" th:object="${teacherScheduleDTO}">
+            <div class="input-group">
                 <label for="weekday">День недели:</label>
-                <select id="weekday" name="weekday" th:field="*{dayOfWeek}">
+                <select id="weekday" name="weekday" class="form-select" required th:field="*{dayOfWeek}">
                     <option value="Понедельник">Понедельник</option>
                     <option value="Вторник">Вторник</option>
                     <option value="Среда">Среда</option>
@@ -15,32 +16,37 @@
                     <option value="Суббота">Суббота</option>
                     <option value="Воскресенье">Воскресенье</option>
                 </select>
+                <div class="invalid-feedback">Пожалуйста, выберите день недели для продолжения</div>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="startTime">Время начала:</label>
-                <input type="text" id="startTime" name="startTime" class="timepicker" required th:field="*{startTime}">
+                <input type="time" id="startTime" name="startTime" class="form-control" required th:field="*{startTime}">
+                <div class="invalid-feedback">Пожалуйста, введите время начала занятия для продолжения</div>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="endTime">Время окончания:</label>
-                <input type="text" id="endTime" name="endTime" class="timepicker" required th:field="*{endTime}">
+                <input type="time" id="endTime" name="endTime" class="form-control" required th:field="*{endTime}">
+                <div class="invalid-feedback">Пожалуйста,  введите время окончания занятия для продолжения</div>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="subject">Название дисциплины:</label>
-                <select id="subject" name="subject" required th:field="*{subjectId}">
+                <select id="subject" name="subject"  class="form-select" required th:field="*{subjectId}">
                     <!-- Опции будут запрашиваться у сервера -->
                 </select>
+                <div class="invalid-feedback">Пожалуйста, выберите дисциплину для продолжения</div>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="lessonType">Вид занятия:</label>
-                <select id="lessonType" name="lessonType" required th:field="*{type}">
+                <select id="lessonType" name="lessonType" class="form-select" required th:field="*{type}">
                     <option value="лекция">лекция</option>
                     <option value="практика">практика</option>
                     <option value="л.р.">л.р.</option>
                 </select>
+                <div class="invalid-feedback">Пожалуйста, выберите вид занятия для продолжения</div>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="lessonRepeat">Повтор:</label>
-                <select id="lessonRepeat" name="lessonRepeat" required th:field="*{repeat}">
+                <select id="lessonRepeat" name="lessonRepeat" class="form-select" required th:field="*{repeat}">
                     <option value="Еженедельно">Еженедельно</option>
                     <option value="Неч.">Неч.</option>
                     <option value="Чет.">Чет.</option>
@@ -48,19 +54,22 @@
                     <option value="Чет./Неч.">Чет./Неч.</option>
                     <option value="Одно занятие">Одно занятие</option>
                 </select>
+                <div class="invalid-feedback">Пожалуйста, выберите повтор занятия для продолжения</div>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="classroom">Аудитория:</label>
-                <input type="text" id="classroom" name="classroom" required th:field="*{audience}">
+                <input type="text" id="classroom" name="classroom" class="form-control" required th:field="*{audience}">
+                <div class="invalid-feedback">Пожалуйста, введите аудиторию для продолжения</div>
             </div>
-            <div>
+            <div class="input-group">
                 <label for="group">Название группы:</label>
-                <select id="group" name="groups" required th:field="*{groupsId}" multiple>
+                <select id="group" name="groups" class="form-select" required th:field="*{groupsId}" multiple>
                     <!-- Опции будут запрашиваться у сервера -->
                 </select>
+                <div class="invalid-feedback">Пожалуйста, выберите название группы для продолжения</div>
             </div>
             <div>
-                <input type="submit" value="Сохранить">
+                <input type="submit" value="Сохранить" class="btn btn-primary">
             </div>
         </form>
     </div>
