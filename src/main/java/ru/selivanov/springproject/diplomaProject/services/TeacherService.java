@@ -8,6 +8,7 @@ import ru.selivanov.springproject.diplomaProject.dao.TeacherDAO;
 import ru.selivanov.springproject.diplomaProject.dto.*;
 import ru.selivanov.springproject.diplomaProject.model.*;
 import ru.selivanov.springproject.diplomaProject.repositories.TeachersRepository;
+import ru.selivanov.springproject.diplomaProject.repositories.UsersRepository;
 
 import java.util.*;
 
@@ -15,10 +16,12 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class TeacherService {
     private final TeachersRepository teachersRepository;
+    private final UsersRepository usersRepository;
     private final TeacherDAO teacherDAO;
     @Autowired
-    public TeacherService(TeachersRepository teachersRepository, TeacherDAO teacherDAO) {
+    public TeacherService(TeachersRepository teachersRepository, UsersRepository usersRepository, TeacherDAO teacherDAO) {
         this.teachersRepository = teachersRepository;
+        this.usersRepository = usersRepository;
         this.teacherDAO = teacherDAO;
     }
 
@@ -28,6 +31,21 @@ public class TeacherService {
 
     public List<Teacher> findByPosition(String position) {
         return teachersRepository.findByPositionLike(position);
+    }
+
+    public Teacher getTeacherById(int id) {
+        return teachersRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public int addTeacher(Teacher teacher) {
+        teachersRepository.save(teacher);
+        return teacher.getTeacherId();
+    }
+
+    @Transactional
+    public void updateTeacherList(List<Teacher> list) {
+        teachersRepository.saveAll(list);
     }
 
     @Transactional
@@ -49,7 +67,9 @@ public class TeacherService {
 
     @Transactional
     public void deleteTeacher(int id) {
-        teachersRepository.deleteById(id);
+        Teacher teacher = teachersRepository.findById(id).orElse(null);
+        int userId = teacher.getUser().getUserId();
+        usersRepository.deleteById(userId);
     }
 
     public User getUserByTeacher(int id) {
@@ -82,8 +102,6 @@ public class TeacherService {
     }
 
     public List<Subject> getSubjectListByTeacher(int id) {
-        List<Subject> list = teacherDAO.getSubjectListByTeacherId(id);
-        System.out.println(list.get(0).getSubjectId());
         return teacherDAO.getSubjectListByTeacherId(id);
     }
 
@@ -163,5 +181,39 @@ public class TeacherService {
 
     public List<Assignment> getAssignmentList(int teacherId, int subjectId, int groupId, String type) {
         return teacherDAO.getAssignmentList(teacherId, subjectId, groupId, type);
+    }
+
+    public List<String> getDepartmentList() {
+        return teacherDAO.getDepartmentList();
+    }
+
+    public List<Teacher> getTeacherList() {
+        return teachersRepository.findAllByOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc();
+    }
+
+    public List<Teacher> getTeacherListSearch(String search) {
+        search = "%" + search + "%";
+        Set<Teacher> set = new TreeSet<>();
+        set.addAll(teachersRepository.findAllByUser_UsernameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(search));
+        set.addAll(teachersRepository.findAllByUser_SecondNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(search));
+        set.addAll(teachersRepository.findAllByUser_FirstNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(search));
+        set.addAll(teachersRepository.findAllByUser_PatronymicLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(search));
+        set.addAll(teachersRepository.findAllByUser_EmailLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(search));
+        set.addAll(teachersRepository.findAllByPositionLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(search));
+
+        return new ArrayList<>(set);
+    }
+
+    public List<Teacher> getTeacherListSearchDepartment(String search, String department) {
+        search = "%" + search + "%";
+        Set<Teacher> set = new HashSet<>();
+        set.addAll(teachersRepository.findAllByDepartmentAndUser_SecondNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(department, search));
+        set.addAll(teachersRepository.findAllByDepartmentAndUser_FirstNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(department, search));
+        set.addAll(teachersRepository.findAllByDepartmentAndUser_PatronymicLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(department, search));
+        set.addAll(teachersRepository.findAllByDepartmentAndUser_EmailLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(department, search));
+        set.addAll(teachersRepository.findAllByDepartmentAndUser_UsernameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(department, search));
+        set.addAll(teachersRepository.findAllByDepartmentAndPositionLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(department, search));
+
+        return new ArrayList<>(set);
     }
 }

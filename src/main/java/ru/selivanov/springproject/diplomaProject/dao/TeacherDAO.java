@@ -26,10 +26,11 @@ public class TeacherDAO {
 
     public List<TeacherScheduleDTO> getTeacherScheduleData(int id, Date date) {
         return jdbcTemplate.query("""
-                SELECT subquery.audience, subquery.day_of_week, subquery.start_time, subquery.end_time, subquery.name, subquery.type, subquery.group_name, subquery.course_number
+                SELECT subquery.audience, subquery.building, subquery.day_of_week, subquery.start_time, subquery.end_time, subquery.name, subquery.type, subquery.group_name, subquery.course_number
                 FROM (
                     SELECT DISTINCT
                         schedule.audience,
+                        schedule.building,
                         schedule.day_of_week,
                         schedule.start_time,
                         schedule.end_time,
@@ -140,5 +141,11 @@ public class TeacherDAO {
                 ORDER BY assignment_.date
                 """, new Object[]{teacherId, subjectId, groupId, type},
                 new BeanPropertyRowMapper<>(Assignment.class));
+    }
+
+    public List<String> getDepartmentList() {
+        return jdbcTemplate.queryForList("""
+                        SELECT DISTINCT department FROM teacher ORDER BY department
+                        """, String.class);
     }
 }

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Teacher")
-public class Teacher {
+public class Teacher implements Comparable<Teacher>{
     @Id
     @Column(name = "teacher_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,11 +85,18 @@ public class Teacher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Teacher teacher = (Teacher) o;
-        return user.equals(teacher.user) && department.equals(teacher.department) && position.equals(teacher.position);
+        return teacherId == teacher.teacherId && user.equals(teacher.user) && department.equals(teacher.department) && position.equals(teacher.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, department, position);
+        return Objects.hash(teacherId, user, department, position);
+    }
+
+    @Override
+    public int compareTo(Teacher o) {
+        String fioThis = this.user.getSecondName() + " " + this.user.getFirstName() + " " + this.user.getPatronymic();
+        String fioObj = o.user.getSecondName() + " " + o.user.getFirstName() + " " + o.user.getPatronymic();
+        return fioThis.compareTo(fioObj);
     }
 }

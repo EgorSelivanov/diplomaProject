@@ -1,0 +1,53 @@
+<div class="d-flex teacher-li">
+
+    <table id="teacherList" class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Кафедра</th>
+            <th>Должность</th>
+            <th>Сброс пароля</th>
+            <th>Удаление</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="teacher : ${teacherList}" th:id="${'row-teacher' + teacher.getTeacherId()}">
+                <td class="editable-cell">
+                    <input type="text" id="teacher-secondName" th:value="${teacher.getUser().getSecondName()}" readonly>
+                </td>
+                <td class="editable-cell">
+                    <input type="text" id="teacher-firstName" th:value="${teacher.getUser().getFirstName()}" readonly>
+                </td>
+                <td class="editable-cell">
+                    <input type="text" id="teacher-patronymic" th:value="${teacher.getUser().getPatronymic()}" readonly>
+                </td>
+                <td class="editable-cell">
+                    <input type="text" id="teacher-username" th:value="${teacher.getUser().getUsername()}" readonly>
+                </td>
+                <td class="editable-cell">
+                    <input type="text" id="teacher-email" th:value="${teacher.getUser().getEmail()}" readonly>
+                </td>
+                <td class="editable-cell" >
+                    <input type="text" id="teacher-department" th:value="${teacher.getDepartment()}" readonly>
+                </td>
+                <td class="editable-cell">
+                    <input type="text" id="teacher-position" th:value="${teacher.getPosition()}" readonly>
+                </td>
+                <td>
+                    <a type="button" th:id="${'button-change-password' + teacher.getUser().getUserId()}"
+                       th:href="@{/admin/getPasswordPage}"
+                       onclick="confirmChangePassword(event, 'Вы уверены, что хотите сбросить пароль преподавателя?')"><i class="bi bi-trash"></i></a>
+                </td>
+                <td>
+                    <a type="button" th:id="${'button-delete-teacher' + teacher.getTeacherId()}"
+                       th:href="@{/admin/{id}/deleteTeacher(id=${teacher.getTeacherId()})}"
+                       onclick="confirmDeletionTeacher(event)"><i class="bi bi-x-circle"></i></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
