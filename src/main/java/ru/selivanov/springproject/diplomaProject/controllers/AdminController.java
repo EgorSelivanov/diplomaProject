@@ -62,21 +62,43 @@ public class AdminController {
 
     @PostMapping("/{id}/new-user")
     public String saveNewUser(@PathVariable("id") int id,
-                              @ModelAttribute("user") @Valid User user,
+                              @ModelAttribute("user") @Valid EditUserDTO editUserDTO, Model model,
                               BindingResult bindingResult) {
+        User user = editUserDTO.getUser();
+        user.setPassword(editUserDTO.getPassword());
         user.setUserId(id);
         if (bindingResult.hasErrors()) {
-            return "/admin/personalArea/edit";
+            model.addAttribute("user", user);
+            return "admin/personalArea/newUser";
         }
 
         userValidator.validate(user, bindingResult);
 
-        if (bindingResult.hasErrors())
-            return "/admin/personalArea/edit";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("user", user);
+            return "admin/personalArea/newUser";
+        }
 
         user.setUserId(null);
         userService.addUser(user);
         return "redirect:/admin/" + id;
+    }
+
+    @GetMapping("/getPasswordPage")
+    public String getPasswordPage() {
+        return "admin/modalChangePassword";
+    }
+
+    @PostMapping("/{id}/change-password/{userId}")
+    public String changePassword(@PathVariable("id") int id,
+                                 @PathVariable("userId") int userId,
+                                 @RequestBody String password) {
+        password = password.substring(1, password.length() - 1);
+        User user = userService.findById(userId);
+        if (user == null)
+            return "admin/modalChangePassword";
+        userService.updatePassword(user, password);
+        return "admin/empty";
     }
 
     @GetMapping("/{id}/edit/{userEditId}")
@@ -122,6 +144,8 @@ public class AdminController {
         User user = adminService.getUserById(id);
         if (user == null)
             return ResponseEntity.ofNullable("Данного пользователя не найдено!");
+        if (user.getUsername().equals("admin"))
+            return ResponseEntity.ofNullable("Данного пользователя нельзя удалить!");
         userService.deleteUser(id);
         return ResponseEntity.ok("Удаление успешно!");
     }
