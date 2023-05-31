@@ -157,7 +157,7 @@ function getScheduleDataByDate(date) {
             data.forEach(item => {
                 const row = document.createElement('tr');
                 const cells = [item.dayOfWeek, item.startTimeFormat, item.endTimeFormat, item.name, item.type, item.audience,
-                    item.secondName + " " + item.firstName + " " + item.patronymic, item.department];
+                    item.building, item.secondName + " " + item.firstName + " " + item.patronymic, item.department];
                 cells.forEach(cell => {
                     const td = document.createElement('td');
                     td.textContent = cell;
@@ -168,3 +168,54 @@ function getScheduleDataByDate(date) {
         })
         .catch(error => console.error(error));
 }
+
+document.getElementById('tab-notification').addEventListener('click', function () {
+    const studentId = document.querySelector('#student-id').getAttribute("value");
+    const csrfToken = document.getElementById("csrfToken").value;
+    fetch(`${studentId}/notifications`)
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (newHtml) {
+            var divNotification = document.getElementById('notifications');
+            divNotification.innerHTML = newHtml;
+
+            fetch(`${studentId}/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            }).catch(error => {
+                    console.error('Ошибка:', error);
+                    customAlert(error.message);
+                });
+
+            var deleteNotificationButton = document.getElementById('delete-all-notifications');
+            deleteNotificationButton.addEventListener('click', function () {
+                fetch(`${studentId}/notifications`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                })
+                    .then(response => {
+                        return response.text();
+                    })
+                    .then(data => {
+                        document.getElementById('notification-list').innerHTML = '';
+                        var messageForShow = document.createElement('h3');
+                        messageForShow.textContent = 'Нет уведомлений';
+                        document.getElementById('notification-list').appendChild(messageForShow);
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                        customAlert(error.message);
+                    });
+            })
+        })
+        .catch(function (error) {
+            console.error('Ошибка получения', error);
+        });
+})

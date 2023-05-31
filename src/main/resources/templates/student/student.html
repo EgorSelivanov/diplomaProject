@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Личный кабинет студента</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Font Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="/css/student.css" />
 </head>
 <body>
@@ -11,6 +16,7 @@
         <div class="student-info" id="student-id" th:value="${user.getStudent().getStudentId()}">
             <h2 th:text="${user.getSecondName() + ' ' + user.getFirstName() + ' ' + user.getPatronymic()}"></h2>
             <p th:text="${user.getEmail()}"></p>
+            <input type="hidden" id="csrfToken" th:value="${_csrf}" />
             <form th:method="GET" th:action="@{/auth/change-password}" id="change-password-btn">
                 <button type="submit" >Сменить пароль</button>
             </form>
@@ -23,7 +29,7 @@
             <ul>
                 <li><button class="tab-button active" data-tab="schedule">Расписание</button></li>
                 <li><button  class="tab-button" data-tab="journal">Журнал</button></li>
-                <li><button  class="tab-button" data-tab="news">Новости</button></li>
+                <li><button id="tab-notification" class="tab-button" data-tab="notifications">Уведомления</button></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="schedule">
@@ -42,6 +48,7 @@
                                 <th>Дисциплина</th>
                                 <th>Вид занятия</th>
                                 <th>Аудитория</th>
+                                <th>Здание</th>
                                 <th>Преподаватель</th>
                                 <th>Кафедра</th>
                             </tr>
@@ -75,6 +82,11 @@
                                     </td>
                                     <td>
                                         <span th:text="${schedule.getAudience()}">
+                                            schedule
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${schedule.getBuilding()}">
                                             schedule
                                         </span>
                                     </td>
@@ -114,9 +126,7 @@
                 <!-- end of journal tab -->
 
                 <!-- news tab -->
-                <div id="news" class="tab-pane" style="display: none;">
-                    <h2>Новости</h2>
-                    <p>Здесь будут новости</p>
+                <div id="notifications" class="tab-pane" style="display: none;">
                 </div>
                 <!-- end of news tab -->
 
@@ -126,6 +136,7 @@
     </div>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/js/student.js"></script>
 <script src="/js/tabsAndScheduleData.js"></script>
 </html>
