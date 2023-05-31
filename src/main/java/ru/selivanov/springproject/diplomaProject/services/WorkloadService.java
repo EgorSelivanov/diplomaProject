@@ -153,6 +153,7 @@ public class WorkloadService {
             Schedule schedule = new Schedule();
             schedule.setWorkload(workload);
             schedule.setAudience(newScheduleTeacherDTO.getAudience());
+            schedule.setBuilding(newScheduleTeacherDTO.getBuilding());
             schedule.setStartTime(newScheduleTeacherDTO.getStartTime());
             schedule.setEndTime(newScheduleTeacherDTO.getEndTime());
             schedule.setDayOfWeek(newScheduleTeacherDTO.getDayOfWeek());

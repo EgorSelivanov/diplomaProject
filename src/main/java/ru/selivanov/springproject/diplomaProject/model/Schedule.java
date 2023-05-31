@@ -25,6 +25,11 @@ public class Schedule {
     @Size(min = 2, max = 50, message = "Название (номер) аудитории должно быть между 2 и 50 символов!")
     private String audience;
 
+    @Column(name = "building")
+    @NotEmpty(message = "Не указано здание!")
+    @Size(min = 1, max = 50, message = "Название (номер) здания должен быть между 1 и 50 символов!")
+    private String building;
+
     @Column(name = "day_of_week")
     @NotEmpty(message = "Не указан день недели!")
     private String dayOfWeek;
@@ -42,16 +47,18 @@ public class Schedule {
 
     public Schedule() {}
 
-    public Schedule(Workload workload, String audience, String dayOfWeek, Date startTime, Date endTime) {
+    public Schedule(Workload workload, String audience, String building, String dayOfWeek, Date startTime, Date endTime) {
         this.workload = workload;
+        this.building = building;
         this.audience = audience;
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public Schedule(String audience, String dayOfWeek, Date startTime, Date endTime) {
+    public Schedule(String audience, String building, String dayOfWeek, Date startTime, Date endTime) {
         this.audience = audience;
+        this.building = building;
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -79,6 +86,14 @@ public class Schedule {
 
     public void setAudience(String audience) {
         this.audience = audience;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
     }
 
     public String getDayOfWeek() {
