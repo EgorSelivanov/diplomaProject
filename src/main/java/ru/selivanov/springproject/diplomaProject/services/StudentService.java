@@ -62,6 +62,49 @@ public class StudentService {
         return studentDAO.getGradesDTOListByGroup(group.getGroupId(), subjectId, id);
     }
 
+    public List<Integer> getCourseNumberList() {
+        return studentDAO.getCourseNumberList();
+    }
+
+    public List<Student> getStudentListSearch(String search) {
+        search = "%" + search + "%";
+        Set<Student> set = new TreeSet<>();
+        set.addAll(studentsRepository.findAllByUser_UsernameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(search));
+        set.addAll(studentsRepository.findAllByUser_EmailLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(search));
+        set.addAll(studentsRepository.findAllByUser_FirstNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(search));
+        set.addAll(studentsRepository.findAllByUser_SecondNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(search));
+        set.addAll(studentsRepository.findAllByUser_PatronymicLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(search));
+
+        return new ArrayList<>(set);
+    }
+
+    public List<Student> getStudentListSearchByGroup(String search, int groupId) {
+        search = "%" + search + "%";
+        Set<Student> set = new TreeSet<>();
+        set.addAll(studentsRepository.findAllByGroup_GroupIdAndUser_UsernameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(groupId, search));
+        set.addAll(studentsRepository.findAllByGroup_GroupIdAndUser_EmailLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(groupId, search));
+        set.addAll(studentsRepository.findAllByGroup_GroupIdAndUser_FirstNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(groupId, search));
+        set.addAll(studentsRepository.findAllByGroup_GroupIdAndUser_SecondNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(groupId, search));
+        set.addAll(studentsRepository.findAllByGroup_GroupIdAndUser_PatronymicLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(groupId, search));
+
+        return new ArrayList<>(set);
+    }
+
+    public List<Student> getStudentListByGroup(int groupId) {
+        return studentsRepository.findAllByGroup_GroupIdOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(groupId);
+    }
+
+    @Transactional
+    public int addStudent(Student student) {
+        studentsRepository.save(student);
+        return student.getStudentId();
+    }
+
+    @Transactional
+    public void updateStudentList(List<Student> list) {
+        studentsRepository.saveAll(list);
+    }
+
     @Transactional
     public void assignUser(int id, User selectedUser) {
         studentsRepository.findById(id).ifPresent(

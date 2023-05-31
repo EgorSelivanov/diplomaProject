@@ -24,7 +24,7 @@ public class StudentDAO {
 
     public List<StudentScheduleDTO> getStudentScheduleData(int studentId, Date date) {
         return jdbcTemplate.query("""
-                    SELECT schedule.day_of_week, schedule.start_time, schedule.end_time, subject.name, workload.type, schedule.audience, user_.first_name, user_.second_name, user_.patronymic, teacher.department
+                    SELECT schedule.day_of_week, schedule.start_time, schedule.end_time, subject.name, workload.type, schedule.audience, schedule.building, user_.first_name, user_.second_name, user_.patronymic, teacher.department
                     FROM workload JOIN schedule ON workload.workload_id = schedule.workload_id
                     JOIN subject ON workload.subject_id = subject.subject_id
                     JOIN teacher ON workload.teacher_id = teacher.teacher_id
@@ -69,5 +69,11 @@ public class StudentDAO {
                 WHERE workload.subject_id = ? AND attendance.student_id = ? 
                 ORDER BY attendance.date
                 """, new Object[]{subjectId, studentId}, new BeanPropertyRowMapper<>(AttendanceStudentDTO.class));
+    }
+
+    public List<Integer> getCourseNumberList() {
+        return jdbcTemplate.queryForList("""
+                        SELECT DISTINCT course_number FROM group_ ORDER BY course_number
+                        """, Integer.class);
     }
 }
