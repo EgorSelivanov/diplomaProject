@@ -13,7 +13,7 @@ h1 {
 
 /* Стиль для контейнера .container */
 .container {
-    max-width: 960px;
+    max-width: 65%;
     margin: 0 auto;
 }
 
@@ -190,13 +190,13 @@ form {
     font-size: 80%;
     width: min-content;
     white-space: break-spaces;
-    overflow: scroll; /* Скрывает содержимое, которое выходит за пределы ячейки */
+    overflow: hidden;
     text-overflow: ellipsis; /* Добавляет многоточие для обозначения обрезанного текста */
     resize: horizontal;
 }
 
 .journal-table td:first-child, .journal-table th:first-child, .grades-table td:first-child, .grades-table th:first-child{
-    width: 20px;
+    width: 5%;
 }
 
 .journal-table td:nth-child(2), .journal-table th:nth-child(2), .grades-table td:nth-child(2), .grades-table th:nth-child(2){
@@ -204,7 +204,7 @@ form {
 }
 
 .assignment-table th:nth-child(5), .assignment-table td:nth-child(5) {
-    width: 0px;
+    width: 5%;
 }
 
 .assignment-table th:nth-child(4) {

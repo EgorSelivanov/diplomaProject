@@ -57,6 +57,7 @@
                             <th>Дисциплина</th>
                             <th>Вид занятия</th>
                             <th>Аудитория</th>
+                            <th>Здание</th>
                             <th>Группа</th>
                             <th>Курс</th>
                         </tr>
@@ -90,6 +91,11 @@
                             </td>
                             <td>
                                     <span th:text="${schedule.getAudience()}">
+                                        schedule
+                                    </span>
+                            </td>
+                            <td>
+                                    <span th:text="${schedule.getBuilding()}">
                                         schedule
                                     </span>
                             </td>

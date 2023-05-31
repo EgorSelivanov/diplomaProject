@@ -1,0 +1,48 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <div class="teacher-control col-md-5">
+        <h2>Действия</h2>
+        <div class="d-flex">
+            <form method="GET" action="/admin/new-teacher" id="add-teacher-form">
+                <button type="submit" id="submit-add-teacher" class="btn btn-primary"
+                        onclick="getPageNewTeacher(event)">Добавить нового преподавателя
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+
+    </div>
+
+    <div class="teacher-list col-lg-11">
+        <h2>Список преподавателей</h2>
+        <div class="input-group">
+            <input type="text" class="form-control" id="search-input" placeholder="Поиск...">
+            <button type="button" id="close-search-button" class="btn btn-secondary">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <button type="button" id="search-button" class="btn btn-secondary">
+                <i class="bi-search"></i>
+            </button>
+
+            <div class="input-group">
+                <span class="input-group-text">Поиск по кафедре</span>
+                <input type="checkbox" id="checkbox-department" class="form-check-input mt-0">
+                <select id='teacher-department-select' class="form-select" disabled>
+                    <option th:each="department : ${departmentList}"
+                            th:value="${department}" th:text="${department}"></option>
+                </select>
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="check-read-edit">
+                <label class="form-check-label" for="check-read-edit">Просмотр/Редактирование</label>
+                <button class="btn btn-secondary" id="btn-check-read-edit" style="display: none">Сохранить изменения</button>
+            </div>
+        </div>
+
+        <div id="teacher-list">
+
+        </div>
+    </div>
+</div>
