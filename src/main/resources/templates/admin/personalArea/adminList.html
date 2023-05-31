@@ -8,9 +8,9 @@
         </h5>
         <p th:text="${'Username: ' + admin.getUsername()}"></p>
         <p th:text="${'Email: ' + admin.getEmail()}"></p>
-        <a th:href="@{/admin/{id}/edit/{userId}(id=${user.getUserId()}, userId=${admin.getUserId()})}"><i
+        <a th:if="${user.getUsername() == 'admin'}" th:href="@{/admin/{id}/edit/{userId}(id=${user.getUserId()}, userId=${admin.getUserId()})}"><i
                 class="bi bi-pencil-square"></i></a>
-        <a th:href="@{/admin/{id}/delete(id=${admin.getUserId()})}" onclick="confirmDeletion(event)"><i
+        <a th:if="${user.getUsername() == 'admin'}" th:href="@{/admin/{id}/delete(id=${admin.getUserId()})}" onclick="confirmDeletion(event)"><i
                 class="bi bi-x-circle"></i></a>
     </div>
 </div>

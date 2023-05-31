@@ -68,7 +68,7 @@ public class AdminGroupController {
     }
 
     @PostMapping("/new-group")
-    public String saveNewGroup(@RequestBody GroupEditDTO groupEditDTO,
+    public String saveNewGroup(@Valid @RequestBody GroupEditDTO groupEditDTO,
                                     Model model, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorGroup", getAllErrors(bindingResult));
@@ -87,7 +87,7 @@ public class AdminGroupController {
 
     @ResponseBody
     @PostMapping("/{id}/edit-group/{groupEditId}")
-    public ResponseEntity<String> editSpeciality(@PathVariable("id") int id, @PathVariable("groupEditId") int groupEditId,
+    public ResponseEntity<String> editGroup(@PathVariable("id") int id, @PathVariable("groupEditId") int groupEditId,
                                                  @RequestBody @Valid GroupEditDTO group, BindingResult bindingResult) {
         if (groupService.getGroupById(groupEditId) == null)
             bindingResult.rejectValue("groupId", "Doesn't exist", "Группы с таким id не существует!");
@@ -106,7 +106,7 @@ public class AdminGroupController {
 
     @ResponseBody
     @DeleteMapping("/{id}/deleteGroup")
-    public ResponseEntity<String> deleteSpecialityById(@PathVariable("id") int id) {
+    public ResponseEntity<String> deleteGroupById(@PathVariable("id") int id) {
         Group group = groupService.getGroupById(id);
         if (group == null)
             return ResponseEntity.ofNullable("Данной группы не найдено!");
@@ -122,5 +122,17 @@ public class AdminGroupController {
 
         // Преобразуем ошибки в текстовое представление
         return String.join(", ", errors);
+    }
+
+    @ResponseBody
+    @GetMapping("/{id}/groupListForTeacher")
+    public List<Group> getGroupList(@PathVariable("id") int id,
+                               @RequestParam("courseNumber") Integer courseNumber) {
+        System.out.println(courseNumber);
+        List<Group> list = groupService.getGroups(courseNumber);
+        for (Group group:list) {
+            System.out.println(group.getName());
+        }
+        return groupService.getGroups(courseNumber);
     }
 }
