@@ -28,8 +28,8 @@ public class UserService {
         return usersRepository.findAll();
     }
 
-    public Optional<User> findById(int id) {
-        return usersRepository.findById(id);
+    public User findById(int id) {
+        return usersRepository.findById(id).orElse(null);
     }
 
     public Optional<User> findByUsername(String username) {
@@ -45,11 +45,22 @@ public class UserService {
     }
 
     @Transactional
-    public void addUser(User user) {
+    public int addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        usersRepository.save(user);
+        return user.getUserId();
+    }
+
+    @Transactional
+    public void updatePassword(User user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
         usersRepository.save(user);
     }
 
+    @Transactional
+    public void updateUserList(List<User> list) {
+        usersRepository.saveAll(list);
+    }
     @Transactional
     public void updateUser(int id, User updatedUser, String password) {
         Optional<User> userById = usersRepository.findById(id);
