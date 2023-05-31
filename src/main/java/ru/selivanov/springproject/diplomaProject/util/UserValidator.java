@@ -32,10 +32,10 @@ public class UserValidator implements Validator {
         Optional<User> userByEmail = userService.findByEmail(user.getEmail());
 
         if (userByUsername.isPresent() && !Objects.equals(userByUsername.get().getUserId(), user.getUserId())) {
-            errors.rejectValue("username", "Already exists", "Человек с таким именем пользователя уже существует!");
+            errors.rejectValue("username", "Already exists", "Человек с таким именем пользователя уже существует: " + user.getUsername());
         }
         if (userByEmail.isPresent() && !Objects.equals(userByEmail.get().getUserId(), user.getUserId())) {
-            errors.rejectValue("email", "Already exists", "Человек с таким адресом электронной почты уже существует!");
+            errors.rejectValue("email", "Already exists", "Человек с таким адресом электронной почты уже существует: " + user.getEmail());
         }
     }
 }
