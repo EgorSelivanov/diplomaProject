@@ -24,7 +24,7 @@ function confirmDeletion(event) {
             })
             .then(data => {
                 customAlert(data);
-                window.location.href = `/admin/${adminId}`;
+                getAdminList(globalSearch);
             })
             .catch(error => {
                 console.error('Ошибка:', error);

@@ -18,7 +18,6 @@ public class EditUserDTO {
     @NotEmpty(message = "Данные почты не могут быть пустыми!")
     private String email;
 
-    @NotEmpty(message = "Не выбрана роль пользователя")
     private String role;
 
     private String password;
@@ -130,6 +129,8 @@ public class EditUserDTO {
     }
 
     public User getUser() {
+        if (role == null || role.trim().equals(""))
+            role = "ROLE_ADMIN";
         return new User(username, email, role, firstName, secondName, patronymic);
     }
 }

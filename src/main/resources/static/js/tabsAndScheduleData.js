@@ -82,23 +82,45 @@ var tabContents = document.querySelectorAll(".tab-pane");
 // При клике на кнопку вкладки
 tabButtons.forEach(function(button) {
     button.addEventListener("click", function() {
-
-        // Удаляем класс "active" у всех кнопок вкладок
-        tabButtons.forEach(function(btn) {
-            btn.classList.remove("active");
-        });
-
-        // Добавляем класс "active" только на выбранную кнопку
-        button.classList.add("active");
-
-        // Скрываем все элементы содержимого вкладок
-        tabContents.forEach(function(content) {
-            content.style.display = "none";
-        });
-
-        // Отображаем только содержимое выбранной вкладки
-        var tabId = button.getAttribute("data-tab");
-        var tabContent = document.querySelector("#" + tabId);
-        tabContent.style.display = "block";
+        var isTeacher = document.getElementById('teacher-id');
+        if (isTeacher !== null) {
+            var tab = button.getAttribute('data-tab');
+            if (tab === 'schedule') {
+                customConfirm("Вы уверены, что сохранили все данные на странице? Все несохраненные данные будут утеряны!");
+                var modal = document.getElementById('modal-div');
+                document.querySelector(".confirmModalYes").addEventListener("click", function() {
+                    modal.innerHTML = '';
+                    changeTab(button);
+                });
+                document.querySelector(".confirmModalNo").addEventListener("click", function() {
+                    // Закрыть окно подтверждения
+                    modal.innerHTML = '';
+                });
+            }
+            else
+                changeTab(button);
+        }
+        else
+            changeTab(button);
     });
 });
+
+function changeTab(button) {
+    // Удаляем класс "active" у всех кнопок вкладок
+    tabButtons.forEach(function(btn) {
+        btn.classList.remove("active");
+    });
+
+    // Добавляем класс "active" только на выбранную кнопку
+    button.classList.add("active");
+
+    // Скрываем все элементы содержимого вкладок
+    tabContents.forEach(function(content) {
+        content.style.display = "none";
+    });
+
+    // Отображаем только содержимое выбранной вкладки
+    var tabId = button.getAttribute("data-tab");
+    var tabContent = document.querySelector("#" + tabId);
+    tabContent.style.display = "block";
+}

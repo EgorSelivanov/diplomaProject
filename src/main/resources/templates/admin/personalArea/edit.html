@@ -35,15 +35,7 @@
         <div class="invalid-feedback">Пожалуйста, введите корректный адрес электронной почты</div>
         <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
     </div>
-    <div class="input-group">
-        <span class="input-group-text">Роль</span>
-        <select id="role" name="role" class="form-select" th:field="*{role}">
-            <option value="ROLE_STUDENT">Студент</option>
-            <option value="ROLE_TEACHER">Преподаватель</option>
-            <option value="ROLE_ADMIN">Администратор</option>
-        </select>
-        <div class="error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Role Error</div>
-    </div>
+
     <div class="input-group">
         <span class="input-group-text">ФИО</span>
         <input type="text" class="form-control" th:field="*{secondName}" placeholder="Фамилия" required>

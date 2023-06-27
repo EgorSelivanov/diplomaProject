@@ -12,6 +12,10 @@
                 <button type="submit" class="btn btn-primary">Сменить пароль</button>
             </form>
 
+            <form th:method="GET" th:action="@{/admin/{id}/edit/{userId}(id=${user.getUserId()}, userId=${user.getUserId()})}">
+                <button type="submit" class="btn btn-primary">Изменить данные</button>
+            </form>
+
             <form th:action="@{/logout}" th:method="POST" class="bth-logout">
                 <input type="submit" value="Выйти" class="btn btn-primary">
             </form>
@@ -19,7 +23,7 @@
     </div>
 
     <div class="admin-list col-lg-6">
-        <h2>Список модераторов</h2>
+        <h2>Список администраторов</h2>
         <div class="input-group">
             <input type="text" class="form-control" id="search-input" placeholder="Поиск...">
             <button type="button" id="close-search-button" class="btn btn-secondary">
@@ -42,7 +46,7 @@
         <h2>Действия</h2>
         <div class="d-flex">
             <form th:method="GET" th:action="@{/admin/{id}/new-user(id=${user.getUserId()})}" id="add-user-btn">
-                <button type="submit" class="btn btn-primary">Добавить нового пользователя</button>
+                <button type="submit" class="btn btn-primary">Добавить нового администратора</button>
             </form>
         </div>
     </div>
