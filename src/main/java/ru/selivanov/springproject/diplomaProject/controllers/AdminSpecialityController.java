@@ -1,18 +1,24 @@
 package ru.selivanov.springproject.diplomaProject.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.selivanov.springproject.diplomaProject.model.Speciality;
 import ru.selivanov.springproject.diplomaProject.services.AdminService;
 import ru.selivanov.springproject.diplomaProject.services.SpecialityService;
 import ru.selivanov.springproject.diplomaProject.util.SpecialityValidator;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,12 +28,14 @@ public class AdminSpecialityController {
     private final SpecialityValidator specialityValidator;
     private final AdminService adminService;
     private final SpecialityService specialityService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public AdminSpecialityController(SpecialityValidator specialityValidator, AdminService adminService, SpecialityService specialityService) {
+    public AdminSpecialityController(SpecialityValidator specialityValidator, AdminService adminService, SpecialityService specialityService, ObjectMapper objectMapper) {
         this.specialityValidator = specialityValidator;
         this.adminService = adminService;
         this.specialityService = specialityService;
+        this.objectMapper = objectMapper;
     }
 
     // -----begin-----Вкладка Специальности-----begin-----
@@ -56,7 +64,7 @@ public class AdminSpecialityController {
     }
 
     @PostMapping("/new-speciality")
-    public String saveNewSpeciality(@RequestBody Speciality speciality,
+    public String saveNewSpeciality(@RequestBody @Valid Speciality speciality,
                                     Model model, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errorSpeciality", getAllErrors(bindingResult));
@@ -102,6 +110,29 @@ public class AdminSpecialityController {
             return ResponseEntity.ofNullable("Данной специальности не найдено!");
         specialityService.deleteSpeciality(id);
         return ResponseEntity.ok("Удаление успешно!");
+    }
+
+    @PostMapping("/{id}/speciality/upload-json")
+    public ResponseEntity<String> uploadJSONFile(@PathVariable("id") int adminId,
+                                                 @RequestPart("file") MultipartFile file) {
+        // Обработка загруженного файла
+        if (!file.isEmpty()) {
+            try {
+                List<Speciality> specialityList = objectMapper.readValue(file.getInputStream(), new TypeReference<List<Speciality>>() {});
+                specialityService.updateDataByJSON(specialityList);
+            }
+            catch (NoSuchFieldException e) {
+                return new ResponseEntity<>("Ошибка: Файл содержит некорректные данные: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            } catch (IOException e) {
+                return new ResponseEntity<>("Ошибка при попытке чтения данных: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            } catch (ConstraintViolationException e) {
+                return new ResponseEntity<>("Ошибка: Файл содержит пустые или некорректные данные: " +
+                        e.getConstraintViolations().stream().iterator().next().getMessage(), HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>("Файл успешно загружен", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Ошибка: Файл не найден", HttpStatus.BAD_REQUEST);
+        }
     }
     // -----end-----Вкладка Специальности-----end-----
 

@@ -1,20 +1,27 @@
 package ru.selivanov.springproject.diplomaProject.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.selivanov.springproject.diplomaProject.dto.GroupEditDTO;
+import ru.selivanov.springproject.diplomaProject.dto.GroupJSONDTO;
 import ru.selivanov.springproject.diplomaProject.model.Group;
 import ru.selivanov.springproject.diplomaProject.model.Speciality;
 import ru.selivanov.springproject.diplomaProject.services.AdminService;
 import ru.selivanov.springproject.diplomaProject.services.GroupService;
 import ru.selivanov.springproject.diplomaProject.services.SpecialityService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,12 +31,13 @@ public class AdminGroupController {
     private final AdminService adminService;
     private final GroupService groupService;
     private final SpecialityService specialityService;
-
+    private final ObjectMapper objectMapper;
     @Autowired
-    public AdminGroupController(AdminService adminService, GroupService groupService, SpecialityService specialityService) {
+    public AdminGroupController(AdminService adminService, GroupService groupService, SpecialityService specialityService, ObjectMapper objectMapper) {
         this.adminService = adminService;
         this.groupService = groupService;
         this.specialityService = specialityService;
+        this.objectMapper = objectMapper;
     }
 
     // -----begin-----Вкладка Группы-----begin-----
@@ -128,11 +136,33 @@ public class AdminGroupController {
     @GetMapping("/{id}/groupListForTeacher")
     public List<Group> getGroupList(@PathVariable("id") int id,
                                @RequestParam("courseNumber") Integer courseNumber) {
-        System.out.println(courseNumber);
         List<Group> list = groupService.getGroups(courseNumber);
         for (Group group:list) {
             System.out.println(group.getName());
         }
         return groupService.getGroups(courseNumber);
+    }
+
+    @PostMapping("/{id}/group/upload-json")
+    public ResponseEntity<String> uploadJSONFile(@PathVariable("id") int adminId,
+                                                  @RequestPart("file") MultipartFile file) {
+        // Обработка загруженного файла
+        if (!file.isEmpty()) {
+            try {
+                List<GroupJSONDTO> groupJSONDTO = objectMapper.readValue(file.getInputStream(), new TypeReference<List<GroupJSONDTO>>() {});
+                groupService.updateDataByJSON(groupJSONDTO);
+            }
+            catch (NoSuchFieldException e) {
+                return new ResponseEntity<>("Ошибка: Файл содержит некорректные данные: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            } catch (IOException e) {
+                return new ResponseEntity<>("Ошибка при попытке чтения данных: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            } catch (ConstraintViolationException e) {
+                return new ResponseEntity<>("Ошибка: Файл содержит пустые или некорректные данные: " +
+                        e.getConstraintViolations().stream().iterator().next().getMessage(), HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>("Файл успешно загружен", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Ошибка: Файл не найден", HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -1,17 +1,23 @@
 package ru.selivanov.springproject.diplomaProject.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.selivanov.springproject.diplomaProject.model.Subject;
 import ru.selivanov.springproject.diplomaProject.services.AdminService;
 import ru.selivanov.springproject.diplomaProject.services.SubjectService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +26,13 @@ import java.util.stream.Collectors;
 public class AdminSubjectController {
     private final AdminService adminService;
     private final SubjectService subjectService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public AdminSubjectController(AdminService adminService, SubjectService subjectService) {
+    public AdminSubjectController(AdminService adminService, SubjectService subjectService, ObjectMapper objectMapper) {
         this.adminService = adminService;
         this.subjectService = subjectService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/{id}/subjects")
@@ -67,7 +75,7 @@ public class AdminSubjectController {
 
     @ResponseBody
     @PostMapping("/{id}/edit-subject/{subjectEditId}")
-    public ResponseEntity<String> editSpeciality(@PathVariable("id") int id, @PathVariable("subjectEditId") int subjectEditId,
+    public ResponseEntity<String> editSubject(@PathVariable("id") int id, @PathVariable("subjectEditId") int subjectEditId,
                                                  @RequestBody @Valid Subject subject, BindingResult bindingResult) {
         if (subjectService.getSubjectById(subjectEditId) == null)
             bindingResult.rejectValue("subjectId", "Doesn't exist", "Дисциплины с таким id не существует!");
@@ -88,6 +96,29 @@ public class AdminSubjectController {
             return ResponseEntity.ofNullable("Данной дисциплины не найдено!");
         subjectService.deleteSubject(id);
         return ResponseEntity.ok("Удаление успешно!");
+    }
+
+    @PostMapping("/{id}/subject/upload-json")
+    public ResponseEntity<String> uploadJSONFile(@PathVariable("id") int adminId,
+                                                 @RequestPart("file") MultipartFile file) {
+        // Обработка загруженного файла
+        if (!file.isEmpty()) {
+            try {
+                List<Subject> groupJSONDTO = objectMapper.readValue(file.getInputStream(), new TypeReference<List<Subject>>() {});
+                subjectService.updateDataByJSON(groupJSONDTO);
+            }
+            catch (NoSuchFieldException e) {
+                return new ResponseEntity<>("Ошибка: Файл содержит некорректные данные: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            } catch (IOException e) {
+                return new ResponseEntity<>("Ошибка при попытке чтения данных: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            } catch (ConstraintViolationException e) {
+                return new ResponseEntity<>("Ошибка: Файл содержит пустые или некорректные данные: " +
+                        e.getConstraintViolations().stream().iterator().next().getMessage(), HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>("Файл успешно загружен", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Ошибка: Файл не найден", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private String getAllErrors(BindingResult bindingResult) {
