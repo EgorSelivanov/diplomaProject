@@ -12,18 +12,15 @@ import ru.selivanov.springproject.diplomaProject.model.User;
 import ru.selivanov.springproject.diplomaProject.security.UserDetails;
 import ru.selivanov.springproject.diplomaProject.services.RegistrationService;
 import ru.selivanov.springproject.diplomaProject.util.PasswordValidator;
-import ru.selivanov.springproject.diplomaProject.util.UserValidator;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
-    private final UserValidator userValidator;
     private final PasswordValidator passwordValidator;
     private final RegistrationService registrationService;
 
     @Autowired
-    public AuthController(UserValidator userValidator, PasswordValidator passwordValidator, RegistrationService registrationService) {
-        this.userValidator = userValidator;
+    public AuthController(PasswordValidator passwordValidator, RegistrationService registrationService) {
         this.passwordValidator = passwordValidator;
         this.registrationService = registrationService;
     }
@@ -45,27 +42,6 @@ public class AuthController {
     @GetMapping("/login")
     public String loginPage() {
         return "auth/login";
-    }
-
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("user") User user) {
-        return "auth/registration";
-    }
-
-    @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("user") @Valid User user,
-                                      BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "/auth/registration";
-
-        userValidator.validate(user, bindingResult);
-
-        if (bindingResult.hasErrors())
-            return "/auth/registration";
-
-        registrationService.register(user);
-
-        return "redirect:/auth/login";
     }
 
     @GetMapping("/change-password")
