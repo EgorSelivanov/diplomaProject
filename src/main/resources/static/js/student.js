@@ -27,7 +27,7 @@ function getJournalData(discipline, text) {
             const thead = document.createElement('thead');
             const tbody = document.createElement('tbody');
             const tr = document.createElement('tr');
-            const headers = ['Вид работы', 'Описание', 'Дата', 'Количество баллов', 'Максимальное количество баллов'];
+            const headers = ['Вид работы', 'Описание', 'Тип занятия', 'Дата', 'Количество баллов', 'Максимальное количество баллов'];
             headers.forEach(header => {
                 const th = document.createElement('th');
                 th.textContent = header;
@@ -40,7 +40,7 @@ function getJournalData(discipline, text) {
             // заполняем таблицу данными
             data.forEach(item => {
                 const row = document.createElement('tr');
-                const cells = [item.type, item.description, item.dateFormat, item.points, item.maxPoints];
+                const cells = [item.type, item.description, item.workloadType, item.dateFormat, item.points, item.maxPoints];
                 cells.forEach(cell => {
                     const td = document.createElement('td');
                     td.textContent = cell;
@@ -179,6 +179,9 @@ document.getElementById('tab-notification').addEventListener('click', function (
         .then(function (newHtml) {
             var divNotification = document.getElementById('notifications');
             divNotification.innerHTML = newHtml;
+            var countOfNotification = document.getElementById('notification-count');
+            if (countOfNotification !== null)
+                countOfNotification.style.display = 'none';
 
             fetch(`${studentId}/notifications`, {
                 method: 'POST',

@@ -1,0 +1,65 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <div class="student-control col-md-5">
+        <h2>Действия</h2>
+        <div class="d-flex">
+            <form method="GET" action="/admin/new-student" id="add-student-form">
+                <button type="submit" id="submit-add-student" class="btn btn-primary"
+                        onclick="getPageNewStudent(event)">Добавить нового студента
+                </button>
+            </form>
+        </div>
+
+        <div class="btn-save-changes" style="margin-top: 15px">
+            <input id="uploadJSONInput" class="btn" type="file" accept=".json">
+            <button id="uploadJSONButton" class="btn btn-primary btn-save-changes" disabled="">Загрузить JSON</button>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+
+    </div>
+
+    <div class="student-list col-lg-11">
+        <h2>Список студентов</h2>
+        <div class="input-group">
+            <input type="text" class="form-control" id="search-input" placeholder="Поиск...">
+            <button type="button" id="close-search-button" class="btn btn-secondary">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <button type="button" id="search-button" class="btn btn-secondary">
+                <i class="bi-search"></i>
+            </button>
+
+            <div class="input-group">
+                <span class="input-group-text">Введите курс</span>
+                <select id='student-course-select' class="form-select">
+                    <option th:each="courseNumber : ${courseNumberList}"
+                            th:value="${courseNumber}" th:text="${courseNumber}"></option>
+                </select>
+            </div>
+
+            <div class="input-group" id="div-student-group-select" style="display: none;">
+                <span class="input-group-text">Выберите группу</span>
+                <select id='student-group-select' class="form-select">
+                   <!--Данные запрашиваются у сервера после выбора-->
+                </select>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Учесть выбор группы при поиске</span>
+                <input type="checkbox" id="checkbox-student-group" class="form-check-input mt-0">
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="check-read-edit">
+                <label class="form-check-label" for="check-read-edit">Просмотр/Редактирование</label>
+                <button class="btn btn-secondary" id="btn-check-read-edit" style="display: none">Сохранить изменения
+                </button>
+            </div>
+        </div>
+
+        <div id="student-list">
+
+        </div>
+    </div>
+</div>

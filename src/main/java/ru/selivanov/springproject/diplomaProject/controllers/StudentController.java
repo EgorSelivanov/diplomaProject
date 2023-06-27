@@ -37,6 +37,7 @@ public class StudentController {
 
         model.addAttribute("scheduleDataList", studentService.getScheduleDataByStudent(id, new Date()));
         model.addAttribute("subjectList", studentService.getSubjectListByStudent(id));
+        model.addAttribute("notificationCount", notificationService.getNotificationListNotShowedByStudentId(id).size());
         CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         model.addAttribute("_csrf", csrfToken.getToken());
         return "student/student";

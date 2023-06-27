@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface StudentsRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByUser(User user);
+    Optional<Student> findByUser_Username(String username);
     List<Student> findAllByUser_UsernameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(String username);
     List<Student> findAllByUser_EmailLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(String email);
     List<Student> findAllByUser_FirstNameLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAscGroup_NameAsc(String firstName);

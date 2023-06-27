@@ -54,10 +54,13 @@ public class StudentDAO {
 
     public List<GradesDTO> getGradesDTOListByGroup(int groupId, int subjectId, int studentId) {
         return jdbcTemplate.query("""
-                SELECT assign.type, assign.description, assign.max_points, assign.date, COALESCE(gr.points, 0) as points
-                FROM Assignment_ assign JOIN workload w ON assign.workload_id = w.workload_id\s
-                LEFT JOIN grade gr ON assign.assignment_id = gr.assignment_id
-                WHERE w.group_id = ? AND w.subject_id = ? AND gr.student_id = ? ORDER BY "date"
+                SELECT assignment_.type, assignment_.description, assignment_.max_points, assignment_.date,\s
+                COALESCE(grade.points, 0) as points, workload.type as workload_type
+                FROM assignment_ JOIN workload ON assignment_.workload_id = workload.workload_id
+                JOIN student ON workload.group_id = student.group_id
+                LEFT JOIN grade ON grade.assignment_id = assignment_.assignment_id
+                AND student.student_id = grade.student_id
+                WHERE workload.group_id = ? AND workload.subject_id = ? AND student.student_id = ? ORDER BY "date"
                 """, new Object[]{groupId, subjectId, studentId}, new BeanPropertyRowMapper<>(GradesDTO.class));
     }
 

@@ -29,7 +29,12 @@
             <ul>
                 <li><button class="tab-button active" data-tab="schedule">Расписание</button></li>
                 <li><button  class="tab-button" data-tab="journal">Журнал</button></li>
-                <li><button id="tab-notification" class="tab-button" data-tab="notifications">Уведомления</button></li>
+                <li>
+                    <button id="tab-notification" class="tab-button" data-tab="notifications">
+                        Уведомления
+                        <span id="notification-count" th:if="${notificationCount != 0}" th:text="${notificationCount}"></span>
+                    </button>
+                </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="schedule">

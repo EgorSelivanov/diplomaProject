@@ -1,0 +1,61 @@
+<div class="d-flex student-li">
+
+    <table id="studentList" class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Отчество</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Группа</th>
+            <th>Курс</th>
+            <th>Сброс пароля</th>
+            <th>Удаление</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${studentList}" th:id="${'row-student' + student.getStudentId()}">
+            <td class="editable-cell">
+                <input type="text" id="student-secondName" th:value="${student.getUser().getSecondName()}" readonly>
+            </td>
+            <td class="editable-cell">
+                <input type="text" id="student-firstName" th:value="${student.getUser().getFirstName()}" readonly>
+            </td>
+            <td class="editable-cell">
+                <input type="text" id="student-patronymic" th:value="${student.getUser().getPatronymic()}" readonly>
+            </td>
+            <td class="editable-cell">
+                <input type="text" id="student-username" th:value="${student.getUser().getUsername()}" readonly>
+            </td>
+            <td class="editable-cell">
+                <input type="text" id="student-email" th:value="${student.getUser().getEmail()}" readonly>
+            </td>
+            <td class="editable-cell-select">
+                <select id='student-group-select-edit' class="form-select" disabled>
+                    <option th:value="${student.getGroup().getGroupId()}" th:text="${student.getGroup().getName()}" selected></option>
+                    <!--Данные запрашиваются у сервера после выбора-->
+                </select>
+            </td>
+            <td class="editable-cell-select">
+                <select id='student-course-select-edit' class="form-select" disabled>
+                    <option th:value="${student.getGroup().getCourseNumber()}"
+                            th:text="${student.getGroup().getCourseNumber()}" selected></option>
+                    <option th:each="courseNumber : ${courseNumberList}" th:if="${student.getGroup().getCourseNumber() != courseNumber}"
+                            th:value="${courseNumber}" th:text="${courseNumber}"></option>
+                </select>
+            </td>
+            <td>
+                <a type="button" th:id="${'button-change-password' + student.getUser().getUserId()}"
+                   th:href="@{/admin/getPasswordPage}"
+                   onclick="confirmChangePassword(event, '\'Вы уверены, что хотите сбросить пароль студента?\'')"><i class="bi bi-trash"></i></a>
+            </td>
+            <td>
+                <a type="button" th:id="${'button-delete-student' + student.getStudentId()}"
+                   th:href="@{/admin/{id}/deleteStudent(id=${student.getStudentId()})}"
+                   onclick="confirmDeletionStudent(event)"><i class="bi bi-x-circle"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

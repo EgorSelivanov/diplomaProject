@@ -1,15 +1,17 @@
 package ru.selivanov.springproject.diplomaProject.services;
 
+import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.selivanov.springproject.diplomaProject.dao.StudentDAO;
-import ru.selivanov.springproject.diplomaProject.dto.AttendanceStudentDTO;
-import ru.selivanov.springproject.diplomaProject.dto.GradesDTO;
-import ru.selivanov.springproject.diplomaProject.dto.StudentScheduleDTO;
+import ru.selivanov.springproject.diplomaProject.dto.*;
 import ru.selivanov.springproject.diplomaProject.model.*;
+import ru.selivanov.springproject.diplomaProject.repositories.GroupsRepository;
 import ru.selivanov.springproject.diplomaProject.repositories.StudentsRepository;
+import ru.selivanov.springproject.diplomaProject.repositories.UsersRepository;
 
 import java.util.*;
 
@@ -17,12 +19,20 @@ import java.util.*;
 @Transactional(readOnly = true)
 public class StudentService {
     private final StudentsRepository studentsRepository;
+    private final UsersRepository usersRepository;
+    private final GroupsRepository groupsRepository;
     private final StudentDAO studentDAO;
+    private final PasswordEncoder passwordEncoder;
+    private final WorkloadService workloadService;
 
     @Autowired
-    public StudentService(StudentsRepository studentsRepository, StudentDAO studentDAO) {
+    public StudentService(StudentsRepository studentsRepository, UsersRepository usersRepository, GroupsRepository groupsRepository, StudentDAO studentDAO, PasswordEncoder passwordEncoder, WorkloadService workloadService) {
         this.studentsRepository = studentsRepository;
+        this.usersRepository = usersRepository;
+        this.groupsRepository = groupsRepository;
         this.studentDAO = studentDAO;
+        this.passwordEncoder = passwordEncoder;
+        this.workloadService = workloadService;
     }
 
     public Optional<Student> findByUser(User user) {
@@ -149,5 +159,69 @@ public class StudentService {
 
     public List<AttendanceStudentDTO> getAttendanceListByStudentAndSubject(int studentId, int subjectId) {
         return studentDAO.getAttendanceDTOList(studentId, subjectId);
+    }
+
+    @Transactional
+    public void updateDataByJSON(@Valid List<StudentJSONDTO> studentJSONDTOList) throws NoSuchFieldException {
+        List<Student> studentList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
+        List<Integer> attendanceList = new ArrayList<>();
+        for (StudentJSONDTO studentJSONDTO : studentJSONDTOList) {
+            Student student = studentsRepository.findByUser_Username(studentJSONDTO.getUsername().trim()).orElse(null);
+
+            if (student == null) {
+                student = new Student();
+                User user = new User();
+                user.setUsername(studentJSONDTO.getUsername().trim());
+
+                updateUser(user, student, studentJSONDTO);
+                student.setUser(user);
+                user.setStudent(student);
+
+                userList.add(user);
+                studentList.add(student);
+                attendanceList.add(studentList.size() - 1);
+                continue;
+            }
+
+            User user = student.getUser();
+            if (!student.getGroup().getName().equals(studentJSONDTO.getGroupName().trim()))
+                attendanceList.add(studentList.size());
+
+            updateUser(user, student, studentJSONDTO);
+            userList.add(user);
+            studentList.add(student);
+        }
+
+        usersRepository.saveAll(userList);
+        studentsRepository.saveAll(studentList);
+        //Создать посещаемости
+        for (Integer index : attendanceList) {
+            Student student = studentList.get(index);
+            workloadService.deleteStudentAttendances(student.getStudentId());
+            workloadService.createStudentAttendances(student.getStudentId());
+        }
+    }
+
+    private void updateUser(User user, Student student, StudentJSONDTO studentJSONDTO) throws NoSuchFieldException {
+        if (studentJSONDTO.getPassword().trim().length() < 6)
+            throw new NoSuchFieldException("Пароль меньше 6 символов для пользователя: " + user.getUsername());
+        user.setPassword(passwordEncoder.encode(studentJSONDTO.getPassword().trim()));
+
+        User emailUser = usersRepository.findByEmail(studentJSONDTO.getEmail().trim()).orElse(null);
+        if (emailUser != null && !Objects.equals(user.getUserId(), emailUser.getUserId()))
+            throw new NoSuchFieldException("Встречен пользователь с зарегестрированным email: " + user.getUsername());
+
+        user.setEmail(studentJSONDTO.getEmail().trim());
+        user.setRole("ROLE_STUDENT");
+        user.setFirstName(studentJSONDTO.getFirstName().trim());
+        user.setSecondName(studentJSONDTO.getSecondName().trim());
+        user.setPatronymic(studentJSONDTO.getPatronymic().trim());
+
+        Group group = groupsRepository.findByName(studentJSONDTO.getGroupName().trim()).orElse(null);
+        if (group == null)
+            throw new NoSuchFieldException("Данной группы не найдено: " + studentJSONDTO.getGroupName());
+
+        student.setGroup(group);
     }
 }

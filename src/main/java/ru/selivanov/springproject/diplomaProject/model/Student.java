@@ -2,7 +2,6 @@ package ru.selivanov.springproject.diplomaProject.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.aspectj.weaver.ast.Not;
 
 import java.util.List;
 import java.util.Objects;

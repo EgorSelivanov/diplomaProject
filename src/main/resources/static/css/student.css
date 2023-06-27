@@ -13,7 +13,7 @@ h1 {
 
 /* Стиль для контейнера .container */
 .container {
-    max-width: 960px;
+    max-width: 65%;
     margin: 0 auto;
 }
 
@@ -194,3 +194,16 @@ form {
     margin-top: 10px;
 }
 
+#notification-count {
+    display: inline-block;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    text-align: center;
+    position: relative;
+    top: -10px;
+    right: -10px;
+}
