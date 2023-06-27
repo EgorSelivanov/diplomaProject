@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Attendance")
 public class Attendance {
+    @Transient
+    private final SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
     @Id
     @Column(name = "attendance_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,6 +82,10 @@ public class Attendance {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getDateFormat() {
+        return formatter.format(date);
     }
 
     @Override

@@ -34,6 +34,11 @@ public class AttendanceService {
     }
 
     @Transactional
+    public void saveAttendanceList(List<Attendance> attendanceList) {
+        attendancesRepository.saveAll(attendanceList);
+    }
+
+    @Transactional
     public boolean updateAttendance(int id, Attendance updatedAttendance) {
         Optional<Attendance> attendanceById = attendancesRepository.findById(id);
 

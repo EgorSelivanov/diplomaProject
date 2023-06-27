@@ -3,6 +3,7 @@ package ru.selivanov.springproject.diplomaProject.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.selivanov.springproject.diplomaProject.model.Attendance;
+import ru.selivanov.springproject.diplomaProject.model.Student;
 
 import java.util.Date;
 import java.util.List;
@@ -10,4 +11,5 @@ import java.util.List;
 @Repository
 public interface AttendancesRepository extends JpaRepository<Attendance, Integer> {
     List<Attendance> findByDate(Date date);
+    List<Attendance> findAllByStudent(Student student);
 }
