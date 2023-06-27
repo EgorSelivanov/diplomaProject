@@ -218,3 +218,54 @@ function fetchNewSubject() {
         formNew.classList.add('was-validated');
     });
 }
+
+function addJsonFunctionalityToSubject() {
+    var inputJSON = document.getElementById('uploadJSONInput');
+    var buttonJSON = document.getElementById('uploadJSONButton');
+    inputJSON.addEventListener('change', function() {
+        if (inputJSON.files.length > 1) {
+            inputJSON.value = '';
+            customAlert("Выберите только 1 файл!");
+            return;
+        }
+        if (inputJSON.files.length === 1 && !inputJSON.files[0].name.endsWith('.json')) {
+            inputJSON.value = '';
+            customAlert("Выберите файл JSON!");
+            return;
+        }
+        customAlert("Обратите внимание, что JSON должен содержать следующие поля:\n" +
+            "name: название дисциплины; " +
+            "description: описание (опционально).");
+        buttonJSON.disabled = inputJSON.files.length <= 0;
+    });
+    buttonJSON.addEventListener('click', function() {
+        uploadJSONToSubject(inputJSON.files[0]);
+    });
+}
+
+function uploadJSONToSubject(file) {
+    const csrfToken = document.getElementById("csrfToken").value;
+    var formData = new FormData();
+    formData.append('file', file);
+    fetch(`${adminId}/subject/upload-json`,
+        { method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData })
+        .then(response => response.text())
+        .then(data => {
+            // Обработка ответа от сервера
+            customAlert(data);
+            var inputJSON = document.getElementById('uploadJSONInput');
+            var buttonJSON = document.getElementById('uploadJSONButton');
+
+            inputJSON.value = '';
+            buttonJSON.disabled = true;
+            getSubjectList(globalSearch);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
+}

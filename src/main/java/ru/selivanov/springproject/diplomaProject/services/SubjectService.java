@@ -1,5 +1,6 @@
 package ru.selivanov.springproject.diplomaProject.services;
 
+import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,5 +82,22 @@ public class SubjectService {
         Hibernate.initialize(subjectOptional.get().getWorkloadList());
 
         return subjectOptional.get().getWorkloadList();
+    }
+
+    @Transactional
+    public void updateDataByJSON(@Valid List<Subject> subjectList) throws NoSuchFieldException {
+        List<Subject> subjects = new ArrayList<>();
+        for (Subject subject : subjectList) {
+            if (subject.getName() == null || subject.getName().trim().equals(""))
+                throw new NoSuchFieldException("Встречено пустое название дисциплины!");
+            if (subject.getDescription() == null)
+                subject.setDescription("");
+
+            Subject subject1 = subjectsRepository.findByNameAndDescription(subject.getName().trim(), subject.getDescription().trim()).orElse(null);
+            if (subject1 == null)
+                subjects.add(subject);
+        }
+
+        subjectsRepository.saveAll(subjects);
     }
 }
