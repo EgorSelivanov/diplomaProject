@@ -2,8 +2,8 @@ package ru.selivanov.springproject.diplomaProject.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +22,7 @@ public class Speciality {
 
     @Column(name = "code")
     @NotEmpty(message = "Код специальности не должен быть пустым!")
+    @Pattern(regexp = "\\d{1,2}(\\.\\d{2}){2}(\\.\\d{2})?", message = "Неверный формат кода")
     @Size(min = 8, max = 10, message = "Код специальности должен содержать 8 или 10 символов")
     private String code;
 
