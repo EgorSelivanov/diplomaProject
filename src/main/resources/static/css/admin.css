@@ -90,7 +90,8 @@ img {
  }
 
 .admin-list, .admin-control, .speciality-list, .speciality-control, .group-list, .group-control,
-.subject-list, .subject-control {
+.subject-list, .subject-control, .teacher-control, .teacher-list, .student-control, .student-list, .workload-list,
+.workload-control, .schedule-control, .schedule-list{
     border: 1px solid #ccc;
     padding: 10px;
     margin-right: auto;
@@ -101,7 +102,7 @@ img {
     margin-top: inherit;
 }
 
-.admin-list .admin-li, .speciality-list .speciality-li, .group-list .group-li, .subject-list .subject-li {
+.admin-list .admin-li, .speciality-list .speciality-li, .group-list .group-li, .subject-list .subject-li{
     border: 1px solid #ddd;
     padding: 10px;
     margin-bottom: 10px;
@@ -119,20 +120,21 @@ img {
     margin-top: 50px;
 }
 
-.admin-list a, .speciality-list .speciality-buttons a, .group-list .group-buttons a, .subject-buttons a {
+.admin-list a, .speciality-list .speciality-buttons a, .group-list .group-buttons a, .subject-buttons a,
+.teacher-li a, .student-li a, .workload-li a, .schedule-li a{
     margin-right: 10px;
     color: #0d6efd;
     max-width: 20px;
 }
 
 .admin-list a:hover, .speciality-list .speciality-buttons a:hover, .group-list .group-buttons a:hover,
-.subject-buttons a:hover {
+.subject-buttons a:hover, .teacher-li a:hover, .student-li a:hover, .workload-li a:hover, .schedule-li a:hover{
     color: blue;
 }
 
 .input-group {
     margin-top: 20px;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 }
 
 /*Specialities*/
@@ -141,7 +143,7 @@ img {
 }
 
 /*Groups*/
-#checkbox-course {
+#checkbox-course, #checkbox-department, #checkbox-student-group {
     width: 38px;
     height: 38px;
 }
@@ -149,4 +151,33 @@ img {
 #inp-number-course {
     width: 75px;
     max-width: 75px;
+}
+
+#teacher-list, #student-list, #workload-list, #schedule-list{
+    max-width: 100%;
+    overflow-x: auto;
+    text-align: center;
+}
+
+/*Teachers*/
+#teacher-department-select{
+    max-width: 30%;
+}
+
+.editable-cell input, .editable-cell-select select {
+    background-color: transparent;
+    border: none;
+    text-align: center;
+}
+
+.editable-cell-select select {
+    width: auto;
+}
+
+.form-check, .form-switch {
+    margin-top: 20px;
+}
+
+.group-buttons {
+    margin-top: 20px;
 }

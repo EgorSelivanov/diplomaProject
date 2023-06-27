@@ -11,7 +11,6 @@ var teachersLink = document.getElementById('teachers');
 var groupsLink = document.getElementById('groups');
 var specialtiesLink = document.getElementById('specialties');
 var subjectsLink = document.getElementById('subject');
-var workloadLink = document.getElementById('workload');
 var scheduleLink = document.getElementById('schedule');
 
 // Обработчик события для категории Личный кабинет
@@ -27,6 +26,130 @@ personalLink.addEventListener('click', function() {
         })
         .then(function (newHtml) {
             showContent(adminContent, newHtml, getAdminList);
+        })
+        .catch(function (error) {
+            console.error('Ошибка получения', error);
+        });
+});
+
+// Обработчик события для категории Преподаватели
+teachersLink.addEventListener('click', function() {
+    globalSearch = '';
+    setMainText(teachersLink);
+    const adminContent = document.querySelector('.container');
+    // Отправить GET-запрос к серверу по адресу "admin/{id}/personal"
+    // и обработать полученную модальную страницу
+    fetch(`${adminId}/teachers`)
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (newHtml) {
+            adminContent.innerHTML =newHtml;
+
+            var inputSearch = document.getElementById('search-input');
+            inputSearch.value = globalSearch;
+            getTeachersAdminList(globalSearch);
+
+            var selectDepartment = document.getElementById('teacher-department-select');
+            var checkboxDepartment = document.getElementById('checkbox-department');
+            checkboxDepartment.addEventListener('change', function (event) {
+                selectDepartment.disabled = !event.target.checked;
+                if (!event.target.checked)
+                    getTeachersAdminList(globalSearch);
+                else
+                    getTeachersAdminListByDepartment(globalSearch, selectDepartment.value);
+            });
+
+            selectDepartment.addEventListener('change', function (ev) {
+                getTeachersAdminListByDepartment(globalSearch, selectDepartment.value);
+            });
+
+            var buttonSearch = document.getElementById('search-button');
+
+            buttonSearch.addEventListener('click', function () {
+                globalSearch = inputSearch.value;
+                if (checkboxDepartment.checked) {
+                    getTeachersAdminListByDepartment(globalSearch, selectDepartment.value);
+                }
+                else {
+                    getTeachersAdminList(globalSearch);
+                }
+            });
+
+            var buttonCloseSearch = document.getElementById('close-search-button');
+
+            buttonCloseSearch.addEventListener('click', function () {
+                inputSearch.value = '';
+                globalSearch = '';
+                if (checkboxDepartment.checked) {
+                    getTeachersAdminListByDepartment(globalSearch, selectDepartment.value);
+                }
+                else {
+                    getTeachersAdminList(globalSearch);
+                }
+            });
+
+            addJsonFunctionalityToTeacher();
+        })
+        .catch(function (error) {
+            console.error('Ошибка получения', error);
+        });
+});
+
+// Обработчик события для категории Студенты
+studentsLink.addEventListener('click', function() {
+    globalSearch = '';
+    setMainText(studentsLink);
+    const adminContent = document.querySelector('.container');
+    // Отправить GET-запрос к серверу по адресу "admin/{id}/personal"
+    // и обработать полученную модальную страницу
+    fetch(`${adminId}/students`)
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (newHtml) {
+            adminContent.innerHTML =newHtml;
+
+            var inputSearch = document.getElementById('search-input');
+            inputSearch.value = globalSearch;
+
+            var divSelect = document.getElementById('div-student-group-select');
+            var selectGroup = document.getElementById('student-group-select');
+
+            var selectCourse = document.getElementById('student-course-select');
+            selectCourse.addEventListener('change', function (event) {
+               getGroupListByCourse(selectCourse.value, divSelect, selectGroup);
+            });
+            getGroupListByCourse(selectCourse.value, divSelect, selectGroup);
+            addJsonFunctionalityToStudent();
+
+            var buttonSearch = document.getElementById('search-button');
+
+            var checkboxStudentGroup = document.getElementById('checkbox-student-group');
+
+            selectGroup.addEventListener('change', function () {
+                getStudentsAdminListByGroup(globalSearch, selectGroup.value);
+            });
+
+            buttonSearch.addEventListener('click', function () {
+                globalSearch = inputSearch.value;
+                if (globalSearch.trim() === "") {
+                    customAlert("Вы не ввели данные для поиска студента!");
+                    return;
+                }
+                if (checkboxStudentGroup.checked)
+                    getStudentsAdminListByGroup(globalSearch, selectGroup.value);
+                else
+                    getStudentsAdminList(globalSearch);
+            });
+
+            var buttonCloseSearch = document.getElementById('close-search-button');
+
+            buttonCloseSearch.addEventListener('click', function () {
+                inputSearch.value = '';
+                globalSearch = '';
+                getStudentsAdminListByGroup(globalSearch, selectGroup.value);
+            });
         })
         .catch(function (error) {
             console.error('Ошибка получения', error);
@@ -50,6 +173,7 @@ groupsLink.addEventListener('click', function() {
             var inputSearch = document.getElementById('search-input');
             inputSearch.value = globalSearch;
             getGroupsAdminList(globalSearch);
+            addJsonFunctionalityToGroup();
 
             var inputCourse = document.getElementById('inp-number-course');
             var checkboxCourse = document.getElementById('checkbox-course');
@@ -105,6 +229,7 @@ subjectsLink.addEventListener('click', function() {
         })
         .then(function (newHtml) {
             showContent(adminContent, newHtml, getSubjectList);
+            addJsonFunctionalityToSubject();
         })
         .catch(function (error) {
             console.error('Ошибка получения', error);
@@ -123,6 +248,26 @@ specialtiesLink.addEventListener('click', function() {
         })
         .then(function (newHtml) {
             showContent(adminContent, newHtml, getSpecialityList);
+            addJsonFunctionalityToSpeciality();
+        })
+        .catch(function (error) {
+            console.error('Ошибка получения', error);
+        });
+});
+
+// Обработчик события для категории Расписание
+scheduleLink.addEventListener('click', function() {
+    setMainText(scheduleLink);
+    const adminContent = document.querySelector('.container');
+    // Отправить GET-запрос к серверу по адресу "admin/{id}/personal"
+    // и обработать полученную модальную страницу
+    fetch(`${adminId}/schedules`)
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (newHtml) {
+            showContent(adminContent, newHtml, getScheduleWorkloadList);
+            addJsonFunctionalityToSchedule();
         })
         .catch(function (error) {
             console.error('Ошибка получения', error);
