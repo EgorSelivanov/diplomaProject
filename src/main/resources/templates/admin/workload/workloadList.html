@@ -1,0 +1,31 @@
+<div class="d-flex workload-li" style="width: 100%;">
+
+    <table id="workloadList" class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Дисциплина</th>
+            <th>Описание дисциплины</th>
+            <th>Тип занятия</th>
+            <th>Группа</th>
+            <th>Курс</th>
+            <th>Специальность</th>
+            <th>Удаление</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="workload : ${workloadList}" th:id="${'row-workload' + workload.getWorkloadId()}">
+            <td class="editable-cell" th:text="${workload.getSubjectName()}"></td>
+            <td class="editable-cell" th:text="${workload.getSubjectDescription()}"></td>
+            <td class="editable-cell" th:text="${workload.getType()}"></td>
+            <td class="editable-cell" th:text="${workload.getGroupName()}"></td>
+            <td class="editable-cell" th:text="${workload.getCourseNumber()}"></td>
+            <td class="editable-cell" th:text="${workload.getSpecialityName()}"></td>
+            <td>
+                <a type="button" th:id="${'button-delete-workload' + workload.getWorkloadId()}"
+                   th:href="@{/admin/{id}/deleteWorkload(id=${workload.getWorkloadId()})}"
+                   onclick="confirmDeletionWorkload(event)"><i class="bi bi-x-circle"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

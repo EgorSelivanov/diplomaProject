@@ -1,0 +1,31 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <h2 th:text="${'Нагрузка: ' + teacher.getUser().getSecondName() + ' ' + teacher.getUser().getFirstName() + ' ' + teacher.getUser().getPatronymic()}"></h2>
+    <div class="workload-control col-md-5">
+        <h2>Действия</h2>
+        <div class="d-flex">
+            <input type="hidden" id="workload-teacher-id" th:value="${teacher.getTeacherId()}">
+            <form method="GET" action="/admin/new-workload" id="add-workload-form">
+                <button type="submit" id="submit-add-workload" class="btn btn-primary"
+                        onclick="getPageNewWorkload(event)">Добавить новую нагрузку
+                </button>
+            </form>
+        </div>
+
+        <div class="btn-save-changes" style="margin-top: 15px">
+            <input id="uploadJSONInput" class="btn" type="file" accept=".json">
+            <button id="uploadJSONButton" class="btn btn-primary btn-save-changes" disabled="">Загрузить JSON</button>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+
+    </div>
+
+    <div class="workload-list col-lg-11">
+        <h2>Список нагрузок</h2>
+
+        <div id="workload-list" class="row row-cols-2" style="margin-top: 2%;">
+
+        </div>
+    </div>
+</div>

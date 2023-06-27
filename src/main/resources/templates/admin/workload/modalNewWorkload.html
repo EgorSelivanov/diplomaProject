@@ -1,0 +1,54 @@
+<!-- HTML код для модальной страницы -->
+<div id="myModal" class="modall">
+    <div class="modall-content">
+        <span class="close">&times;</span>
+        <h2>Создание новой нагрузки</h2>
+        <form id="newWorkloadForm" class="needs-validation" novalidate
+              action="/admin/new-workload" method="POST">
+            <div class="input-group">
+                <span class="input-group-text">Введите курс</span>
+                <select id='student-course-select-modal' class="form-select">
+                    <option th:each="courseNumber : ${courseNumberList}"
+                            th:value="${courseNumber}" th:text="${courseNumber}"></option>
+                </select>
+            </div>
+
+            <div class="input-group" id="div-student-group-select-modal" style="display: none;">
+                <span class="input-group-text">Выберите группу</span>
+                <select id='student-group-select-modal' class="form-select" required="true">
+                    <!--Данные запрашиваются у сервера после выбора-->
+                </select>
+                <div class="invalid-feedback">Пожалуйста, выберите группу для продолжения</div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Выберите дисциплину</span>
+                <select id='subject-select-modal' class="form-select" required="true">
+                    <option th:each="subject : ${subjectList}" th:value="${subject.getSubjectId()}"
+                            th:if="${subject.getDescription() != null && !subject.getDescription().equals('')}"
+                            th:text="${subject.getName() + ' (' + subject.getDescription() + ')'}"></option>
+
+                    <option th:each="subject : ${subjectList}" th:value="${subject.getSubjectId()}"
+                            th:if="${subject.getDescription() == null || subject.getDescription().equals('')}"
+                            th:text="${subject.getName()}"></option>
+                </select>
+                <div class="invalid-feedback">Пожалуйста, выберите дисциплину для продолжения</div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Вид занятия</span>
+                <select id='subject-type-select' class="form-select" required="true">
+                    <option value="лекция">лекция</option>
+                    <option value="практика">практика</option>
+                    <option value="л.р.">л.р.</option>
+                </select>
+                <div class="invalid-feedback">Пожалуйста, выберите вид занятия для продолжения</div>
+            </div>
+
+            <div th:if="${errorWorkload != ''}" class="error" th:text="${errorWorkload}"></div>
+            <div>
+                <input id="submit-add" type="submit" value="Сохранить" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>
