@@ -42,6 +42,9 @@ public class Schedule {
     @Temporal(TemporalType.TIME)
     private Date endTime;
 
+    @Column(name = "repeat")
+    private String repeat;
+
     @OneToMany(mappedBy = "schedule")
     private List<Attendance> attendanceList;
 
@@ -118,6 +121,14 @@ public class Schedule {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public String getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(String repeat) {
+        this.repeat = repeat;
     }
 
     public List<Attendance> getAttendanceList() {

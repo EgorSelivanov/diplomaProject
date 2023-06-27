@@ -19,6 +19,10 @@ public class NewScheduleTeacherDTO {
     @Size(min = 2, max = 50, message = "Название (номер) аудитории должно быть между 2 и 50 символов!")
     private String audience;
 
+    @NotEmpty(message = "Не указано здание!")
+    @Size(min = 1, max = 50, message = "Название (номер) здания должен быть между 1 и 50 символов!")
+    private String building;
+
     @NotEmpty(message = "Не указан день недели!")
     private String dayOfWeek;
 
@@ -52,8 +56,9 @@ public class NewScheduleTeacherDTO {
         groupsId = new ArrayList<>();
     };
 
-    public NewScheduleTeacherDTO(String audience, String dayOfWeek, Date startTime, Date endTime, int subjectId, String type, List<Integer> groupId) {
+    public NewScheduleTeacherDTO(String audience, String building, String dayOfWeek, Date startTime, Date endTime, int subjectId, String type, List<Integer> groupId) {
         this.audience = audience;
+        this.building = building;
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -68,6 +73,14 @@ public class NewScheduleTeacherDTO {
 
     public void setAudience(String audience) {
         this.audience = audience;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
     }
 
     public String getDayOfWeek() {

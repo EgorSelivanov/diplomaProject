@@ -1,0 +1,31 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <div class="schedule-control col-md-5">
+        <h2>Действия</h2>
+
+        <div class="btn-save-changes" style="margin-top: 15px">
+            <input id="uploadJSONInput" class="btn" type="file" accept=".json">
+            <button id="uploadJSONButton" class="btn btn-primary btn-save-changes" disabled="">Загрузить JSON</button>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+
+    </div>
+
+    <div class="schedule-list col-lg-11">
+        <h2>Список нагрузок</h2>
+        <div class="input-group">
+            <input type="text" class="form-control" id="search-input" placeholder="Поиск...">
+            <button type="button" id="close-search-button" class="btn btn-secondary">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <button type="button" id="search-button" class="btn btn-secondary">
+                <i class="bi-search"></i>
+            </button>
+        </div>
+
+        <div id="schedule-list" style="margin-top: 15px;">
+
+        </div>
+    </div>
+</div>

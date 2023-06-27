@@ -50,8 +50,6 @@
                     <option value="Еженедельно">Еженедельно</option>
                     <option value="Неч.">Неч.</option>
                     <option value="Чет.">Чет.</option>
-                    <option value="Неч./Чет.">Неч./Чет.</option>
-                    <option value="Чет./Неч.">Чет./Неч.</option>
                     <option value="Одно занятие">Одно занятие</option>
                 </select>
                 <div class="invalid-feedback">Пожалуйста, выберите повтор занятия для продолжения</div>
@@ -60,6 +58,11 @@
                 <label for="classroom">Аудитория:</label>
                 <input type="text" id="classroom" name="classroom" class="form-control" required th:field="*{audience}">
                 <div class="invalid-feedback">Пожалуйста, введите аудиторию для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="building">Здание:</label>
+                <input type="text" id="building" name="building" class="form-control" required th:field="*{building}">
+                <div class="invalid-feedback">Пожалуйста, введите здание для продолжения</div>
             </div>
             <div class="input-group">
                 <label for="group">Название группы:</label>

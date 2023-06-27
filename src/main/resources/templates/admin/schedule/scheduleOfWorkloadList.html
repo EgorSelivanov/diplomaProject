@@ -1,0 +1,58 @@
+<div class="d-flex schedule-li" style="width: 100%;">
+    <table id="scheduleList" class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Дисциплина</th>
+            <th>Вид занятия</th>
+            <th>Преподаватель</th>
+            <th>Группа</th>
+            <th>Аудитория</th>
+            <th>Здание</th>
+            <th>День недели</th>
+            <th>Время начала</th>
+            <th>Время окончания</th>
+            <th>Повторяемость</th>
+            <th>Удаление</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="schedule : ${scheduleList}" th:id="${'row-schedule' + schedule.getScheduleId()}">
+            <td class="editable-cell" th:text="${schedule.getSubjectName()}"></td>
+            <td class="editable-cell" th:text="${schedule.getType()}"></td>
+            <td class="editable-cell" th:text="${schedule.getTeacherFio()}"></td>
+            <td class="editable-cell" th:text="${schedule.getGroupName()}"></td>
+            <td class="editable-cell">
+                <input type="text" id="schedule-audience" th:value="${schedule.getAudience()}" readonly>
+            </td>
+            <td class="editable-cell">
+                <input type="text" id="schedule-building" th:value="${schedule.getBuilding()}" readonly>
+            </td>
+            <td class="editable-cell-select">
+                <select id='schedule-day-of-week' class="form-select" style="min-width: fit-content;" disabled>
+                    <option th:value="${schedule.getDayOfWeek()}" th:text="${schedule.getDayOfWeek()}" selected></option>
+                    <option th:if="${!schedule.getDayOfWeek().equals('Понедельник')}" th:value="Понедельник" th:text="Понедельник"></option>
+                    <option th:if="${!schedule.getDayOfWeek().equals('Вторник')}" th:value="Вторник" th:text="Вторник"></option>
+                    <option th:if="${!schedule.getDayOfWeek().equals('Среда')}" th:value="Среда" th:text="Среда"></option>
+                    <option th:if="${!schedule.getDayOfWeek().equals('Четверг')}" th:value="Четверг" th:text="Четверг"></option>
+                    <option th:if="${!schedule.getDayOfWeek().equals('Пятница')}" th:value="Пятница" th:text="Пятница"></option>
+                    <option th:if="${!schedule.getDayOfWeek().equals('Суббота')}" th:value="Суббота" th:text="Суббота"></option>
+                </select>
+            </td>
+            <td class="editable-cell">
+                <input type="time" class="form-control" id="schedule-start-time" th:value="${schedule.getStartTimeFormat()}" readonly>
+            </td>
+            <td class="editable-cell">
+                <input type="time" class="form-control" id="schedule-end-time" th:value="${schedule.getEndTimeFormat()}" readonly>
+            </td>
+            <td class="editable-cell">
+                <input type="text" id="schedule-repeat" th:value="${schedule.getRepeat()}" readonly>
+            </td>
+            <td>
+                <a type="button" th:id="${'button-delete-schedule' + schedule.getScheduleId()}"
+                   th:href="@{/admin/{id}/deleteSchedule(id=${schedule.getScheduleId()})}"
+                   onclick="confirmDeletionSchedule(event)"><i class="bi bi-x-circle"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

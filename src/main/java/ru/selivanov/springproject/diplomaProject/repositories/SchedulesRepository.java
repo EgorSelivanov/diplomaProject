@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface SchedulesRepository extends JpaRepository<Schedule, Integer> {
     List<Schedule> findByAudienceAndDayOfWeekAndStartTime(String audience, String dayOfWeek, Date startTime);
+    Schedule findByAudienceAndBuildingAndDayOfWeekAndStartTime(String audience, String building, String dayOfWeek, Date startTime);
     List<Schedule> findByAudience(String audience);
     List<Schedule> findByDayOfWeek(String dayOfWeek);
 

@@ -1,0 +1,58 @@
+<!-- HTML код для модальной страницы -->
+<div id="myModal" class="modall">
+    <div class="modall-content">
+        <span class="close">&times;</span>
+        <h2>Создание нового расписания занятий</h2>
+        <form id="newScheduleForm" class="needs-validation" novalidate
+              action="/admin/new-schedule" method="POST">
+            <div class="input-group">
+                <label for="weekday">День недели:</label>
+                <select id="weekday" name="weekday" class="form-select" required>
+                    <option value="Понедельник">Понедельник</option>
+                    <option value="Вторник">Вторник</option>
+                    <option value="Среда">Среда</option>
+                    <option value="Четверг">Четверг</option>
+                    <option value="Пятница">Пятница</option>
+                    <option value="Суббота">Суббота</option>
+                    <option value="Воскресенье">Воскресенье</option>
+                </select>
+                <div class="invalid-feedback">Пожалуйста, выберите день недели для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="startTime">Время начала:</label>
+                <input type="time" id="startTime" name="startTime" class="form-control" required>
+                <div class="invalid-feedback">Пожалуйста, введите время начала занятия для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="endTime">Время окончания:</label>
+                <input type="time" id="endTime" name="endTime" class="form-control" required>
+                <div class="invalid-feedback">Пожалуйста, введите время окончания занятия для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="lessonRepeat">Повтор:</label>
+                <select id="lessonRepeat" name="lessonRepeat" class="form-select" required>
+                    <option value="Еженедельно">Еженедельно</option>
+                    <option value="Неч.">Неч.</option>
+                    <option value="Чет.">Чет.</option>
+                    <option value="Одно занятие">Одно занятие</option>
+                </select>
+                <div class="invalid-feedback">Пожалуйста, выберите повтор занятия для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="classroom">Аудитория:</label>
+                <input type="text" id="classroom" name="classroom" class="form-control" required>
+                <div class="invalid-feedback">Пожалуйста, введите аудиторию для продолжения</div>
+            </div>
+            <div class="input-group">
+                <label for="building">Здание:</label>
+                <input type="text" id="building" name="building" class="form-control" required>
+                <div class="invalid-feedback">Пожалуйста, введите здание для продолжения</div>
+            </div>
+
+            <div th:if="${errorSchedule != ''}" class="error" th:text="${errorSchedule}"></div>
+            <div>
+                <input id="submit-add" type="submit" value="Сохранить" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>

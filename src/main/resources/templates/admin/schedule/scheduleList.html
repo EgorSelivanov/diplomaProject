@@ -1,0 +1,33 @@
+<div class="d-flex schedule-li" style="width: 100%;">
+
+    <table id="scheduleList" class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Дисциплина</th>
+            <th>Описание дисциплины</th>
+            <th>Тип занятия</th>
+            <th>Преподаватель</th>
+            <th>Группа</th>
+            <th>Курс</th>
+            <th>Специальность</th>
+            <th>Расписание</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="workload : ${workloadList}" th:id="${'row-workload' + workload.getWorkloadId()}">
+            <td class="editable-cell" th:text="${workload.getSubjectName()}"></td>
+            <td class="editable-cell" th:text="${workload.getSubjectDescription()}"></td>
+            <td class="editable-cell" th:text="${workload.getType()}"></td>
+            <td class="editable-cell" th:text="${workload.getTeacherFio()}"></td>
+            <td class="editable-cell" th:text="${workload.getGroupName()}"></td>
+            <td class="editable-cell" th:text="${workload.getCourseNumber()}"></td>
+            <td class="editable-cell" th:text="${workload.getSpecialityName()}"></td>
+            <td>
+                <a type="button" th:id="${'button-redirect-schedule' + workload.getWorkloadId()}"
+                   th:href="@{/admin/workload-schedule/{workloadId}(workloadId=${workload.getWorkloadId()})}"
+                   onclick="getSchedulePage(event)"><i class="bi bi-box-arrow-right"></i></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

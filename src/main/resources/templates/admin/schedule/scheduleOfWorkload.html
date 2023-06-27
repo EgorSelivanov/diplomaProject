@@ -1,0 +1,42 @@
+<div class="admin-content row d-flex justify-content-between align-items-start">
+    <div class="schedule-control col-md-5">
+        <h2>Действия</h2>
+        <div class="d-flex">
+            <input type="hidden" id="workload-id" th:value="${workload.getWorkloadId()}">
+            <form method="GET" action="/admin/new-schedule" id="add-schedule-form">
+                <button type="submit" id="submit-add-schedule" class="btn btn-primary"
+                        onclick="getPageNewSchedule(event)">Добавить новое расписание
+                </button>
+            </form>
+
+            <button type="button" id="return-to-workload" class="btn btn-primary"
+                    onclick="scheduleLink.click()" style="margin-left: 5px;height: fit-content;margin-top: auto;">
+                Вернуться к назначениям
+            </button>
+        </div>
+
+        <div class="btn-save-changes" style="margin-top: 15px">
+            <input id="uploadJSONInput" class="btn" type="file" accept=".json">
+            <button id="uploadJSONButton" class="btn btn-primary btn-save-changes" disabled="">Загрузить JSON</button>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+
+    </div>
+
+    <div class="schedule-list col-lg-11">
+        <h2>Расписание занятий</h2>
+
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="check-read-edit">
+            <label class="form-check-label" for="check-read-edit">Просмотр/Редактирование</label>
+            <button class="btn btn-secondary" id="btn-check-read-edit" style="display: none">Сохранить изменения
+            </button>
+        </div>
+
+        <div id="schedule-list" class="row row-cols-2" style="margin-top: 2%;">
+
+        </div>
+    </div>
+</div>
