@@ -1,9 +1,11 @@
 package ru.selivanov.springproject.diplomaProject.services;
 
+import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.selivanov.springproject.diplomaProject.dto.GroupJSONDTO;
 import ru.selivanov.springproject.diplomaProject.model.*;
 import ru.selivanov.springproject.diplomaProject.repositories.GroupsRepository;
 import ru.selivanov.springproject.diplomaProject.repositories.SpecialitiesRepository;
@@ -148,5 +150,56 @@ public class GroupService {
         Hibernate.initialize(groupOptional.get().getWorkloadList());
 
         return groupOptional.get().getWorkloadList();
+    }
+
+    @Transactional
+    public void updateDataByJSON(@Valid List<GroupJSONDTO> groupJSONDTOList) throws NoSuchFieldException {
+        List<Group> groupList = new ArrayList<>();
+        for (GroupJSONDTO groupJSONDTO : groupJSONDTOList) {
+            Group group = groupsRepository.findByName(groupJSONDTO.getName()).orElse(null);
+            Group groupToUpdate = new Group();
+            if (group == null) {
+                groupToUpdate.setName(groupJSONDTO.getName());
+                groupToUpdate.setCourseNumber(groupJSONDTO.getCourseNumber());
+                Speciality speciality = searchSpeciality(groupJSONDTO);
+                groupToUpdate.setSpeciality(speciality);
+                groupList.add(groupToUpdate);
+                continue;
+            }
+
+            Hibernate.initialize(group.getWorkloadList());
+            Hibernate.initialize(group.getStudents());
+
+            groupToUpdate.setName(group.getName());
+            groupToUpdate.setGroupId(group.getGroupId());
+            groupToUpdate.setStudents(group.getStudents());
+            groupToUpdate.setWorkloadList(group.getWorkloadList());
+
+            Speciality speciality = searchSpeciality(groupJSONDTO);
+            groupToUpdate.setSpeciality(speciality);
+            groupToUpdate.setCourseNumber(groupJSONDTO.getCourseNumber());
+            groupList.add(groupToUpdate);
+        }
+
+        groupsRepository.saveAll(groupList);
+    }
+
+    private Speciality searchSpeciality(GroupJSONDTO groupJSONDTO) throws NoSuchFieldException {
+        if (groupJSONDTO.getSpecialityName() != null && !groupJSONDTO.getSpecialityName().trim().equals("")) {
+            Speciality speciality = specialitiesRepository.findBySpecialityName(groupJSONDTO.getSpecialityName().trim()).orElse(null);
+            if (speciality == null)
+                throw new NoSuchFieldException("Не найдено такой специальности: " + groupJSONDTO.getSpecialityName() +
+                        " для группы: " + groupJSONDTO.getName());
+            return speciality;
+        }
+        if (groupJSONDTO.getCode() != null && !groupJSONDTO.getCode().trim().equals("")) {
+            Speciality speciality = specialitiesRepository.findByCode(groupJSONDTO.getCode().trim()).orElse(null);
+            if (speciality == null)
+                throw new NoSuchFieldException("Не найдено такой специальности: " + groupJSONDTO.getCode() +
+                        " для группы: " + groupJSONDTO.getName());
+            return speciality;
+        }
+
+        throw new NoSuchFieldException("Не указано специальности для группы: " + groupJSONDTO.getName());
     }
 }

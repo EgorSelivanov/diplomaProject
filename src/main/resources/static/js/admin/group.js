@@ -284,3 +284,56 @@ function fetchNewGroup() {
         formNew.classList.add('was-validated');
     });
 }
+
+function addJsonFunctionalityToGroup() {
+    var inputJSON = document.getElementById('uploadJSONInput');
+    var buttonJSON = document.getElementById('uploadJSONButton');
+    inputJSON.addEventListener('change', function() {
+        if (inputJSON.files.length > 1) {
+            inputJSON.value = '';
+            customAlert("Выберите только 1 файл!");
+            return;
+        }
+        if (inputJSON.files.length === 1 && !inputJSON.files[0].name.endsWith('.json')) {
+            inputJSON.value = '';
+            customAlert("Выберите файл JSON!");
+            return;
+        }
+        customAlert("Обратите внимание, что JSON должен содержать следующие поля:\n" +
+            "name: имя группы; " +
+            "courseNumber: курс; " +
+            "specialityName: название специальности (и/или) " +
+            "code: код специальности.");
+        buttonJSON.disabled = inputJSON.files.length <= 0;
+    });
+    buttonJSON.addEventListener('click', function() {
+        uploadJSONToGroup(inputJSON.files[0]);
+    });
+}
+
+function uploadJSONToGroup(file) {
+    const csrfToken = document.getElementById("csrfToken").value;
+    var formData = new FormData();
+    formData.append('file', file);
+    fetch(`${adminId}/group/upload-json`,
+        { method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData })
+        .then(response => response.text())
+        .then(data => {
+            // Обработка ответа от сервера
+            customAlert(data);
+            var inputJSON = document.getElementById('uploadJSONInput');
+            var buttonJSON = document.getElementById('uploadJSONButton');
+
+            inputJSON.value = '';
+            buttonJSON.disabled = true;
+            getGroupsAdminList(globalSearch);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
+}

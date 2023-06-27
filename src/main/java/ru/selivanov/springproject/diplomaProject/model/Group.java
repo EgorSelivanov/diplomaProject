@@ -1,5 +1,6 @@
 package ru.selivanov.springproject.diplomaProject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -23,6 +24,7 @@ public class Group {
 
     @ManyToOne
     @JoinColumn(name = "speciality_id", referencedColumnName = "speciality_id")
+    @JsonIgnore
     private Speciality speciality;
 
     @Column(name = "course_number")
@@ -30,9 +32,11 @@ public class Group {
     private int courseNumber;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
     private List<Student> students;
 
     @OneToMany(mappedBy = "group")
+    @JsonIgnore
     private List<Workload> workloadList;
 
     public Group() {}
