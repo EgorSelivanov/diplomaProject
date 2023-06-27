@@ -49,7 +49,7 @@ public class SecurityConfig {
         http
                 .cors().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                        .requestMatchers("/auth/login", "/error").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/student/**").hasRole("STUDENT")
                         .requestMatchers("/teacher/**", "/grade", "/assignment", "/attendance").hasRole("TEACHER")
@@ -73,7 +73,7 @@ public class SecurityConfig {
                     .maximumSessions(1)
                     .expiredUrl("/login")
                     .maxSessionsPreventsLogin(false)
-                    .sessionRegistry(sessionRegistry());;
+                    .sessionRegistry(sessionRegistry());
         return http.build();
     }
 }
