@@ -221,6 +221,118 @@ function getGrades(selectedDiscipline, selectedGroup, selectedType) {
                 saveChangesOfGrades(selectedDiscipline, selectedGroup, selectedType);
             });
 
+            //кнопка скачивания Excel
+            var buttonSaveExcelTable = document.createElement('button');
+            buttonSaveExcelTable.setAttribute('id', 'saveExcelButton');
+            buttonSaveExcelTable.classList.add('btn', 'btn-primary', 'btn-save-changes');
+            buttonSaveExcelTable.textContent = 'Скачать в Excel';
+            gradesSaveBtn.appendChild(buttonSaveExcelTable);
+            buttonSaveExcelTable.addEventListener('click', function() {
+                createExcel(selectedDiscipline, selectedGroup, selectedType);
+            });
+
+            //Загрузить Excel
+            var divUploadExcel = document.createElement('div');
+            divUploadExcel.classList.add('btn-save-changes');
+            gradesSaveBtn.appendChild(divUploadExcel);
+
+            var inputUploadExcel = document.createElement('input');
+            inputUploadExcel.setAttribute('id', 'uploadExcelInput');
+            inputUploadExcel.classList.add('btn-save-changes');
+            inputUploadExcel.classList.add('btn');
+            inputUploadExcel.type = 'file';
+            inputUploadExcel.accept = '.xlsx';
+            divUploadExcel.appendChild(inputUploadExcel);
+
+            var buttonUploadExcel = document.createElement('button');
+            buttonUploadExcel.setAttribute('id', 'uploadExcelButton');
+            buttonUploadExcel.classList.add('btn', 'btn-primary', 'btn-save-changes');
+            buttonUploadExcel.textContent = 'Загрузить из Excel';
+            buttonUploadExcel.disabled = true;
+            divUploadExcel.appendChild(buttonUploadExcel);
+            buttonUploadExcel.addEventListener('click', function() {
+                uploadExcel(selectedDiscipline, selectedGroup, selectedType, inputUploadExcel.files[0]);
+            });
+
+            inputUploadExcel.addEventListener('change', function() {
+                if (inputUploadExcel.files.length > 1) {
+                    inputUploadExcel.value = '';
+                    customAlert("Выберите только 1 файл!");
+                    return;
+                }
+                if (inputUploadExcel.files.length === 1 && !inputUploadExcel.files[0].name.endsWith('.xlsx')) {
+                    inputUploadExcel.value = '';
+                    customAlert("Выберите файл Excel!");
+                    return;
+                }
+                customAlert("Обратите внимание, что будут обновлены только данные о количестве баллов студентов.\n" +
+                    "Для изменения данных о работах воспользуйтесь соответствующей таблицей.\n" +
+                    "Изменение в данных студентов приведет к ошибке обновления.");
+                buttonUploadExcel.disabled = inputUploadExcel.files.length <= 0;
+            });
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
+}
+
+
+function createExcel(selectedDiscipline, selectedGroup, selectedType){
+    fetch(`${teacherId}/download-excel?discipline=${selectedDiscipline}&group=${selectedGroup}&type=${selectedType}`,
+        { method: 'GET' })
+        .then(response => {
+        if (response.ok) {
+            return response.blob(); // Получение данных в виде Blob объекта
+        } else {
+            throw new Error('Ошибка при загрузке файла');
+        }
+    })
+        .then(blobData => {
+            const url = window.URL.createObjectURL(blobData); // Создание URL для скачивания файла
+            const a = document.createElement('a');
+            a.href = url;
+
+            var nameOfSubject = document.getElementById('nameOfSubject').textContent;
+            var groupName = document.getElementById('select-group-to-show');
+            var selectedOption = groupName.options[groupName.selectedIndex];
+            var selectedText = selectedOption.text;
+
+            a.download = nameOfSubject + "_" + selectedType + "_" + selectedText + '.xlsx';
+            document.body.appendChild(a);
+            a.click(); // Имитация клика для скачивания файла
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url); // Освобождение ресурсов
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
+}
+
+function uploadExcel(selectedDiscipline, selectedGroup, selectedType, file) {
+    const csrfToken = document.getElementById("csrfToken").value;
+    var formData = new FormData();
+    formData.append('file', file);
+    fetch(`${teacherId}/upload-excel?discipline=${selectedDiscipline}&group=${selectedGroup}&type=${selectedType}`,
+        { method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData })
+        .then(response => response.text())
+        .then(data => {
+            // Обработка ответа от сервера
+            customAlert(data);
+            var inputUploadExcel = document.getElementById('uploadExcelInput');
+            var buttonUploadExcel = document.getElementById('uploadExcelButton');
+
+            inputUploadExcel.value = '';
+            buttonUploadExcel.disabled = true;
+            getGrades(selectedDiscipline, selectedGroup, selectedType);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
 }

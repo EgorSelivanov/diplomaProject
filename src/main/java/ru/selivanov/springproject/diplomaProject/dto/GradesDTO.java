@@ -28,6 +28,8 @@ public class GradesDTO {
     @NotEmpty(message = "Количество баллов не должно быть пустым!")
     private int points;
 
+    private String workloadType;
+
     public GradesDTO() {}
 
     public GradesDTO(String type, String description, int maxPoints, Date date, int points) {
@@ -80,6 +82,13 @@ public class GradesDTO {
         this.dateFormat = formatter.format(date);
     }
 
+    public String getWorkloadType() {
+        return workloadType;
+    }
+
+    public void setWorkloadType(String workloadType) {
+        this.workloadType = workloadType;
+    }
 
     public String getDateFormat() {
         return dateFormat;

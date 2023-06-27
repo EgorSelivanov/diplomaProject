@@ -10,6 +10,7 @@ import ru.selivanov.springproject.diplomaProject.repositories.AssignmentsReposit
 import ru.selivanov.springproject.diplomaProject.repositories.GradesRepository;
 import ru.selivanov.springproject.diplomaProject.repositories.StudentsRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,12 @@ public class GradeService {
     public void saveGrade(Grade grade) {
         gradesRepository.save(grade);
     }
+
+    @Transactional
+    public void saveGradeList(List<Grade> gradeList) {
+        gradesRepository.saveAll(gradeList);
+    }
+
     @Transactional
     public void deleteGrade(int id) {
         gradesRepository.deleteById(id);
