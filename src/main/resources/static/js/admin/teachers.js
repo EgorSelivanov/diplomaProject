@@ -284,3 +284,112 @@ function fetchNewTeacher() {
         formNew.classList.add('was-validated');
     });
 }
+
+function addJsonFunctionalityToTeacher() {
+    var inputJSON = document.getElementById('uploadJSONInput');
+    var buttonJSON = document.getElementById('uploadJSONButton');
+    inputJSON.addEventListener('change', function() {
+        if (inputJSON.files.length > 1) {
+            inputJSON.value = '';
+            customAlert("Выберите только 1 файл!");
+            return;
+        }
+        if (inputJSON.files.length === 1 && !inputJSON.files[0].name.endsWith('.json')) {
+            inputJSON.value = '';
+            customAlert("Выберите файл JSON!");
+            return;
+        }
+        customAlert("Обратите внимание, что JSON должен содержать следующие поля:\n" +
+            "username: имя пользователя; " +
+            "password: пароль; " +
+            "email: почта; " +
+            "firstName: имя преподавателя; " +
+            "secondName: фамилия преподавателя; " +
+            "patronymic: отчество преподавателя; " +
+            "department: кафедра; " +
+            "position: должность.");
+        buttonJSON.disabled = inputJSON.files.length <= 0;
+    });
+    buttonJSON.addEventListener('click', function() {
+        uploadJSONToTeacher(inputJSON.files[0]);
+    });
+}
+
+function uploadJSONToTeacher(file) {
+    const csrfToken = document.getElementById("csrfToken").value;
+    var formData = new FormData();
+    formData.append('file', file);
+    fetch(`${adminId}/teacher/upload-json`,
+        { method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData })
+        .then(response => response.text())
+        .then(data => {
+            // Обработка ответа от сервера
+            customAlert(data);
+            var inputJSON = document.getElementById('uploadJSONInput');
+            var buttonJSON = document.getElementById('uploadJSONButton');
+
+            inputJSON.value = '';
+            buttonJSON.disabled = true;
+
+            var selectDepartment = document.getElementById('teacher-department-select');
+            var checkboxDepartment = document.getElementById('checkbox-department');
+            if (!checkboxDepartment.checked)
+                getTeachersAdminList(globalSearch);
+            else
+                getTeachersAdminListByDepartment(globalSearch, selectDepartment.value);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
+}
+
+function getTeacherWorkloadPage(event) {
+    event.preventDefault();
+    globalSearch = '';
+
+    const adminContent = document.querySelector('.container');
+
+    var url = event.currentTarget.getAttribute('href');
+
+    fetch(url, { method: 'GET' })
+        .then(function (response) {
+            return response.text();
+        })
+        .then(function (newHtml) {
+            adminContent.innerHTML = newHtml;
+
+            addJsonFunctionalityToWorkload();
+
+            getTeacherWorkloadList(globalSearch);
+        })
+        .catch(function (error) {
+            console.error('Ошибка получения', error);
+        });
+}
+
+function getTeacherWorkloadList(search) {
+    const idOfTeacher = document.getElementById('workload-teacher-id').value;
+    fetch(`${adminId}/workloadList/${idOfTeacher}?search=${search}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => {
+            return response.text();
+        })
+        .then(function (workloadListHtml) {
+            var divList = document.getElementById('workload-list');
+            divList.innerHTML = '';
+            divList.innerHTML = workloadListHtml;
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            customAlert(error.message);
+        });
+}

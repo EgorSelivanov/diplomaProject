@@ -1,0 +1,61 @@
+<!-- HTML код для модальной страницы -->
+<div id="myModal" class="modall">
+    <div class="modall-content">
+        <span class="close">&times;</span>
+        <h2>Создание нового студента</h2>
+        <form id="newStudentForm" class="needs-validation" novalidate
+              action="/admin/new-student" method="POST">
+            <div class="input-group">
+                <span class="input-group-text">Имя пользователя</span>
+                <input type="text" id="username" class="form-control" name="username"
+                       placeholder="Username" required>
+                <div class="invalid-feedback">Пожалуйста, введите имя пользователя для продолжения</div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Пароль</span>
+                <input type="password" id="password" class="form-control" name="password" required placeholder="Пароль"
+                       minlength="6">
+                <div class="col-auto span-password" style="margin-left: 20%;">
+                    <span class="form-text">Должен содержать минимум 6 символов</span>
+                </div>
+                <div class="invalid-feedback">Пожалуйста, введите пароль для продолжения</div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Email</span>
+                <input type="email" id="email" class="form-control" name="email" required placeholder="Email">
+                <div class="invalid-feedback">Пожалуйста, введите корректный адрес электронной почты</div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">ФИО</span>
+                <input type="text" class="form-control" id="secondNameStudent" placeholder="Фамилия" required>
+                <input type="text" class="form-control" id="firstNameStudent" placeholder="Имя" required>
+                <input type="text" class="form-control" id="patronymicStudent" placeholder="Отчество">
+                <div class="invalid-feedback">Пожалуйста, введите ФИО для продолжения</div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Введите курс</span>
+                <select id='student-course-select-modal' class="form-select">
+                    <option th:each="courseNumber : ${courseNumberList}"
+                            th:value="${courseNumber}" th:text="${courseNumber}"></option>
+                </select>
+            </div>
+
+            <div class="input-group" id="div-student-group-select-modal" style="display: none;">
+                <span class="input-group-text">Выберите группу</span>
+                <select id='student-group-select-modal' class="form-select" required="true">
+                    <!--Данные запрашиваются у сервера после выбора-->
+                </select>
+                <div class="invalid-feedback">Пожалуйста, выберите группу для продолжения</div>
+            </div>
+
+            <div th:if="${errorStudent != ''}" class="error" th:text="${errorStudent}"></div>
+            <div>
+                <input id="submit-add" type="submit" value="Сохранить" class="btn btn-primary">
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,7 +1,9 @@
 package ru.selivanov.springproject.diplomaProject.services;
 
+import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.selivanov.springproject.diplomaProject.dao.TeacherDAO;
@@ -18,11 +20,13 @@ public class TeacherService {
     private final TeachersRepository teachersRepository;
     private final UsersRepository usersRepository;
     private final TeacherDAO teacherDAO;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public TeacherService(TeachersRepository teachersRepository, UsersRepository usersRepository, TeacherDAO teacherDAO) {
+    public TeacherService(TeachersRepository teachersRepository, UsersRepository usersRepository, TeacherDAO teacherDAO, PasswordEncoder passwordEncoder) {
         this.teachersRepository = teachersRepository;
         this.usersRepository = usersRepository;
         this.teacherDAO = teacherDAO;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Teacher> findByDepartment(String department) {
@@ -215,5 +219,55 @@ public class TeacherService {
         set.addAll(teachersRepository.findAllByDepartmentAndPositionLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(department, search));
 
         return new ArrayList<>(set);
+    }
+
+    @Transactional
+    public void updateDataByJSON(@Valid List<TeacherEditDTO> teacherEditDTOList) throws NoSuchFieldException {
+        List<Teacher> teacherList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
+        for (TeacherEditDTO teacherEditDTO : teacherEditDTOList) {
+            Teacher teacher = teachersRepository.findByUser_Username(teacherEditDTO.getUsername().trim()).orElse(null);
+            if (teacher == null) {
+                teacher = new Teacher();
+                User user = new User();
+                user.setUsername(teacherEditDTO.getUsername().trim());
+
+                updateUser(user, teacher, teacherEditDTO);
+                teacher.setUser(user);
+                user.setTeacher(teacher);
+
+                userList.add(user);
+                teacherList.add(teacher);
+                continue;
+            }
+
+            User user = teacher.getUser();
+
+            updateUser(user, teacher, teacherEditDTO);
+            userList.add(user);
+            teacherList.add(teacher);
+        }
+
+        usersRepository.saveAll(userList);
+        teachersRepository.saveAll(teacherList);
+    }
+
+    private void updateUser(User user, Teacher teacher, TeacherEditDTO teacherEditDTO) throws NoSuchFieldException {
+        if (teacherEditDTO.getPassword().trim().length() < 6)
+            throw new NoSuchFieldException("Пароль меньше 6 символов для пользователя: " + user.getUsername());
+        user.setPassword(passwordEncoder.encode(teacherEditDTO.getPassword().trim()));
+
+        User emailUser = usersRepository.findByEmail(teacherEditDTO.getEmail().trim()).orElse(null);
+        if (emailUser != null && !Objects.equals(user.getUserId(), emailUser.getUserId()))
+            throw new NoSuchFieldException("Встречен пользователь с зарегестрированным email: " + user.getUsername());
+
+        user.setEmail(teacherEditDTO.getEmail().trim());
+        user.setRole("ROLE_TEACHER");
+        user.setFirstName(teacherEditDTO.getFirstName().trim());
+        user.setSecondName(teacherEditDTO.getSecondName().trim());
+        user.setPatronymic(teacherEditDTO.getPatronymic().trim());
+
+        teacher.setDepartment(teacherEditDTO.getDepartment().trim());
+        teacher.setPosition(teacherEditDTO.getPosition().trim());
     }
 }

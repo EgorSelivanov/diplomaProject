@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.selivanov.springproject.diplomaProject.model.Teacher;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TeachersRepository extends JpaRepository<Teacher, Integer> {
@@ -23,4 +24,5 @@ public interface TeachersRepository extends JpaRepository<Teacher, Integer> {
     List<Teacher> findAllByDepartmentAndPositionLikeIgnoreCaseOrderByUser_SecondNameAscUser_FirstNameAscUser_PatronymicAsc(String department, String position);
     List<Teacher> findByDepartmentLike(String department);
     List<Teacher> findByPositionLike(String position);
+    Optional<Teacher> findByUser_Username(String username);
 }

@@ -10,6 +10,7 @@
             <th>Email</th>
             <th>Кафедра</th>
             <th>Должность</th>
+            <th>Нагрузка</th>
             <th>Сброс пароля</th>
             <th>Удаление</th>
         </tr>
@@ -36,6 +37,11 @@
                 </td>
                 <td class="editable-cell">
                     <input type="text" id="teacher-position" th:value="${teacher.getPosition()}" readonly>
+                </td>
+                <td>
+                    <a type="button" th:id="${'button-redirect-workload' + teacher.getUser().getUserId()}"
+                       th:href="@{/admin/teacher-workload/{teacherId}(teacherId=${teacher.getTeacherId()})}"
+                       onclick="getTeacherWorkloadPage(event)"><i class="bi bi-box-arrow-right"></i></a>
                 </td>
                 <td>
                     <a type="button" th:id="${'button-change-password' + teacher.getUser().getUserId()}"

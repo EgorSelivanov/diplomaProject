@@ -1,4 +1,3 @@
-//Добавление нового расписания
 const teacherId = document.querySelector('#teacher-id').getAttribute("value");
 
 // Найти кнопку "Добавить занятие"
@@ -120,13 +119,12 @@ function getScheduleDataByDate(date) {
             data.forEach(item => {
                 const row = document.createElement('tr');
                 const cells = [item.dayOfWeek, item.startTimeFormat, item.endTimeFormat, item.name, item.type, item.audience,
-                    item.groupName, item.courseNumber];
+                    item.building, item.groupName, item.courseNumber];
                 cells.forEach(cell => {
                     const td = document.createElement('td');
                     td.textContent = cell;
                     row.appendChild(td);
                 });
-                console.log("odd: " + i);
                 if (i % 2 === 0)
                     row.classList.add('even-row');
                 else
@@ -149,6 +147,7 @@ function getGroupsList(selectedDiscipline, selectedType) {
 
             // Создаем выпадающий список и добавляем его в .groups-list
             const select = document.createElement('select');
+            select.setAttribute('id', 'select-group-to-show');
 
             // Добавляем опцию по умолчанию
             const defaultOption = document.createElement('option');
